@@ -1,0 +1,88 @@
+     1                                  	; Name: Kevin Stine
+     2                                  	; Creation date: 1/26/15
+     3                                  	; Last modified: 2/2/15
+     4                                  	;
+     5                                  	; 
+     6                                  	; Name of file: loop.asm
+     7                                  	; Description: print an integer from storage and from a register
+     8                                  		
+     9                                  	; Assemble:	nasm -f elf -l loop.lst  loop.asm
+    10                                  	; Link:		gcc -m32 -o loop  loop.o
+    11                                  	; Run:		./loop
+    12                                  	; Output:	a=5, eax=7
+    13                                  
+    14                                  	; Equivalent C code
+    15                                  	; /* printf1.c  print an int and an expression */
+    16                                  	; #include <stdio.h>
+    17                                  	; int main()
+    18                                  	; {
+    19                                  	;   int a=5;
+    20                                  	;   printf("a=%d, eax=%d\n", a, a+2);
+    21                                  	;   return 0;
+    22                                  	; }
+    23                                  
+    24                                  	; Declare needed external functions
+    25                                  	;
+    26                                  	extern	printf			; the C function, to be called
+    27                                  SECTION .data				; Data section, initialized variables
+    28 00000000 256400                  	intFmt:		db "%d", 0
+    29 00000003 200A00                  	newLine:	db " ", 10, 0
+    30 00000006 5468652070726F6772-     	terminate:	db "The program has successfully completed. Exiting now.", 10, 0
+    31 0000000F 616D20686173207375-
+    32 00000018 636365737366756C6C-
+    33 00000021 7920636F6D706C6574-
+    34 0000002A 65642E204578697469-
+    35 00000033 6E67206E6F772E0A00 
+    36 0000003C 09000000                	int1:		dd 9
+    37 00000040 01000000                	int2:		dd 1
+    38 00000044 5468652076616C7565-     	valebx:		db "The value of ebx is %d", 10, 0
+    39 0000004D 206F66206562782069-
+    40 00000056 732025640A00       
+    41 0000005C 5468652076616C7565-     	valeax:		db "The value of eax is %d", 10, 0
+    42 00000065 206F66206561782069-
+    43 0000006E 732025640A00       
+    44 00000074 5468652070726F6772-     	finish:		db "The program has completed its operation", 10, 0
+    45 0000007D 616D2068617320636F-
+    46 00000086 6D706C657465642069-
+    47 0000008F 7473206F7065726174-
+    48 00000098 696F6E0A00         
+    49                                  SECTION .bss				; BSS, uninitialized variables
+    50 00000000 <res 00000004>          	num:		resd 1
+    51                                  SECTION .text				; Code section.
+    52                                  
+    53                                  	global main				; the standard gcc entry point
+    54                                  
+    55                                  	main:					; the program label for the entry point
+    56 00000000 55                      		push	ebp			; set up stack frame
+    57 00000001 89E5                    		mov		ebp,esp
+    58                                  	
+    59                                  		;Set ebx equal to 9 to begin the loop to count down
+    60 00000003 BB09000000              		mov ebx, 9
+    61                                  	
+    62                                  	;The loop block which goes through and decrements ebx 
+    63                                  	.loopBlock:
+    64 00000008 53                      		push ebx
+    65 00000009 68[00000000]            		push dword intFmt 
+    66 0000000E E8(00000000)            		call printf 
+    67 00000013 81C404000000            		add esp, 4
+    68                                  
+    69 00000019 4B                      		dec ebx
+    70 0000001A 81FB05000000            		cmp ebx, 5
+    71 00000020 7DE6                    		jge .loopBlock
+    72                                  
+    73                                  		;Print a newline after the numbers 
+    74 00000022 68[03000000]            		push dword newLine 
+    75 00000027 E8(00000000)            		call printf 
+    76 0000002C 81C404000000            		add esp, 4
+    77                                  
+    78                                  		;Print out the termination message 
+    79 00000032 68[06000000]            		push dword terminate 
+    80 00000037 E8(00000000)            		call printf 
+    81 0000003C 81C404000000            		add esp, 4
+    82                                  
+    83                                  
+    84 00000042 89EC                    		mov		esp, ebp	; takedown stack frame
+    85 00000044 5D                      		pop		ebp			; same as "leave" op
+    86                                  
+    87 00000045 B800000000              		mov		eax,0		; normal, no error, return value
+    88 0000004A C3                      		ret					; return

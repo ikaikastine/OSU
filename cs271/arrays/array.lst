@@ -1,0 +1,58 @@
+     1                                  extern printf 
+     2                                  section .data
+     3 00000000 010000000200000003-         array:  dd 1, 2, 3
+     4 00000009 000000             
+     5 0000000C 03000000                    arrayLen: dd 3
+     6                                  
+     7                                  section .text
+     8                                  global main
+     9                                  
+    10                                  main:
+    11 00000000 68[00000000]                push dword array
+    12 00000005 FF35[0C000000]              push dword [arrayLen]
+    13 0000000B E806000000                  call reverse
+    14 00000010 81C408000000                add esp, 8
+    15                                  
+    16                                  
+    17                                  reverse:
+    18 00000016 55                          push ebp        ; setup stack
+    19 00000017 89E5                        mov ebp, esp
+    20 00000019 81EC40000000                sub esp, 0x40       ; 64 bytes of local stack space
+    21                                  
+    22                                      ; put parameters into registers
+    23 0000001F 8B5D0C                      mov ebx, [ebp + 12]           ; array
+    24 00000022 8B7D08                      mov edi, [ebp + 8]            ; len
+    25                                  
+    26                                      ; set up loop
+    27 00000025 B900000000                  mov ecx, 0
+    28                                  
+    29                                  ; push all the values onto the stack
+    30                                  .loopPush:
+    31 0000002A B804000000                  mov eax, 4
+    32 0000002F F7E1                        mul ecx
+    33 00000031 FF3403                      push dword [ebx + eax]
+    34 00000034 41                          inc ecx
+    35 00000035 39F9                        cmp ecx, edi
+    36 00000037 7CF1                        jl .loopPush
+    37 00000039 B900000000                  mov ecx, 0
+    38                                  
+    39                                  ; pop all the values from the stack
+    40                                  .loopPop:
+    41 0000003E B804000000                  mov eax, 4
+    42 00000043 F7E1                        mul ecx
+    43 00000045 8F0403                      pop dword [ebx + eax]
+    44 00000048 41                          inc ecx
+    45 00000049 39F9                        cmp ecx, edi
+    46 0000004B 7CF1                        jl .loopPop
+    47                                  
+    48                                  ; print the array
+    49 0000004D FF750C                      push dword [ebp+12]
+    50 00000050 FF7508                      push dword [ebp+8]
+    51 00000053 E8(00000000)                call printf 
+    52 00000058 81C408000000                add esp, 8
+    53                                  
+    54                                  .end:
+    55 0000005E 89EC                        mov esp,ebp ; undo "sub esp,0x40" above                                                                     
+    56 00000060 5D                          pop ebp
+    57 00000061 89D8                        mov eax, ebx    ; return the reversed array
+    58 00000063 C3                          ret

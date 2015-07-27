@@ -1,0 +1,184 @@
+     1                                  	;Name: Kevin Stine
+     2                                  	;Creation Date: 
+     3                                  	;Last Modified:
+     4                                  	;
+     5                                  	;
+     6                                  	;Name of file: sum.asm
+     7                                  	;Description: calculate the value of e using an infinte sum
+     8                                  	;
+     9                                  	;Assemble: nasm -f elf -l sum.lst sum.asm 
+    10                                  	;Link:	gcc -m32 -0 sum sum.o
+    11                                  	;run: ./sum
+    12                                  	
+    13                                  
+    14                                  
+    15                                  	extern printf
+    16                                  	extern scanf
+    17                                  
+    18                                  SECTION .data
+    19 00000000 506C6561736520656E-     	inputx db "Please enter a value for x in the equation e^x ",10
+    20 00000009 74657220612076616C-
+    21 00000012 756520666F72207820-
+    22 0000001B 696E20746865206571-
+    23 00000024 756174696F6E20655E-
+    24 0000002D 78200A             
+    25                                  	linputx equ $-inputx
+    26 00000030 506C6561736520656E-     	inputn db "Please enter a value for n (number of terms up to 34) ",10
+    27 00000039 74657220612076616C-
+    28 00000042 756520666F72206E20-
+    29 0000004B 286E756D626572206F-
+    30 00000054 66207465726D732075-
+    31 0000005D 7020746F2033342920-
+    32 00000066 0A                 
+    33                                  	linputn equ $-inputn
+    34 00000067 256C6600                	scanfFmt db "%lf",0
+    35 0000006B 256400                  	scanfint db "%d",0
+    36 0000006E 5468652076616C7565-     	printFmt db "The value of e = %.7f",10,0
+    37 00000077 206F662065203D2025-
+    38 00000080 2E37660A00         
+    39                                  
+    40                                  SECTION .bss
+    41 00000000 <res 00000008>          	data resq 1
+    42 00000008 <res 00000004>          	fact resd 1
+    43 0000000C <res 00000008>          	x resq 1
+    44 00000014 <res 00000008>          	poweredx resq 1
+    45 0000001C <res 00000004>          	n resd 1
+    46 00000020 <res 00000002>          	temp resw 1
+    47 00000022 <res 00000008>          	sum resq 1
+    48 0000002A <res 00000004>          	one resd 1
+    49 0000002E <res 00000001>          	garbage resb 1
+    50                                  
+    51                                  SECTION .text
+    52                                   
+    53                                  	global main
+    54                                  	
+    55                                  
+    56 00000000 E805000000              	call infinite
+    57 00000005 E82A010000              	call end
+    58                                  
+    59                                  	infinite:
+    60                                   
+    61                                  		
+    62                                  		 
+    63                                  
+    64                                  		print:
+    65 0000000A B804000000              		mov eax,4
+    66 0000000F BB01000000              		mov ebx,1
+    67 00000014 CD80                    		int 0x80
+    68 00000016 C3                      		ret
+    69                                  		 
+    70                                  		printfloat:
+    71 00000017 55                      		push ebp
+    72 00000018 89E5                    		mov ebp,esp
+    73                                  		 
+    74 0000001A FF35[04000000]          		push dword[data+4]
+    75 00000020 FF35[00000000]          		push dword[data]
+    76                                  		 
+    77 00000026 68[6E000000]            		push printFmt
+    78 0000002B E8(00000000)            		call printf
+    79                                  		
+    80 00000030 89EC                    		mov esp,ebp
+    81 00000032 5D                      		pop ebp
+    82 00000033 C3                      		ret
+    83                                  		 
+    84                                  		 
+    85                                  		readfloat:
+    86 00000034 55                      		push ebp
+    87 00000035 89E5                    		mov ebp,esp
+    88                                  		 
+    89 00000037 68[00000000]            		push data
+    90 0000003C 68[67000000]            		push scanfFmt
+    91 00000041 E8(00000000)            		call scanf
+    92                                  		 
+    93 00000046 89EC                    		mov esp,ebp
+    94 00000048 5D                      		pop ebp
+    95 00000049 C3                      		ret
+    96                                  		 
+    97                                  		main:
+    98 0000004A B9[30000000]            		mov ecx,inputn
+    99 0000004F BA37000000              		mov edx,linputn
+   100 00000054 E8B1FFFFFF              		call print
+   101                                  		 
+   102                                  		 
+   103 00000059 68[1C000000]            		push n
+   104 0000005E 68[6B000000]            		push scanfint
+   105 00000063 E8(00000000)            		call scanf
+   106                                  		 
+   107 00000068 812D[1C000000]0100-     		sub dword[n],1
+   108 00000070 0000               
+   109                                  		 
+   110 00000072 B9[00000000]            		mov ecx,inputx
+   111 00000077 BA30000000              		mov edx,linputx
+   112 0000007C E889FFFFFF              		call print
+   113                                  		 
+   114 00000081 E8AEFFFFFF              		call readfloat
+   115 00000086 DD05[00000000]          		fld qword[data]
+   116                                  		 
+   117 0000008C DD1D[0C000000]          		fstp qword[x]
+   118 00000092 A1[1C000000]            		mov eax,dword[n]
+   119                                  		 
+   120 00000097 3D00000000              		cmp eax,0
+   121 0000009C 7469                    		je done
+   122                                  		 
+   123                                  		looping:
+   124                                  		 
+   125 0000009E DD05[0C000000]          		fld qword[x]
+   126 000000A4 3D01000000              		cmp eax,1
+   127 000000A9 7E3A                    		jle adding
+   128                                  		 
+   129 000000AB 89C3                    		mov ebx,eax
+   130                                  		 
+   131                                  		powering:
+   132 000000AD DC0D[0C000000]          		fmul qword[x]
+   133 000000B3 4B                      		dec ebx
+   134 000000B4 81FB01000000            		cmp ebx,1
+   135 000000BA 7FF1                    		jnle powering
+   136 000000BC DD1D[14000000]          		fstp qword[poweredx]
+   137                                  		 
+   138 000000C2 89C3                    		mov ebx,eax
+   139 000000C4 B801000000              		mov eax,1
+   140                                  		factorial:
+   141 000000C9 F7EB                    		imul ebx
+   142 000000CB 4B                      		dec ebx
+   143 000000CC 81FB01000000            		cmp ebx,1
+   144 000000D2 7FF5                    		jnle factorial
+   145                                  		 
+   146 000000D4 A3[08000000]            		mov dword[fact],eax
+   147                                  		 
+   148 000000D9 DD05[14000000]          		fld qword[poweredx]
+   149 000000DF DA35[08000000]          		fidiv dword[fact]
+   150                                  		 
+   151                                  		adding:
+   152 000000E5 DC05[22000000]          		fadd qword[sum]
+   153 000000EB DD1D[22000000]          		fstp qword[sum]
+   154                                  		 
+   155                                  		 
+   156                                  		 
+   157 000000F1 A1[1C000000]            		mov eax,dword[n]
+   158 000000F6 2D01000000              		sub eax,1
+   159 000000FB A3[1C000000]            		mov dword[n],eax
+   160 00000100 3D00000000              		cmp eax,0
+   161 00000105 7F97                    		jnle looping
+   162                                  		 
+   163                                  		done:
+   164                                  		 
+   165 00000107 DD05[22000000]          		fld qword[sum]
+   166 0000010D C705[2A000000]0100-     		mov dword[one], 1
+   167 00000115 0000               
+   168 00000117 DA05[2A000000]          		fiadd dword[one]
+   169 0000011D DD1D[00000000]          		fstp qword[data]
+   170                                  		 
+   171                                  		 
+   172 00000123 E8EFFEFFFF              		call printfloat
+   173                                  		 
+   174                                  		exit:
+   175 00000128 B801000000              		mov eax,1
+   176 0000012D BB00000000              		mov ebx,0
+   177 00000132 CD80                    		int 0x80
+   178                                  		 
+   179                                  	end:
+   180 00000134 89EC                    		mov		esp, ebp	; takedown stack frame
+   181 00000136 5D                      		pop		ebp			; same as "leave" op
+   182                                  
+   183 00000137 B800000000              		mov		eax,0		; normal, no error, return value
+   184 0000013C C3                      		ret					; return

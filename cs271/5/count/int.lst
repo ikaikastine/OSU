@@ -1,0 +1,203 @@
+     1                                  	; Name: Kevin Stine 
+     2                                  	; Creation date: 1/26/15
+     3                                  	; Last modified: 2/2/15
+     4                                  	;
+     5                                  	; 
+     6                                  	; Name of file: int.asm
+     7                                  	; Description: print an integer from storage and from a register
+     8                                  		
+     9                                  	; Assemble:	nasm -f elf -l template.lst  template.asm
+    10                                  	; Link:		gcc -m32 -o template  template.o
+    11                                  	; Run:		./template
+    12                                  	; Output:	a=5, eax=7
+    13                                  
+    14                                  	; Equivalent C code
+    15                                  	; /* printf1.c  print an int and an expression */
+    16                                  	; #include <stdio.h>
+    17                                  	; int main()
+    18                                  	; {
+    19                                  	;   int a=5;
+    20                                  	;   printf("a=%d, eax=%d\n", a, a+2);
+    21                                  	;   return 0;
+    22                                  	; }
+    23                                  
+    24                                  	; Declare needed external functions
+    25                                  	;
+    26                                  	extern	printf			; the C function, to be called
+    27                                  	extern scanf
+    28                                  SECTION .data				; Data section, initialized variables
+    29 00000000 50726F6772616D2054-     	title:			db "Program Title: assignment3.asm", 10, 0
+    30 00000009 69746C653A20617373-
+    31 00000012 69676E6D656E74332E-
+    32 0000001B 61736D0A00         
+    33 00000020 4E616D653A204B6576-     	designer: 		db "Name: Kevin Stine", 10, 0
+    34 00000029 696E205374696E650A-
+    35 00000032 00                 
+    36 00000033 506C6561736520656E-     	prompt: 		db "Please enter your name", 10, 0
+    37 0000003C 74657220796F757220-
+    38 00000045 6E616D650A00       
+    39 0000004B 48656C6C6F2025730A-     	greet:			db "Hello %s", 10, 0
+    40 00000054 00                 
+    41 00000055 257300                  	name_input:		db "%s", 0
+    42 00000058 596F752077696C6C20-     	instructions:	db "You will be prompted to enter a number until you enter a negative number", 10, 0
+    43 00000061 62652070726F6D7074-
+    44 0000006A 656420746F20656E74-
+    45 00000073 65722061206E756D62-
+    46 0000007C 657220756E74696C20-
+    47 00000085 796F7520656E746572-
+    48 0000008E 2061206E6567617469-
+    49 00000097 7665206E756D626572-
+    50 000000A0 0A00               
+    51 000000A2 506C6561736520656E-     	intPrompt:		db "Please enter a number less than or equal to 100", 10, 0
+    52 000000AB 7465722061206E756D-
+    53 000000B4 626572206C65737320-
+    54 000000BD 7468616E206F722065-
+    55 000000C6 7175616C20746F2031-
+    56 000000CF 30300A00           
+    57 000000D3 256400                  	intFmt:			db "%d", 0
+    58 000000D6 5468652073756D206F-     	sum:			db "The sum of your numbers is: %d", 10, 0
+    59 000000DF 6620796F7572206E75-
+    60 000000E8 6D626572732069733A-
+    61 000000F1 2025640A00         
+    62 000000F6 54686520726F756E64-     	avg:			db "The rounded average is: %d", 10, 0
+    63 000000FF 656420617665726167-
+    64 00000108 652069733A2025640A-
+    65 00000111 00                 
+    66 00000112 5468616E6B20796F75-     	goodbye:		db "Thank you %s. Have a nice day.", 10, 0
+    67 0000011B 2025732E2048617665-
+    68 00000124 2061206E6963652064-
+    69 0000012D 61792E0A00         
+    70 00000132 546865206E756D6265-     	error:			db "The number you entered was greater than 100", 10, 0
+    71 0000013B 7220796F7520656E74-
+    72 00000144 657265642077617320-
+    73 0000014D 677265617465722074-
+    74 00000156 68616E203130300A00 
+    75 0000015F 54686520746F74616C-     	total:			db "The total numbers entered were: %d", 10, 0
+    76 00000168 206E756D6265727320-
+    77 00000171 656E74657265642077-
+    78 0000017A 6572653A2025640A00 
+    79 00000183 5468652076616C7565-     	eaxVal:			db "The value of eax is %d", 10, 0
+    80 0000018C 206F66206561782069-
+    81 00000195 732025640A00       
+    82 0000019B 00000000                	count:			dd 0
+    83                                  SECTION .bss				; BSS, uninitialized variables
+    84 00000000 <res 00000004>          	user_name:	resd 1
+    85 00000004 <res 00000004>          	user_int: 	resd 1
+    86 00000008 <res 00000004>          	sumInt:		resd 1
+    87 0000000C <res 00000004>          	avgInt:		resd 1
+    88                                  SECTION .text				; Code section.
+    89                                  
+    90                                  	global main				; the standard gcc entry point
+    91                                  
+    92                                  	main:					; the program label for the entry point
+    93 00000000 55                      		push	ebp			; set up stack frame
+    94 00000001 89E5                    		mov		ebp,esp
+    95                                  	
+    96                                  		;Print out the name of the designer 
+    97 00000003 68[20000000]            		push dword designer
+    98 00000008 E8(00000000)            		call printf
+    99 0000000D 81C404000000            		add esp, 4
+   100                                  
+   101                                  		;Print out the title of the program 
+   102 00000013 68[00000000]            		push dword title
+   103 00000018 E8(00000000)            		call printf 
+   104 0000001D 81C404000000            		add esp, 4
+   105                                  
+   106                                  		;Display the prompt to the user
+   107 00000023 68[33000000]            		push dword prompt
+   108 00000028 E8(00000000)            		call printf
+   109 0000002D 81C404000000            		add esp, 4
+   110                                  
+   111                                  		;Prompt the user for their name 
+   112 00000033 68[00000000]            		push dword user_name
+   113 00000038 68[55000000]            		push dword name_input
+   114 0000003D E8(00000000)            		call scanf
+   115 00000042 81C408000000            		add esp, 8
+   116                                  
+   117                                  		;Greet the user by name 
+   118 00000048 BA[00000000]            		mov edx, user_name
+   119 0000004D 52                      		push edx
+   120 0000004E 68[4B000000]            		push dword greet
+   121 00000053 E8(00000000)            		call printf
+   122 00000058 81C404000000            		add esp, 4
+   123                                  
+   124                                  		;Display the instruction set to the user 
+   125 0000005E 68[58000000]            		push dword instructions
+   126 00000063 E8(00000000)            		call printf 
+   127 00000068 81C404000000            		add esp, 4
+   128                                  
+   129 0000006E B800000000              		mov eax, 0
+   130                                  		 
+   131                                  	;Begin the process of calculating the numbers 	 
+   132                                  	calculate:
+   133 00000073 BB00000000              		mov ebx, 0
+   134                                  		input:
+   135 00000078 68[A2000000]            			push dword intPrompt
+   136 0000007D E8(00000000)            			call printf 
+   137 00000082 81C404000000            			add esp, 4
+   138                                  
+   139 00000088 68[04000000]            			push dword user_int
+   140 0000008D 68[D3000000]            			push dword intFmt
+   141 00000092 E8(00000000)            			call scanf
+   142 00000097 81C408000000            			add esp, 8
+   143                                  
+   144 0000009D A1[04000000]            			mov eax, [user_int]
+   145 000000A2 3D64000000              			cmp eax, 100
+   146 000000A7 7F0C                    			jg .falseLoop
+   147 000000A9 3D00000000              			cmp eax, 0
+   148 000000AE 7C30                    			jl .finish
+   149 000000B0 E910000000              			jmp .calc
+   150                                  		
+   151                                  		;If the number entered is above 100
+   152                                  		.falseLoop:
+   153 000000B5 68[32010000]            			push dword error 
+   154 000000BA E8(00000000)            			call printf 
+   155 000000BF 81C404000000            			add esp, 4
+   156                                  		
+   157                                  		;Calculate the sum and average 
+   158                                  		.calc: 
+   159 000000C5 A3[04000000]            			mov [user_int], eax 
+   160 000000CA A1[08000000]            			mov eax, [sumInt] 
+   161 000000CF 0305[04000000]          			add eax, [user_int]
+   162 000000D5 A3[08000000]            			mov [sumInt], eax 
+   163                                  
+   164                                  			;mov ebx, [count]
+   165 000000DA 43                      			inc ebx 
+   166                                  
+   167 000000DB E998FFFFFF              			jmp input
+   168                                  
+   169                                  		;Once the loop has finished, print out the count, sum, and average 
+   170                                  		.finish: 
+   171                                  			;mov ebx, [count]
+   172 000000E0 53                      			push ebx 
+   173 000000E1 68[5F010000]            			push dword total
+   174 000000E6 E8(00000000)            			call printf 
+   175 000000EB 81C404000000            			add esp, 4
+   176                                  
+   177                                  			;sum 
+   178 000000F1 A1[08000000]            			mov eax, [sumInt]
+   179 000000F6 50                      			push eax 
+   180 000000F7 68[D6000000]            			push dword sum
+   181 000000FC E8(00000000)            			call printf
+   182 00000101 81C404000000            			add esp, 4 
+   183                                  
+   184                                  			;avg 
+   185 00000107 BA00000000              			mov edx, 0
+   186 0000010C A1[08000000]            			mov eax, [sumInt]
+   187 00000111 F7F3                    			div ebx 
+   188 00000113 50                      			push eax
+   189 00000114 68[F6000000]            			push dword avg
+   190 00000119 E8(00000000)            			call printf 
+   191 0000011E 81C404000000            			add esp, 4 
+   192                                  
+   193 00000124 B8[00000000]            			mov eax, user_name
+   194 00000129 50                      			push eax
+   195 0000012A 68[12010000]            			push dword goodbye
+   196 0000012F E8(00000000)            			call printf
+   197 00000134 81C404000000            			add esp, 4  
+   198                                  
+   199 0000013A 89EC                    		mov		esp, ebp	; takedown stack frame
+   200 0000013C 5D                      		pop		ebp			; same as "leave" op
+   201                                  
+   202 0000013D B800000000              		mov		eax, 0		; normal, no error, return value
+   203 00000142 C3                      		ret					; return

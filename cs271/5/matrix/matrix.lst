@@ -1,0 +1,234 @@
+     1                                  ; Name:
+     2                                  ; Creation date: 
+     3                                  ; Last modified: 
+     4                                  ;
+     5                                  ; 
+     6                                  ; Name of file: printf1.asm
+     7                                  ; Description: print an integer from storage and from a register
+     8                                          
+     9                                  ; Assemble: nasm -f elf -l template.lst  template.asm
+    10                                  ; Link:     gcc -m32 -o template  template.o
+    11                                  ; Run:      ./template
+    12                                  ; Output:   a=5, eax=7
+    13                                  
+    14                                  ; Equivalent C code
+    15                                  ; /* printf1.c  print an int and an expression */
+    16                                  ; #include <stdio.h>
+    17                                  ; int main()
+    18                                  ; {
+    19                                  ;   int a=5;
+    20                                  ;   printf("a=%d, eax=%d\n", a, a+2);
+    21                                  ;   return 0;
+    22                                  ; }
+    23                                  
+    24                                  ; Declare needed external functions
+    25                                  ;
+    26                                  extern  printf          ; the C function, to be called
+    27                                  %define C esp+4
+    28                                  SECTION .data               ; Data section, initialized variables
+    29 00000000 010000000200000003-         matrix  dd  1, 2,                3, 4,
+    30 00000009 00000004000000     
+    31                                  
+    32 00000010 050000000600000007-         matrix2 dd  5, 6,                 7, 8,
+    33 00000019 00000008000000     
+    34 00000020 04000000                    matrixLen:  dd 4
+    35                                     
+    36 00000024 454358203D2025640A-     testEcx:    db "ECX = %d", 10, 0
+    37 0000002D 00                 
+    38 0000002E 454458203D2025640A-     testEdx:    db "EDX = %d", 10, 0
+    39 00000037 00                 
+    40 00000038 454158203D2025640A-     testEax:    db "EAX = %d", 10, 0
+    41 00000041 00                 
+    42 00000042 454258203D2025640A-     testEbx:    db "EBX = %d", 10, 0
+    43 0000004B 00                 
+    44 0000004C 25642000                arrayFmt:   db "%d ", 0
+    45 00000050 5468652076616C7565-     testMul:    db "The value after multiplying is = %d", 10, 0
+    46 00000059 206166746572206D75-
+    47 00000062 6C7469706C79696E67-
+    48 0000006B 206973203D2025640A-
+    49 00000074 00                 
+    50 00000075 5468652076616C7565-     resultFmt:  db "The value for the new array is = %d", 10, 0
+    51 0000007E 20666F722074686520-
+    52 00000087 6E6577206172726179-
+    53 00000090 206973203D2025640A-
+    54 00000099 00                 
+    55 0000009A 25642000                intFmt:     db "%d ", 0
+    56 0000009E 25642000                matrixFmt:  db "%d ", 0
+    57 000000A2 200A00                  newLine:    db " ", 10, 0
+    58 000000A5 04                      arrayLen:   db 4
+    59                                  
+    60                                  SECTION .bss                ; BSS, uninitialized variables
+    61 00000000 <res 00000008>             val:     resq 1
+    62 00000008 <res 00000004>             val1:    resd 1
+    63 0000000C <res 00000004>             add1:    resd 1
+    64 00000010 <res 00000004>             add2:    resd 1
+    65 00000014 <res 00000004>             add3:    resd 1
+    66 00000018 <res 00000004>             add4:    resd 1
+    67 0000001C <res 00000004>             add5:    resd 1
+    68 00000020 <res 00000004>             add6:    resd 1
+    69 00000024 <res 00000004>             add7:    resd 1
+    70 00000028 <res 00000004>             add8:    resd 1
+    71 0000002C <res 00000004>             result1: resd 1
+    72 00000030 <res 00000004>             result2: resd 1
+    73 00000034 <res 00000004>             result3: resd 1
+    74 00000038 <res 00000004>             result4: resd 1
+    75                                  SECTION .text               ; Code section.
+    76                                  
+    77                                  global main             ; the standard gcc entry point
+    78                                  
+    79                                  main:                   ; the program label for the entry point
+    80 00000000 55                              push    ebp         ; set up stack frame
+    81 00000001 89E5                            mov     ebp,esp
+    82                                  
+    83                                          .setup:
+    84 00000003 8B0D[A5000000]                      mov ecx, [arrayLen]
+    85                                          .printMatrix1:
+    86 00000009 51                                  push ecx                                    
+    87 0000000A FFB6[00000000]                      push dword [matrix + esi]                    
+    88 00000010 68[4C000000]                        push dword arrayFmt                          
+    89 00000015 E8(00000000)                        call printf                                 
+    90 0000001A 81C408000000                        add esp, 8                                 
+    91 00000020 59                                  pop ecx                                     
+    92                                  
+    93 00000021 81C604000000                        add esi, 4
+    94 00000027 E2E0                                loop .printMatrix1
+    95                                  
+    96 00000029 68[A2000000]                        push dword newLine
+    97 0000002E E8(00000000)                        call printf 
+    98 00000033 81C404000000                        add esp, 4
+    99 00000039 8B0D[A5000000]                      mov ecx, [arrayLen]
+   100 0000003F 31F6                                xor esi, esi 
+   101                                          .printMatrix2:
+   102 00000041 51                                  push ecx                                    
+   103 00000042 FFB6[10000000]                      push dword [matrix2 + esi]                    
+   104 00000048 68[4C000000]                        push dword arrayFmt                          
+   105 0000004D E8(00000000)                        call printf                                 
+   106 00000052 81C408000000                        add esp, 8                                 
+   107 00000058 59                                  pop ecx                                     
+   108                                  
+   109 00000059 81C604000000                        add esi, 4
+   110 0000005F E2E0                                loop .printMatrix2
+   111                                  
+   112 00000061 68[A2000000]                        push dword newLine
+   113 00000066 E8(00000000)                        call printf 
+   114 0000006B 81C404000000                        add esp, 4
+   115                                  
+   116                                          ;calculate the first element of new matrix 
+   117 00000071 31F6                                xor esi, esi 
+   118 00000073 8B86[00000000]                      mov eax, [matrix + esi]
+   119 00000079 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   120                                          
+   121 0000007F F7E3                                mul ebx
+   122 00000081 A3[0C000000]                        mov [add1], eax
+   123 00000086 81C604000000                        add esi, 4
+   124                                              
+   125                                  
+   126 0000008C 8B86[00000000]                      mov eax, [matrix + esi]
+   127 00000092 81C604000000                        add esi, 4
+   128 00000098 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   129                                  
+   130 0000009E F7E3                                mul ebx 
+   131 000000A0 A3[10000000]                        mov [add2], eax 
+   132                                  
+   133                                              ;pop eax  
+   134 000000A5 A1[0C000000]                        mov eax, [add1]
+   135 000000AA 0305[10000000]                      add eax, [add2]
+   136 000000B0 A3[2C000000]                        mov [result1], eax 
+   137                                  
+   138                                          ;calculate the second element of the new matrix
+   139 000000B5 31F6                                xor esi, esi 
+   140 000000B7 8B86[00000000]                      mov eax, [matrix + esi]
+   141 000000BD 81C604000000                        add esi, 4
+   142 000000C3 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   143                                  
+   144 000000C9 F7E3                                mul ebx 
+   145 000000CB A3[14000000]                        mov [add3], eax 
+   146                                              
+   147 000000D0 8B86[00000000]                      mov eax, [matrix + esi]
+   148 000000D6 81C608000000                        add esi, 8
+   149 000000DC 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   150 000000E2 F7E3                                mul ebx
+   151 000000E4 A3[18000000]                        mov [add4], eax 
+   152                                  
+   153 000000E9 A1[14000000]                        mov eax, [add3]
+   154 000000EE 0305[18000000]                      add eax, [add4]
+   155 000000F4 A3[30000000]                        mov [result2], eax 
+   156                                  
+   157                                          ;calculate the third element of the new matrix 
+   158 000000F9 31F6                                xor esi, esi 
+   159 000000FB 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   160 00000101 81C608000000                        add esi, 8
+   161 00000107 8B86[00000000]                      mov eax, [matrix + esi]
+   162                                  
+   163 0000010D F7E3                                mul ebx 
+   164 0000010F A3[1C000000]                        mov [add5], eax 
+   165                                  
+   166 00000114 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   167 0000011A 81C604000000                        add esi, 4
+   168 00000120 8B86[00000000]                      mov eax, [matrix + esi]
+   169                                  
+   170 00000126 F7E3                                mul ebx 
+   171 00000128 A3[20000000]                        mov [add6], eax 
+   172                                              ;pop eax 
+   173 0000012D A1[1C000000]                        mov eax, [add5]
+   174 00000132 0305[20000000]                      add eax, [add6]
+   175 00000138 A3[34000000]                        mov [result3], eax 
+   176                                  
+   177                                          ;calculate the fourth element of the new matrix 
+   178 0000013D 31F6                                xor esi, esi 
+   179 0000013F 81C604000000                        add esi, 4
+   180 00000145 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   181                                          
+   182 0000014B 81C604000000                        add esi, 4
+   183 00000151 8B86[00000000]                      mov eax, [matrix + esi]
+   184                                  
+   185 00000157 F7E3                                mul ebx 
+   186 00000159 A3[24000000]                        mov [add7], eax
+   187                                  
+   188 0000015E 81C604000000                        add esi, 4
+   189 00000164 8B86[00000000]                      mov eax, [matrix + esi]
+   190 0000016A 8B9E[10000000]                      mov ebx, [matrix2 + esi]
+   191                                              
+   192 00000170 F7E3                                mul ebx 
+   193 00000172 A3[28000000]                        mov [add8], eax 
+   194                                  
+   195 00000177 A1[24000000]                        mov eax, [add7]
+   196 0000017C 0305[28000000]                      add eax, [add8]
+   197 00000182 A3[38000000]                        mov [result4], eax 
+   198                                  
+   199                                          .printNewMatrix:
+   200 00000187 FF35[2C000000]                      push dword [result1]
+   201 0000018D 68[9A000000]                        push dword intFmt
+   202 00000192 E8(00000000)                        call printf 
+   203 00000197 81C408000000                        add esp, 8
+   204                                  
+   205 0000019D FF35[30000000]                      push dword [result2]
+   206 000001A3 68[9A000000]                        push dword intFmt
+   207 000001A8 E8(00000000)                        call printf 
+   208 000001AD 81C408000000                        add esp, 8
+   209                                  
+   210 000001B3 68[A2000000]                        push dword newLine
+   211 000001B8 E8(00000000)                        call printf 
+   212 000001BD 81C404000000                        add esp, 4
+   213                                  
+   214 000001C3 FF35[34000000]                      push dword [result3]
+   215 000001C9 68[9A000000]                        push dword intFmt
+   216 000001CE E8(00000000)                        call printf 
+   217 000001D3 81C408000000                        add esp, 8
+   218                                  
+   219 000001D9 FF35[38000000]                      push dword [result4]
+   220 000001DF 68[9A000000]                        push dword intFmt
+   221 000001E4 E8(00000000)                        call printf 
+   222 000001E9 81C408000000                        add esp, 8
+   223                                  
+   224 000001EF 68[A2000000]                        push dword newLine
+   225 000001F4 E8(00000000)                        call printf 
+   226 000001F9 81C404000000                        add esp, 4
+   227                                              
+   228                                  
+   229 000001FF 89EC                            mov     esp, ebp    ; takedown stack frame
+   230 00000201 5D                              pop     ebp         ; same as "leave" op
+   231                                  
+   232 00000202 B800000000                      mov     eax,0       ; normal, no error, return value
+   233 00000207 C3                              ret                 ; return
+   234                                          

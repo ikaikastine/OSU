@@ -1,0 +1,50 @@
+     1                                  	; printf1.asm   print an integer from storage and from a register
+     2                                  	; Assemble:	nasm -f elf -l printf.lst  printf1.asm
+     3                                  	; Link:		gcc -o printf1  printf1.o
+     4                                  	; Run:		printf1
+     5                                  	; Output:	a=5, eax=7
+     6                                  
+     7                                  	; Equivalent C code
+     8                                  	; /* printf1.c  print an int and an expression */
+     9                                  	; #include <stdio.h>
+    10                                  	; int main()
+    11                                  	; {
+    12                                  	;   int a=5;
+    13                                  	;   printf("a=%d, eax=%d\n", a, a+2);
+    14                                  	;   return 0;
+    15                                  	; }
+    16                                  
+    17                                  	; Declare some external functions
+    18                                  	;
+    19                                  		extern	printf		; the C function, to be called
+    20                                  SECTION .data		; Data section, initialized variables
+    21                                  
+    22 00000000 05000000                	a:	dd	5		; int a=5;
+    23 00000004 613D25642C20656178-     	fmt:    db "a=%d, eax=%d", 10, 0 ; The printf format, "\n",'0'
+    24 0000000D 3D25640A00         
+    25                                  
+    26                                  
+    27                                  SECTION .text                   ; Code section.
+    28                                  
+    29                                  	global main		; the standard gcc entry point
+    30                                  
+    31                                  	main:				; the program label for the entry point
+    32 00000000 55                      		push    ebp		; set up stack frame
+    33 00000001 89E5                    		mov     ebp,esp
+    34                                  	
+    35 00000003 A1[00000000]            		mov	eax, [a]	; put a from store into register
+    36                                  
+    37 00000008 0502000000              		add	eax, 2		; a+2
+    38                                  
+    39 0000000D 50                      		push	eax		; value of a+2
+    40 0000000E FF35[00000000]          		push    dword [a]	; value of variable a
+    41 00000014 68[04000000]            		push    dword fmt	; address of ctrl string
+    42 00000019 E8(00000000)            		call    printf		; Call C function
+    43 0000001E 81C40C000000            		add     esp, 12		; pop stack 3 push times 4 bytes
+    44                                  
+    45 00000024 89EC                    		mov     esp, ebp	; takedown stack frame
+    46 00000026 5D                      		pop     ebp		; same as "leave" op
+    47                                  
+    48 00000027 B800000000              		mov	eax,0		;  normal, no error, return value
+    49 0000002C C3                      		ret			; return
+    50                                  	

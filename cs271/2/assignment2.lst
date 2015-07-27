@@ -1,0 +1,178 @@
+     1                                  		; Name: Kevin Stine
+     2                                  		; Creation date: 20 January 2015
+     3                                  		; Last modified: 13:28 23 January 2015
+     4                                  		;
+     5                                  		; 
+     6                                  		; Name of file: assignment2.asm
+     7                                  		; Description: First assembly assignment, with printf/scanf and arithmetic
+     8                                  			
+     9                                  		; Assemble:	nasm -f elf -l assignment2.lst  assignment2.asm
+    10                                  		; Link:		gcc -o assignment2  assignment2.o
+    11                                  		; Run:		assignment2
+    12                                  		; Output:	Name, assignment, sum, difference, product, quotient, remainder, termination message.
+    13                                  
+    14                                  		; Equivalent C code
+    15                                  		; /* printf1.c  print an int and an expression */
+    16                                  		; #include <stdio.h>
+    17                                  		; int main()
+    18                                  		; {
+    19                                  		;	int int1, int2, int3;
+    20                                  		;   printf("Name: Kevin Stine\n");
+    21                                  		;	printf("Assignment2\n");
+    22                                  		;	printf("Please enter two numbers seperated by a space\n");
+    23                                  		;	scanf("%d %d", int1, int2);
+    24                                  		; 	
+    25                                  		;	int3 = int1 + int2;
+    26                                  		; 	printf("The sum of int1 + int2 = %d\n");
+    27                                  		;	int3 = int1 - int2;
+    28                                  		;	printf("The difference of int1 - int2 = %d\n");
+    29                                  		;	int3 = int1 * int2;
+    30                                  		;	printf("The product of int1 * int2 = %d\n");
+    31                                  		; 	int3 = int1 / int2;
+    32                                  		;	printf("The quotient of int1 / int2 = %d\n");
+    33                                  		;	int 3 = int1 % int2;
+    34                                  		;	printf("The remainder of int1 / int2 = %d\n");
+    35                                  		;	printf("Program execution complete. Exiting now.\n");
+    36                                  		;
+    37                                  		;   return 0;
+    38                                  		; }
+    39                                  
+    40                                  		; Declare needed external functions
+    41                                  		;
+    42                                  	extern printf			; the C function, to be called
+    43                                  	extern scanf			; C input function
+    44                                  
+    45                                  SECTION .data				; Data section, initialized variables
+    46 00000000 4E616D653A204B6576-     	name: 	db "Name: Kevin Stine", 10, 0
+    47 00000009 696E205374696E650A-
+    48 00000012 00                 
+    49 00000013 50726F6772616D2054-     	hw:		db "Program Title: Assignment 2", 10, 0
+    50 0000001C 69746C653A20417373-
+    51 00000025 69676E6D656E742032-
+    52 0000002E 0A00               
+    53 00000030 256420256400            	input:	db "%d %d",0			 ; format for scanf
+    54 00000036 506C6561736520656E-     	prompt:	db "Please enter two numbers seperated by a space", 10, 0
+    55 0000003F 7465722074776F206E-
+    56 00000048 756D62657273207365-
+    57 00000051 706572617465642062-
+    58 0000005A 792061207370616365-
+    59 00000063 0A00               
+    60 00000065 5468652073756D206F-     	addfmt: db "The sum of int1 + int2 = %d", 10, 0
+    61 0000006E 6620696E7431202B20-
+    62 00000077 696E7432203D202564-
+    63 00000080 0A00               
+    64 00000082 546865206469666665-     	subfmt: db "The difference of int1 - int2 = %d", 10, 0
+    65 0000008B 72656E6365206F6620-
+    66 00000094 696E7431202D20696E-
+    67 0000009D 7432203D2025640A00 
+    68 000000A6 5468652070726F6475-     	mulfmt: db "The product of int1 * int2 = %d", 10, 0
+    69 000000AF 6374206F6620696E74-
+    70 000000B8 31202A20696E743220-
+    71 000000C1 3D2025640A00       
+    72 000000C7 5468652071756F7469-     	divfmt: db "The quotient of int1 / int2 = %d", 10, 0
+    73 000000D0 656E74206F6620696E-
+    74 000000D9 7431202F20696E7432-
+    75 000000E2 203D2025640A00     
+    76 000000E9 5468652072656D6169-     	remfmt: db "The remainder of int1 / int2 = %d", 10, 0
+    77 000000F2 6E646572206F662069-
+    78 000000FB 6E7431202F20696E74-
+    79 00000104 32203D2025640A00   
+    80 0000010C 50726F6772616D2065-     	end:	db "Program execution complete. Exiting now.", 10, 0
+    81 00000115 7865637574696F6E20-
+    82 0000011E 636F6D706C6574652E-
+    83 00000127 2045786974696E6720-
+    84 00000130 6E6F772E0A00       
+    85                                  
+    86                                  SECTION .bss				; BSS, uninitialized variables
+    87 00000000 <res 00000004>          	int1:	resd 1
+    88 00000004 <res 00000004>          	int2:	resd 1
+    89 00000008 <res 00000004>          	int3:	resd 1
+    90 0000000C <res 00000004>          	quotient: resd 1
+    91 00000010 <res 00000004>          	remainder: resd 1
+    92                                  		
+    93                                  SECTION .text				; Code section.
+    94                                  
+    95                                  	global main				; the standard gcc entry point
+    96                                  
+    97                                  	main:					; the program label for the entry point
+    98 00000000 55                      		push ebp			; set up stack frame
+    99 00000001 89E5                    		mov ebp,esp
+   100                                  
+   101 00000003 68[00000000]            		push dword name		; print name
+   102 00000008 E8(00000000)            		call printf
+   103 0000000D 81C404000000            		add esp, 4
+   104                                  
+   105 00000013 68[13000000]            		push dword hw		; print project name
+   106 00000018 E8(00000000)            		call printf
+   107 0000001D 81C404000000            		add esp, 4
+   108                                  
+   109 00000023 68[36000000]            		push dword prompt	; print prompt for variables
+   110 00000028 E8(00000000)            		call printf
+   111 0000002D 81C404000000            		add esp, 4
+   112                                  
+   113 00000033 68[04000000]            		push dword int2		; variable 2
+   114 00000038 68[00000000]            		push dword int1		; variable 1
+   115 0000003D 68[30000000]            		push dword input	; input format
+   116 00000042 E8(00000000)            		call scanf			; take two variables as an input
+   117 00000047 81C40C000000            		add esp, 12
+   118                                  
+   119                                  
+   120 0000004D A1[04000000]            		mov eax, [int2]
+   121 00000052 99                      		cdq
+   122 00000053 8B1D[00000000]          		mov ebx, [int1]
+   123 00000059 F7F3                    		div ebx
+   124                                  
+   125 0000005B A1[04000000]            		mov eax, [int2]		; adds the two variables
+   126 00000060 8B1D[00000000]          		mov ebx, [int1]
+   127 00000066 01D8                    		add eax, ebx
+   128 00000068 50                      		push eax
+   129 00000069 68[65000000]            		push dword addfmt
+   130 0000006E E8(00000000)            		call printf
+   131 00000073 81C404000000            		add esp, 4
+   132                                  
+   133 00000079 A1[04000000]            		mov eax, [int2]		; subtracts the two variables
+   134 0000007E 8B1D[00000000]          		mov ebx, [int1]
+   135 00000084 29C3                    		sub ebx, eax
+   136 00000086 53                      		push ebx
+   137 00000087 68[82000000]            		push dword subfmt
+   138 0000008C E8(00000000)            		call printf
+   139 00000091 81C404000000            		add esp, 4
+   140                                  
+   141 00000097 A1[04000000]            		mov eax, [int2]		; multiplys the two variables
+   142 0000009C 8B1D[00000000]          		mov ebx, [int1]
+   143 000000A2 F7E3                    		mul ebx
+   144 000000A4 50                      		push eax
+   145 000000A5 68[A6000000]            		push dword mulfmt
+   146 000000AA E8(00000000)            		call printf
+   147 000000AF 81C404000000            		add esp, 4
+   148                                  
+   149 000000B5 8B1D[04000000]          		mov ebx, [int2]		; divides the two variables 
+   150 000000BB A1[00000000]            		mov eax, [int1]
+   151 000000C0 99                      		cdq
+   152 000000C1 F7F3                    		div ebx
+   153 000000C3 A3[0C000000]            		mov [quotient], eax
+   154 000000C8 50                      		push eax
+   155 000000C9 68[C7000000]            		push dword divfmt
+   156 000000CE E8(00000000)            		call printf
+   157 000000D3 81C404000000            		add esp, 4
+   158                                  
+   159 000000D9 8B1D[04000000]          		mov ebx, [int2]		; finds the remainder after dividing the two variables
+   160 000000DF A1[00000000]            		mov eax, [int1]
+   161 000000E4 99                      		cdq
+   162 000000E5 F7F3                    		div ebx
+   163 000000E7 8915[10000000]          		mov [remainder], edx
+   164 000000ED 52                      		push edx
+   165 000000EE 68[E9000000]            		push dword remfmt
+   166 000000F3 E8(00000000)            		call printf
+   167 000000F8 81C404000000            		add esp, 4
+   168                                  
+   169 000000FE 68[0C010000]            		push dword end		; prints the termination message
+   170 00000103 E8(00000000)            		call printf
+   171 00000108 81C404000000            		add esp, 4
+   172                                  		
+   173 0000010E 89EC                    		mov esp, ebp	; takedown stack frame
+   174 00000110 5D                      		pop ebp			; same as "leave" op
+   175                                  
+   176 00000111 B800000000              		mov eax,0		; normal, no error, return value
+   177 00000116 C3                      		ret					; return
+   178                                  	

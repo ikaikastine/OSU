@@ -1,0 +1,450 @@
+     1                                  	; Name: Kevin Stine
+     2                                  	; Creation date: 2/8/15
+     3                                  	; Last modified: 2/10/15
+     4                                  	;
+     5                                  	; 
+     6                                  	; Name of file: array.asm
+     7                                  	; Description: print an integer from storage and from a register
+     8                                  		
+     9                                  	; Assemble:	nasm -f elf -l array.lst  array.asm
+    10                                  	; Link:		gcc -m32 -o array  array.o
+    11                                  	; Run:		./array
+    12                                  	; Output:	a=5, eax=7
+    13                                  
+    14                                  	; Equivalent C code
+    15                                  	; /* array.c  print an int and an expression */
+    16                                  	; #include <stdio.h>
+    17                                  	; int main()
+    18                                  	; {
+    19                                  	;   int a=5;
+    20                                  	;   printf("a=%d, eax=%d\n", a, a+2);
+    21                                  	;   return 0;
+    22                                  	; }
+    23                                  
+    24                                  	; Declare needed external functions
+    25                                  	;
+    26                                  	extern printf  
+    27                                  	extern scanf
+    28                                  
+    29                                  SECTION .data              ; Data section, initialized variables
+    30                                  
+    31                                  	;data relevent to the array section 
+    32 00000000 010000000200000003-     	array: 		dd 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+    33 00000009 000000040000000500-
+    34 00000012 000006000000070000-
+    35 0000001B 000800000009000000-
+    36 00000024 00000000           
+    37 00000028 09000000                	arrayLen: 	dd 9  ; length of array 
+    38 0000002C 25642000                	arrayFmt: 	db "%d ", 0 ; output format
+    39 00000030 12000000                	newArrayLen:	dd 18 ; length of new array 
+    40                                  
+    41 00000034 506C65617365207365-     	welcome: 	db "Please select from the following.", 10, 0
+    42 0000003D 6C6563742066726F6D-
+    43 00000046 2074686520666F6C6C-
+    44 0000004F 6F77696E672E0A00   
+    45 00000057 31202D207265766572-     	prompt:		db "1 - reverse an array, 2 - rotate an array, 3 - frequency of a string, 4 - Sieve of Eratosthenes", 10, 0
+    46 00000060 736520616E20617272-
+    47 00000069 61792C2032202D2072-
+    48 00000072 6F7461746520616E20-
+    49 0000007B 61727261792C203320-
+    50 00000084 2D206672657175656E-
+    51 0000008D 6379206F6620612073-
+    52 00000096 7472696E672C203420-
+    53 0000009F 2D205369657665206F-
+    54 000000A8 6620457261746F7374-
+    55 000000B1 68656E65730A00     
+    56 000000B8 256400                  	inputFmt:	db "%d", 0
+    57                                  
+    58 000000BB 200A00                  	newline:	db " ", 10, 0
+    59 000000BE 54686520636F646520-     	segFault:	db "The code seg faults after this line", 10, 0
+    60 000000C7 736567206661756C74-
+    61 000000D0 732061667465722074-
+    62 000000D9 686973206C696E650A-
+    63 000000E2 00                 
+    64 000000E3 57656C636F6D652074-     	frequencyBlock:		db "Welcome to the frequency block", 10, 0
+    65 000000EC 6F2074686520667265-
+    66 000000F5 7175656E637920626C-
+    67 000000FE 6F636B0A00         
+    68 00000103 5468652076616C7565-     	testEax:	db "The value of eax is = %d", 10, 0
+    69 0000010C 206F66206561782069-
+    70 00000115 73203D2025640A00   
+    71                                  
+    72                                  	;data relevent to the frequency block section
+    73 0000011D 48656C6C6F2C206D79-     	freqString:	db "Hello, my name is Kevin.", 0
+    74 00000126 206E616D6520697320-
+    75 0000012F 4B6576696E2E00     
+    76                                  	freqStringLen:	equ $-freqString-1
+    77                                  
+    78 00000136 54686520666F6C6C6F-     	freqInstructions: 	db "The following is your string: ", 0
+    79 0000013F 77696E672069732079-
+    80 00000148 6F757220737472696E-
+    81 00000151 673A2000           
+    82 00000155 257300                  	strFmt:		db "%s", 0 ;string format 
+    83 00000158 25633A2000              	charFmt:	db "%c: ", 0 ;character format 
+    84 0000015D 256400                  	freqNum:	db "%d", 0
+    85                                  
+    86 00000160 506C6561736520656E-     	primePrompt:	db "Please enter the value of n", 10, 0
+    87 00000169 746572207468652076-
+    88 00000172 616C7565206F66206E-
+    89 0000017B 0A00               
+    90 0000017D 256400                  	primeFmt:	db "%d", 0
+    91                                  
+    92 00000180 5468652076616C7565-     	isNotPrime:	db "The value %d is not prime", 10, 0
+    93 00000189 202564206973206E6F-
+    94 00000192 74207072696D650A00 
+    95 0000019B 5468652076616C7565-     	primeVal:	db "The value %d is prime", 10, 0
+    96 000001A4 202564206973207072-
+    97 000001AD 696D650A00         
+    98 000001B2 546865726520617265-     	primeCount:	db "There are %d prime numbers in this range", 10, 0
+    99 000001BB 202564207072696D65-
+   100 000001C4 206E756D6265727320-
+   101 000001CD 696E20746869732072-
+   102 000001D6 616E67650A00       
+   103                                  
+   104                                  	;test prompts 
+   105 000001DC 5468652076616C7565-     	testEcx:	db "The value of ECX = %d", 10, 0
+   106 000001E5 206F6620454358203D-
+   107 000001EE 2025640A00         
+   108 000001F3 5468652076616C7565-     	testEdx:	db "The value of EDX = %d", 10, 0
+   109 000001FC 206F6620454458203D-
+   110 00000205 2025640A00         
+   111 0000020A 5468652076616C7565-     	testEbx:	db "The value of EBX = %d", 10, 0
+   112 00000213 206F6620454258203D-
+   113 0000021C 2025640A00         
+   114 00000221 5468652076616C7565-     	testEsi:	db "The value of ESI = %d", 10, 0
+   115 0000022A 206F6620455349203D-
+   116 00000233 2025640A00         
+   117 00000238 5468652072656D6169-     	testRemainder:	db "The remainder = %d", 10, 0
+   118 00000241 6E646572203D202564-
+   119 0000024A 0A00               
+   120 0000024C 5468652071756F7469-     	testQuotient:	db "The quotient = %d", 10, 0
+   121 00000255 656E74203D2025640A-
+   122 0000025E 00                 
+   123                                  
+   124                                  SECTION .bss 
+   125 00000000 <res 00000004>          	input: 		resd 1 
+   126 00000004 <res 00000004>          	newArray:	resd 1 
+   127 00000008 <res 00000004>          	primeInput:	resd 1
+   128 0000000C <res 00000004>          	remainder:	resd 1
+   129 00000010 <res 00000200>          	freqArray:	resd 128
+   130                                  
+   131                                  SECTION .text               ; Code section.
+   132                                  	
+   133                                  	global main             ; the standard gcc entry point
+   134                                  
+   135                                  	main:                   ; the program label for the entry point
+   136 00000000 55                      	    push    ebp         ; set up stack frame
+   137 00000001 89E5                    	    mov     ebp,esp
+   138                                  
+   139 00000003 BE00000000              	    mov esi, 0      ; counter to increment set up for looping through array
+   140                                  
+   141 00000008 68[34000000]            	    push dword welcome
+   142 0000000D E8(00000000)            	    call printf 
+   143 00000012 81C404000000            	    add esp, 4
+   144                                  
+   145 00000018 68[57000000]            	    push dword prompt 
+   146 0000001D E8(00000000)            	    call printf 
+   147 00000022 81C404000000            	    add esp, 4
+   148                                  
+   149 00000028 68[00000000]            	    push dword input 
+   150 0000002D 68[B8000000]            	    push dword inputFmt
+   151 00000032 E8(00000000)            	    call scanf 
+   152 00000037 81C404000000            	    add esp, 4
+   153                                  
+   154 0000003D A1[00000000]            	    mov eax, [input]
+   155 00000042 3D01000000              	    cmp eax, 1
+   156 00000047 7415                    	    je .reverse
+   157 00000049 3D02000000              	    cmp eax, 2 
+   158 0000004E 745F                    	    je .rotate
+   159 00000050 3D03000000              	    cmp eax, 3
+   160 00000055 7473                    	    je .frequency 
+   161 00000057 3D04000000              	    cmp eax, 4 
+   162 0000005C 7476                    	    je .prime 
+   163                                  	    ;jmp .end
+   164                                  
+   165                                  	.reverse:
+   166                                  		.init_setup:
+   167 0000005E 8B0D[28000000]          			mov ecx, [arrayLen]
+   168                                  		.initial:
+   169 00000064 51                      		    push ecx                                    
+   170 00000065 FFB6[00000000]          		    push dword [array + esi]                    
+   171 0000006B 68[2C000000]            		    push dword arrayFmt                          
+   172 00000070 E8(00000000)            		    call printf                                 
+   173 00000075 81C408000000            		    add esp, 8                                 
+   174 0000007B 59                      		    pop ecx                                     
+   175                                  
+   176 0000007C 81C604000000            		    add esi, 4
+   177 00000082 E2E0                    		    loop .initial  
+   178                                  
+   179 00000084 68[BB000000]            		    push dword newline
+   180 00000089 E8(00000000)            		    call printf 
+   181 0000008E 81C404000000            		    add esp, 4 
+   182                                  
+   183 00000094 68[00000000]            		    push dword array 
+   184 00000099 FF35[28000000]          		    push dword [arrayLen]
+   185 0000009F E884000000              		    call reverseArray
+   186 000000A4 81C408000000            		    add esp, 8
+   187 000000AA E960000000              		    jmp .end
+   188                                  
+   189                                  	.rotate:
+   190 000000AF 68[00000000]            		push dword array 
+   191 000000B4 FF35[28000000]          		push dword [arrayLen]
+   192 000000BA E8DB000000              		call rotateArray
+   193 000000BF 81C408000000            		add esp, 8
+   194 000000C5 E945000000              		jmp .end 
+   195                                  
+   196                                  	.frequency:
+   197 000000CA E824010000              		call freqBlock 		
+   198 000000CF E93B000000              		jmp .end
+   199                                  
+   200                                  	.prime:
+   201 000000D4 68[60010000]            		push dword primePrompt
+   202 000000D9 E8(00000000)            		call printf 
+   203 000000DE 81C404000000            		add esp, 4
+   204                                  
+   205 000000E4 68[08000000]            		push dword primeInput
+   206 000000E9 68[7D010000]            		push dword primeFmt
+   207 000000EE E8(00000000)            		call scanf 
+   208 000000F3 81C408000000            		add esp, 8
+   209                                  
+   210 000000F9 FF35[08000000]          		push dword [primeInput]
+   211 000000FF E8B8010000              		call primeCalc
+   212 00000104 81C404000000            		add esp, 4
+   213 0000010A E900000000              		jmp .end
+   214                                  
+   215                                  	.end:
+   216 0000010F 68[BB000000]            		push dword newline
+   217 00000114 E8(00000000)            		call printf 
+   218 00000119 81C404000000            		add esp, 4 
+   219                                  
+   220 0000011F 89EC                    		mov     esp, ebp    ; takedown stack frame
+   221 00000121 5D                      	    pop     ebp         ; same as "leave" op
+   222                                  
+   223 00000122 B800000000              	    mov     eax, 0       ; normal, no error, return value
+   224 00000127 C3                      	    ret                 ; return
+   225                                  
+   226                                  	reverseArray:
+   227 00000128 55                      		push ebp                    ; setup stack
+   228 00000129 89E5                    	    mov ebp, esp 
+   229 0000012B 81EC40000000            	    sub esp, 0x40                ; 64 bytes of local stack space 
+   230                                  
+   231                                  	    ; put parameters into registers
+   232 00000131 8B5D0C                  	    mov ebx, [ebp+12]           ; array
+   233 00000134 8B5508                  	    mov edx, [ebp+8]            ; arrayLen
+   234                                  			
+   235 00000137 8B750C                  		mov esi, [ebp+12]
+   236 0000013A 8B7D0C                  		mov edi, [ebp+12]
+   237 0000013D 8B4508                  		mov eax, [ebp+8]
+   238                                  
+   239 00000140 50                      		push eax 
+   240 00000141 2D01000000              		sub eax, 1
+   241 00000146 BB04000000              		mov ebx, 4
+   242 0000014B F7E3                    		mul ebx 
+   243 0000014D 01C7                    		add edi, eax 
+   244 0000014F BB02000000              		mov ebx, 2 
+   245 00000154 8B4508                  		mov eax, [ebp+8]
+   246                                  
+   247 00000157 FF36                    		push dword [esi]		
+   248                                  		.reverse_loop:
+   249                                  			;push dword [esi]
+   250 00000159 FF37                    			push dword [edi]
+   251                                  
+   252 0000015B 68[2C000000]            			push dword arrayFmt
+   253 00000160 E8(00000000)            			call printf 
+   254 00000165 81C404000000            			add esp, 4
+   255                                  			;pop dword [esi]
+   256 0000016B 8F07                    			pop dword [edi]
+   257                                  			;add esi, 4
+   258 0000016D 81EF04000000            			sub edi, 4 
+   259 00000173 39FE                    			cmp esi, edi
+   260 00000175 75E2                    			jne .reverse_loop
+   261 00000177 8F06                    			pop dword [esi]
+   262 00000179 FF35[00000000]          			push dword [array] 
+   263 0000017F 68[2C000000]            		    push dword arrayFmt 
+   264 00000184 E8(00000000)            		    call printf 
+   265 00000189 81C404000000            		    add esp, 4
+   266 0000018F E900000000              			jmp .exit
+   267                                  	
+   268                                  		.exit:
+   269 00000194 89EC                    			mov esp, ebp             ; undo "sub esp,0x40" above 
+   270 00000196 5D                      	        pop ebp
+   271 00000197 89D8                    	        mov eax, ebx                ; return the reversed array
+   272 00000199 C3                      	        ret 
+   273                                  
+   274                                  	rotateArray:
+   275 0000019A 55                      		push ebp                    ; setup stack
+   276 0000019B 89E5                    	    mov ebp, esp 
+   277 0000019D 81EC40000000            	    sub esp, 0x40                ; 64 bytes of local stack space 
+   278                                  
+   279 000001A3 8B5D0C                  	    mov ebx, [ebp+12]
+   280 000001A6 8B4D08                  		mov ecx, [ebp+8]
+   281 000001A9 D1CB                    		ror ebx, 1
+   282 000001AB 81C604000000            		add esi, 4
+   283 000001B1 81E901000000            		sub ecx, 1
+   284                                  
+   285                                  		.printNewArray:
+   286 000001B7 51                      		    push ecx                                    
+   287 000001B8 FFB6[00000000]          		    push dword [array + esi]                    
+   288 000001BE 68[2C000000]            		    push dword arrayFmt                          
+   289 000001C3 E8(00000000)            		    call printf                                 
+   290 000001C8 81C408000000            		    add esp, 8                                 
+   291 000001CE 59                      		    pop ecx                                     
+   292                                  
+   293 000001CF 81C604000000            		    add esi, 4
+   294 000001D5 E2E0                    		    loop .printNewArray 
+   295                                  
+   296 000001D7 FF35[00000000]          		    push dword [array] 
+   297 000001DD 68[2C000000]            		    push dword arrayFmt 
+   298 000001E2 E8(00000000)            		    call printf 
+   299 000001E7 81C404000000            		    add esp, 4
+   300                                  
+   301 000001ED 89EC                    	    mov esp, ebp 
+   302 000001EF 5D                      	    pop ebp
+   303 000001F0 89D8                    	    mov eax, ebx 
+   304 000001F2 C3                      	    ret 
+   305                                  
+   306                                  
+   307                                  	freqBlock:
+   308 000001F3 BE[1D010000]            		mov esi, freqString
+   309 000001F8 BF00000000              		mov edi, 0
+   310 000001FD BB[10000000]            		mov ebx, freqArray
+   311 00000202 B918000000              		mov ecx, freqStringLen
+   312                                  		.initLoop:
+   313 00000207 31C0                    		    xor eax, eax
+   314 00000209 8A06                    		    mov al, [esi]
+   315 0000020B 01C7                    		    add edi, eax
+   316 0000020D BB01000000              		    mov ebx, 1
+   317 00000212 011CBD[10000000]        		    add [freqArray+4*edi], ebx
+   318                                  
+   319 00000219 BF00000000              		    mov edi, 0
+   320 0000021E 81C601000000            		    add esi, 1
+   321 00000224 E2E1                    		    loop .initLoop
+   322                                  
+   323 00000226 68[1D010000]            		    push dword freqString
+   324 0000022B 68[55010000]            		    push dword strFmt
+   325 00000230 E8(00000000)            		    call printf
+   326 00000235 81C408000000            		    add esp, 8
+   327                                  
+   328 0000023B 68[BB000000]            		    push dword newline
+   329 00000240 E8(00000000)            		    call printf
+   330 00000245 81C404000000            		    add esp, 4
+   331                                     
+   332 0000024B BB[10000000]            		    mov ebx, freqArray
+   333 00000250 B980000000              		    mov ecx, 128                            
+   334 00000255 BE00000000              		    mov esi, 0                              
+   335                                  		.finalLoop:
+   336 0000025A B800000000              		    mov eax, 0
+   337 0000025F 390433                  		    cmp [ebx+esi], eax
+   338 00000262 744A                    		    je .skip
+   339 00000264 89F0                    		    mov eax, esi
+   340 00000266 53                      		    push ebx
+   341 00000267 51                      		    push ecx
+   342 00000268 BB04000000              		    mov ebx, 4
+   343 0000026D 99                      		    cdq
+   344 0000026E F7F3                    		    div ebx
+   345 00000270 50                      		    push eax
+   346 00000271 68[58010000]            		    push dword charFmt
+   347 00000276 E8(00000000)            		    call printf
+   348 0000027B 81C408000000            		    add esp, 8
+   349 00000281 59                      		    pop ecx
+   350 00000282 5B                      		    pop ebx
+   351                                  
+   352 00000283 53                      		    push ebx
+   353 00000284 51                      		    push ecx                                    
+   354 00000285 FF3433                  		    push dword [ebx + esi]     ;push value of array onto stack                                    
+   355 00000288 68[5D010000]            		    push dword freqNum
+   356 0000028D E8(00000000)            		    call printf                                 
+   357 00000292 81C408000000            		    add esp, 8                                 
+   358 00000298 59                      		    pop ecx                                    
+   359 00000299 5B                      		    pop ebx
+   360                                  
+   361 0000029A 53                      		    push ebx
+   362 0000029B 51                      		    push ecx
+   363 0000029C 68[BB000000]            		    push dword newline
+   364 000002A1 E8(00000000)            		    call printf
+   365 000002A6 81C404000000            		    add esp, 4
+   366 000002AC 59                      		    pop ecx
+   367 000002AD 5B                      		    pop ebx
+   368                                  
+   369                                  		.skip:
+   370 000002AE 81C604000000            		    add esi, 4
+   371 000002B4 E2A4                    		    loop .finalLoop
+   372                                  		.end:
+   373 000002B6 89EC                    		    mov esp, ebp
+   374 000002B8 5D                      			pop ebp
+   375 000002B9 89D8                    			mov eax, ebx
+   376 000002BB C3                      			ret 
+   377                                  
+   378                                  	primeCalc:
+   379 000002BC 55                      		push ebp                    ; setup stack
+   380 000002BD 89E5                    	    mov ebp, esp 
+   381 000002BF 81EC40000000            	    sub esp, 0x40 
+   382                                  
+   383 000002C5 B900000000              		mov ecx, 0
+   384                                  		.loop:
+   385                                  			
+   386 000002CA BB02000000              			mov ebx, 2     ; finds the remainder after dividing the two variables
+   387 000002CF A1[08000000]            			mov eax, [primeInput]
+   388 000002D4 99                      			cdq
+   389 000002D5 F7F3                    			div ebx
+   390 000002D7 8915[0C000000]          			mov [remainder], edx
+   391                                  
+   392 000002DD 8B1D[0C000000]          			mov ebx, [remainder]
+   393 000002E3 81FB00000000            			cmp ebx, 0 
+   394 000002E9 7423                    			je .checkPrime
+   395                                  			
+   396 000002EB 81FB00000000            			cmp ebx, 0 
+   397 000002F1 751B                    			jne .checkPrime
+   398                                  
+   399                                  		.notPrime:
+   400 000002F3 A1[08000000]            			mov eax, [primeInput]
+   401 000002F8 50                      			push eax
+   402 000002F9 68[80010000]            			push dword isNotPrime
+   403 000002FE E8(00000000)            			call printf 
+   404 00000303 81C404000000            			add esp, 4
+   405 00000309 E95D000000              			jmp .endLoop
+   406                                  
+   407                                  		.checkPrime:
+   408 0000030E 81FB00000000            			cmp ebx, 0
+   409 00000314 74DD                    			je .notPrime
+   410 00000316 A1[08000000]            			mov eax, [primeInput]
+   411 0000031B 3D03000000              			cmp eax, 3
+   412 00000320 742E                    			je .isPrime
+   413                                  
+   414 00000322 BB03000000              			mov ebx, 3
+   415 00000327 A1[08000000]            			mov eax, [primeInput]
+   416 0000032C 99                      			cdq 
+   417 0000032D F7F3                    			div ebx 
+   418 0000032F 8915[0C000000]          			mov [remainder], edx 
+   419                                  			
+   420 00000335 8B1D[0C000000]          			mov ebx, [remainder]
+   421 0000033B 81FB00000000            			cmp ebx, 0
+   422 00000341 74B0                    			je .notPrime 
+   423 00000343 81FB00000000            			cmp ebx, 0
+   424 00000349 7505                    			jne .isPrime
+   425 0000034B E91B000000              			jmp .endLoop
+   426                                  
+   427                                  		.isPrime:
+   428 00000350 A1[08000000]            			mov eax, [primeInput]
+   429 00000355 50                      			push eax
+   430 00000356 68[9B010000]            			push dword primeVal
+   431 0000035B E8(00000000)            			call printf 
+   432 00000360 81C404000000            			add esp, 4
+   433 00000366 E900000000              			jmp .endLoop
+   434                                  
+   435                                  		.endLoop:
+   436 0000036B 89EC                    			mov esp, ebp
+   437 0000036D 5D                      			pop ebp
+   438 0000036E 89D8                    			mov eax, ebx
+   439 00000370 C3                      			ret 
+   440                                  
+   441                                  	.end: 
+   442 00000371 68[BB000000]            		push dword newline 
+   443 00000376 E8(00000000)            		call printf 
+   444 0000037B 81C404000000            		add esp, 4
+   445                                  
+   446 00000381 89EC                    	    mov     esp, ebp    ; takedown stack frame
+   447 00000383 5D                      	    pop     ebp         ; same as "leave" op
+   448                                  
+   449 00000384 B800000000              	    mov     eax, 0       ; normal, no error, return value
+   450 00000389 C3                      	    ret                 ; return
