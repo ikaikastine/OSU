@@ -1,0 +1,25 @@
+1. Which of the implemenations uses more memory? Explain why.
+
+The linked list implementation uses more memory, because each time
+malloc is called, it is storing a little extra memory. Also each link stores
+both the value, and two pointers. The entire struct also has count which uses
+more memory.  
+
+
+
+2. Which of the implementation is the fastest? Explain why.
+
+The linked list implementation is faster because it has O(1) when adding,
+while the dynamic array implementation is O(1+). 
+
+
+
+3. Would you expect anything to change if the loop performed remove() instead
+of contains()? If so, what? 
+
+If it ran remove() the dynamic array would have an O(n) since it has to shift
+n elements to remove that one while Linked list would have O(1)
+
+
+
+
