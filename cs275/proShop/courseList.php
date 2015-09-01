@@ -7,10 +7,10 @@
             <h2> <a href="http://people.oregonstate.edu/~stinek/proShop/index.html">Pro Shop Management</a></h2>
         <div id="menu">
           <ul>
-            <li><a href="http://people.oregonstate.edu/~stinek/proShop/courseList.php">List Courses</a></li>
-            <li><a href="http://people.oregonstate.edu/~stinek/proShop/memberLogin.php">Member Sign-In</a></li>
-            <li><a href="http://people.oregonstate.edu/~stinek/proShop/employeeLogin.php">Employee Sign-In</a></li> 
-            <li><a href="http://people.oregonstate.edu/~stinek/proShop/signUp.php">Sign Up</a></li>
+            <li><a href="http://people.oregonstate.edu/~stinek/OSU/cs275/proShop/courseList.php">List Courses</a></li>
+            <li><a href="http://people.oregonstate.edu/~stinek/OSU/cs275/proShop/memberLogin.php">Member Sign-In</a></li>
+            <li><a href="http://people.oregonstate.edu/~stinek/OSU/cs275/proShop/employeeLogin.php">Employee Sign-In</a></li> 
+            <li><a href="http://people.oregonstate.edu/~stinek/OSU/cs275/proShop/signUp.php">Sign Up</a></li>
           </ul>
         </div>
       </div>
