@@ -8,3 +8,12 @@ else
 	echo Invalid input
 fi
 
+count=0;
+total=0;
+
+for i in $( awk '{ print $2; }' test_file )
+	do 
+		total=$(echo $total+$i | bc )
+		((count++))
+	done
+echo "scale=2; $total / $count" | bc
