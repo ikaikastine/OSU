@@ -5,7 +5,7 @@ if [ "$1" = "-r" ]; then
 elif [ "$1" = "-c" ]; then
 	echo will calculate columns
 else 
-	echo Invalid input
+	echo "Usage: stats {-rows|-cols} [input_file]"
 fi
 
 count=0;
