@@ -11,7 +11,7 @@ fi
 count=0;
 total=0;
 
-for i in $( awk '{ print $2; }' test_file )
+for i in $( awk '{ print $1; }' test_file )
 	do 
 		total=$(echo $total+$i | bc )
 		((count++))
