@@ -8,12 +8,8 @@ else
 	echo "Usage: stats {-rows|-cols} [input_file]"
 fi
 
-count=0;
-total=0;
+while read  line
+do
+	echo "Column 1: $line"
 
-for i in $( awk '{ print $1; }' test_file )
-	do 
-		total=$(echo $total+$i | bc )
-		((count++))
-	done
-echo "scale=2; $total / $count" | bc
+done < test_file
