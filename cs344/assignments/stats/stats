@@ -8,8 +8,22 @@ else
 	echo "Usage: stats {-rows|-cols} [input_file]"
 fi
 
-while read  line
+echo "Print out test file"
+while read line
 do
-	echo "Column 1: $line"
+	echo "$line"
 
 done < test_file
+
+cut -f 1 test_file > output_file
+col_sum=0
+avg=0
+wc -l < output_file > line_number
+read lines < line_number
+echo "Lines: $lines"
+while read col
+do 	
+	let col_sum=col_sum+col
+done < output_file
+avg=$(echo "scale=4; $col_sum/$lines" | bc ) 
+echo "$avg"

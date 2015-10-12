@@ -1,4 +1,4 @@
 #!/bin/bash
-"$t1" = "test_file"
+t1="test_file"
 wc -l $t1
-wc -m 
+wc -m $t1 
