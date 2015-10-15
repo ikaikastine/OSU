@@ -1,48 +1,49 @@
 #!/bin/bash
+
+#Function that calculates average/median for columns
+function calculate_columns {
+	#-------------Begin Column Average Calculation--------------#
+	#Declare variables for calculation
+	count=1
+	col_sum=0
+	avg=0
+	#Read the numbers of lines from file to get number of rows
+	wc -l < test_file > line_number 
+	read lines < line_number
+	echo "Average: "
+	#Begin the loop for calculating the avg for each variable
+	while (( count < lines ))
+	do
+		col_sum=0
+		#Cut each column and place in output file
+		cut -f "$count" test_file > output_file
+		wc -l < output_file > line_number
+		while read col
+		do 	
+			let col_sum=col_sum+col
+		done < output_file
+		avg=$(echo "scale=2; $col_sum/$lines" | bc ) 
+		echo "$avg"
+		let count=count+1
+	done 
+	#--------------End Column Average Calculation---------------#
+}
+
+file=$2
+
 #Initial input checking	
 if [ "$1" = "-r" ]; then
 	echo Will calculate rows
 elif [ "$1" = "-c" ]; then
 	echo will calculate columns
+	calculate_columns
 else 
 	echo "Usage: stats {-rows|-cols} [input_file]"
 fi
 
-echo "Print out test file"
-while read line
-do
-	echo "$line"
+#echo "Print out test file"
+#while read line
+#do
+#	echo "$line"
+#done < test_file
 
-done < test_file
-
-
-#-------------Begin Column Average Calculation--------------#
-wc -l < test_file > line_number 
-read lines < line_number
-count=1
-col_sum=0
-avg=0
-#echo "Lines: $lines"
-#echo "count: $count"
-
-echo "Average: "
-while (( count < lines ))
-do
-	cut -f"$count" test_file > output_file
-	col_sum=0
-	#col_sum=0
-	#avg=0
-	wc -l < output_file > line_number
-	#read lines < line_number
-	#echo "Lines: $lines"
-	while read col
-	do 	
-		let col_sum=col_sum+col
-	done < output_file
-	avg=$(echo "scale=4; $col_sum/$lines" | bc ) 
-	echo "$avg"
-	let count=count+1
-	#echo "count: $count"
-
-done 
-#--------------End Column Average Calculation---------------#
