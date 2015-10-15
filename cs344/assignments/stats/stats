@@ -1,14 +1,18 @@
 #!/bin/bash
 
 #Function that calculates average/median for columns
-function calculate_columns {
+function calculate_columns () {
+	file=$1
+	echo "Inside column calculator"
+	echo "File: $file"
 	#-------------Begin Column Average Calculation--------------#
 	#Declare variables for calculation
 	count=1
 	col_sum=0
 	avg=0
 	#Read the numbers of lines from file to get number of rows
-	wc -l < test_file > line_number 
+	#wc -l < test_file > line_number 
+	wc -l < "$file" > line_number
 	read lines < line_number
 	echo "Average: "
 	#Begin the loop for calculating the avg for each variable
@@ -16,7 +20,8 @@ function calculate_columns {
 	do
 		col_sum=0
 		#Cut each column and place in output file
-		cut -f "$count" test_file > output_file
+		#cut -f "$count" test_file > output_file
+		cut -f "$count" $file > output_file
 		wc -l < output_file > line_number
 		while read col
 		do 	
@@ -31,14 +36,30 @@ function calculate_columns {
 
 file=$2
 
-#Initial input checking	
-if [ "$1" = "-r" ]; then
-	echo Will calculate rows
-elif [ "$1" = "-c" ]; then
-	echo will calculate columns
-	calculate_columns
-else 
-	echo "Usage: stats {-rows|-cols} [input_file]"
+if [ "$file" != "test_file" ]; then
+	echo "Inside alternate file input"
+	echo "Alternate File: $file"
+	#Initial input checking	
+	if [ "$1" = "-r" ]; then
+		echo Will calculate rows
+	elif [ "$1" = "-c" ]; then
+		echo will calculate columns
+		calculate_columns $file
+	else 
+		echo "Usage: stats {-rows|-cols} [input_file]"
+	fi
+else
+	file=test_file
+	echo "Inside default file input"
+	echo "Default File: $file"
+	if [ "$1" = "-r" ]; then
+		echo Will calculate rows
+	elif [ "$1" = "-c" ]; then
+		echo will calculate columns
+		calculate_columns $file
+	else 
+		echo "Usage: stats {-rows|-cols} [input_file]"
+	fi
 fi
 
 #echo "Print out test file"
