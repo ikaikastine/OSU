@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm line_number
+rm output_file
