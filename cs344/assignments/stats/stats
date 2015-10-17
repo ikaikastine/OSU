@@ -62,6 +62,7 @@ else
 	else 
 		echo "Could not locate: "$file"" 
 		echo "Please make sure the file exists"
+		exit
 	fi
 fi
 
