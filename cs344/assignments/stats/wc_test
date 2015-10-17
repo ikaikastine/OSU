@@ -1,4 +1,0 @@
-#!/bin/bash
-t1="test_file"
-wc -l $t1
-wc -m $t1 

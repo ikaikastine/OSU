@@ -2,69 +2,70 @@
 
 #Function that calculates average/median for columns
 function calculate_columns () {
-	file=$1
-	echo "Inside column calculator"
+	#file=$1
 	echo "File: $file"
 	#-------------Begin Column Average Calculation--------------#
 	#Declare variables for calculation
 	count=1
 	col_sum=0
 	avg=0
+	median=0
+
 	#Read the numbers of lines from file to get number of rows
-	#wc -l < test_file > line_number 
-	wc -l < "$file" > line_number
-	read lines < line_number
-	echo "Average: "
+	lines=$(wc -l < "$file")
+	total=$(wc -w < "$file")
+	let rows=$(echo "$total/$lines")
+	echo "Average:	Median:"
+
 	#Begin the loop for calculating the avg for each variable
-	while (( count < lines ))
+	while (( count < rows+1 ))
 	do
 		col_sum=0
-		#Cut each column and place in output file
-		#cut -f "$count" test_file > output_file
 		cut -f "$count" $file > output_file
-		wc -l < output_file > line_number
+		sort output_file > sorted_output
+		wc -l < sorted_output > line_number
 		while read col
 		do 	
 			let col_sum=col_sum+col
-		done < output_file
+		done < sorted_output
 		avg=$(echo "scale=2; $col_sum/$lines" | bc ) 
-		echo "$avg"
+		let half="$lines/2"
+		while read val 
+		do 
+			let median=$(head -n "$lines" | tail -n "$half")
+		done < sorted_output
+		echo "$avg 		$median"
 		let count=count+1
 	done 
 	#--------------End Column Average Calculation---------------#
 }
 
-file=$2
-
-if [ "$file" != "test_file" ]; then
-	echo "Inside alternate file input"
-	echo "Alternate File: $file"
-	#Initial input checking	
-	if [ "$1" = "-r" ]; then
-		echo Will calculate rows
-	elif [ "$1" = "-c" ]; then
-		echo will calculate columns
-		calculate_columns $file
-	else 
-		echo "Usage: stats {-rows|-cols} [input_file]"
-	fi
-else
+#Validates input from user
+if [ $# -eq 1 ]; then
 	file=test_file
-	echo "Inside default file input"
-	echo "Default File: $file"
 	if [ "$1" = "-r" ]; then
 		echo Will calculate rows
 	elif [ "$1" = "-c" ]; then
-		echo will calculate columns
 		calculate_columns $file
+	fi
+elif [ $# -ne 2 ]; then
+	echo "Usage: stats {-rows|-cols} [input_file]"
+	exit
+else 
+	file=$2
+	if test -e "$file"; then
+		if [ "$1" = "-r" ]; then
+			echo Will calculate rows
+		elif [ "$1" = "-c" ]; then
+			calculate_columns $file
+		fi
 	else 
-		echo "Usage: stats {-rows|-cols} [input_file]"
+		echo "Could not locate: "$file"" 
+		echo "Please make sure the file exists"
 	fi
 fi
 
-#echo "Print out test file"
-#while read line
-#do
-#	echo "$line"
-#done < test_file
-
+#Remove all temporary files created by script
+rm line_number
+rm output_file
+rm sorted_output
