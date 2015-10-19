@@ -4,6 +4,8 @@
 function calculate_columns () {
 	#file=$1
 	echo "File: $file"
+	
+	echo "Type: $2"
 	#-------------Begin Column Average Calculation--------------#
 	#Declare variables for calculation
 	count=1
@@ -13,8 +15,11 @@ function calculate_columns () {
 
 	#Read the numbers of lines from file to get number of rows
 	lines=$(wc -l < "$file")
+	echo "Lines: $lines"
 	total=$(wc -w < "$file")
+	echo "Total: $total"
 	let rows=$(echo "$total/$lines")
+	echo "Rows: $rows"
 	echo "Average:	Median:"
 
 	#Begin the loop for calculating the avg for each variable
@@ -29,22 +34,59 @@ function calculate_columns () {
 			let col_sum=col_sum+col
 		done < sorted_output
 		avg=$(echo "scale=2; $col_sum/$lines" | bc ) 
-		let half="$lines/2"
-		while read val 
-		do 
-			let median=$(head -n "$lines" | tail -n "$half")
-		done < sorted_output
+		if [ $lines%2 = 0 ]; then 
+			let half="$lines/2"
+			while read val 
+			do 
+				let median=$(head -n "$lines" | tail -n "$half")
+			done < sorted_output
+		elif [ "$2" = "row" ]; then
+			let half=$((1+$lines/2))
+			#let new_half="$half-1"
+			while read val 
+			do 
+				let median=$(head -n "$lines" | tail -n "$half")
+			done < sorted_output
+		else 
+			let half="$lines/2"
+			while read val 
+			do 
+				let median=$(head -n "$lines" | tail -n "$half")
+			done < sorted_output
+		fi
 		echo "$avg 		$median"
 		let count=count+1
 	done 
 	#--------------End Column Average Calculation---------------#
 }
 
+function swap () {
+	echo "Made it to swap function"
+	awk ' {
+		for (i=1; i<=NF; i++) {
+			a[NR,i] = $i
+		}
+	}
+	NF>p { p = NF }
+	END {
+		for(j=1; j<=p; j++) {
+			str=a[1,j]
+			for(i=2; i<=NR; i++) {
+				str=str"\t"a[i,j];
+			}
+			print str > "swap_output"
+		}
+	} ' $file
+}
+
 #Validates input from user
 if [ $# -eq 1 ]; then
 	file=test_file
 	if [ "$1" = "-r" ]; then
-		echo Will calculate rows
+		echo "Will print rows"
+		swap $file 
+		file=swap_output
+		calculate_columns $file
 	elif [ "$1" = "-c" ]; then
 		calculate_columns $file
 	fi
@@ -55,7 +97,11 @@ else
 	file=$2
 	if test -e "$file"; then
 		if [ "$1" = "-r" ]; then
-			echo Will calculate rows
+			echo "Will print rows"
+			echo "Alt_flie: $file"
+			swap $file 
+			file=swap_output
+			calculate_columns $file row
 		elif [ "$1" = "-c" ]; then
 			calculate_columns $file
 		fi
@@ -70,3 +116,4 @@ fi
 rm line_number
 rm output_file
 rm sorted_output
+rm swap_output
