@@ -2,38 +2,33 @@
 
 #Function that calculates average/median for columns
 function calculate_columns () {
-	#file=$1
-	echo "File: $file"
-	
-	echo "Type: $2"
 	#-------------Begin Column Average Calculation--------------#
 	#Declare variables for calculation
 	count=1
 	col_sum=0
 	avg=0
 	median=0
-
 	#Read the numbers of lines from file to get number of rows
-	lines=$(wc -l < "$file")
-	echo "Lines: $lines"
-	total=$(wc -w < "$file")
-	echo "Total: $total"
+	lines=$(wc -l < "$1")
+	total=$(wc -w < "$1")
 	let rows=$(echo "$total/$lines")
-	echo "Rows: $rows"
 	echo "Average:	Median:"
 
 	#Begin the loop for calculating the avg for each variable
 	while (( count < rows+1 ))
 	do
 		col_sum=0
-		cut -f "$count" $file > output_file
+		cut -f "$count" $1 > output_file
 		sort output_file > sorted_output
 		wc -l < sorted_output > line_number
-		while read col
+		while read -a col
 		do 	
-			let col_sum=col_sum+col
+			let col_sum=$col_sum+$col
 		done < sorted_output
+		let rem="$col_sum%$rows"
+		let dec="$rem*10"
 		avg=$(echo "scale=2; $col_sum/$lines" | bc ) 
+		avg=$(echo "($avg+0.5)/1" | bc )
 		if [ $lines%2 = 0 ]; then 
 			let half="$lines/2"
 			while read val 
@@ -61,7 +56,6 @@ function calculate_columns () {
 }
 
 function swap () {
-	echo "Made it to swap function"
 	awk ' {
 		for (i=1; i<=NF; i++) {
 			a[NR,i] = $i
@@ -76,44 +70,81 @@ function swap () {
 			}
 			print str > "swap_output"
 		}
-	} ' $file
+	} ' $1
 }
 
-#Validates input from user
-if [ $# -eq 1 ]; then
-	file=test_file
-	if [ "$1" = "-r" ]; then
-		echo "Will print rows"
-		swap $file 
-		file=swap_output
-		calculate_columns $file
-	elif [ "$1" = "-c" ]; then
-		calculate_columns $file
+function remove_files () {
+	if test -e "line_number"; then
+		rm line_number
 	fi
+	if test -e "output_file"; then
+		rm output_file
+	fi
+	if test -e "sorted_output"; then
+		rm sorted_output
+	fi
+	if test -e "stdin_file"; then
+		rm stdin_file
+	fi
+	if test -e "swap_output"; then
+		rm swap_output
+	fi
+	if test -e "stdin"; then
+		rm stdin
+	fi
+	exit
+}
+#Validates input from user
+
+#Checks first parameter is correct
+if [[ $1 != -r* && $1 != -c* ]]; then
+	exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	cat /dev/stdin > stdin
+	std_file=stdin
+	if [[ $1 == -r* ]]; then
+		swap $std_file 
+		stdin_file=swap_output
+		calculate_columns $stdin_file
+	elif [[ $1 == -c* ]]; then
+		swap $std_file 
+		stdin_file=swap_output
+		swap $std_file
+		calculate_columns $stdin_file
+	else 
+		echo "Usage: stats {-rows|-cols} [input_file]"
+		exit 1
+	fi
+	remove_files
 elif [ $# -ne 2 ]; then
 	echo "Usage: stats {-rows|-cols} [input_file]"
-	exit
-else 
+	exit 1
+fi
+if [ $# -gt 1 ]; then
 	file=$2
-	if test -e "$file"; then
-		if [ "$1" = "-r" ]; then
-			echo "Will print rows"
-			echo "Alt_flie: $file"
-			swap $file 
-			file=swap_output
-			calculate_columns $file row
-		elif [ "$1" = "-c" ]; then
-			calculate_columns $file
+	if test -r "$file"; then
+		if test -s "$file"; then
+			if [[ $1 == -r* ]]; then
+				swap $file 
+				file=swap_output
+				calculate_columns $file row
+			elif [[ $1 == -c* ]]; then
+				swap $file 
+				file=swap_output
+				swap $file
+				calculate_columns $file 
+			fi
+			remove_files
+		else 
+			2>&1 echo "File is empty"
+			exit 1
 		fi
 	else 
-		echo "Could not locate: "$file"" 
-		echo "Please make sure the file exists"
-		exit
+		2>&1 echo "I'm sorry. I can't read that file."
+		exit 1
 	fi
 fi
 
-#Remove all temporary files created by script
-rm line_number
-rm output_file
-rm sorted_output
-rm swap_output
+trap remove_files exit
