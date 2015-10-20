@@ -135,7 +135,6 @@ fi
 #Checks for Standard Input from the command line
 #Checks the number of command line arguments to be equal to one
 if [ $# -eq 1 ]; then
-	#read -a stdin
 	cat /dev/stdin > stdin
 	#If first argument matches, call swap function to swap columns and rows
 	if [[ $1 == -r* ]]; then
