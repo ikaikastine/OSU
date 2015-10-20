@@ -42,18 +42,27 @@ function calculate () {
 			let half=$((1+$lines/2))
 			while read val 
 			do 
-				let median=$(head -n "$lines" | tail -n "$half") #Calculates the median
+				if [ $total -eq 1 ]; then
+					let median=$val
+				else 
+					let median=$(head -n "$lines" | tail -n "$half") #Calculates the median
+				fi
 			done < sorted_output
 		else 
 			let half="$lines/2"
 			while read val 
 			do 
-				let median=$(head -n "$lines" | tail -n "$half") #Calculates the median
+				if [ $total -eq 1 ]; then
+					let median=$val
+				else 
+					let median=$(head -n "$lines" | tail -n "$half") #Calculates the median
+				fi
 			done < sorted_output
 		fi
 		echo "$avg 		$median" #Prints out value for average and median
 		let count=count+1
 	done 
+	clean
 }
 
 #######################################
@@ -126,19 +135,19 @@ fi
 #Checks for Standard Input from the command line
 #Checks the number of command line arguments to be equal to one
 if [ $# -eq 1 ]; then
+	#read -a stdin
 	cat /dev/stdin > stdin
-	std_file=stdin
 	#If first argument matches, call swap function to swap columns and rows
 	if [[ $1 == -r* ]]; then
-		swap $std_file 
+		swap $stdin
 		stdin_file=swap_output
 		calculate $stdin_file
 	#If first argument matches pattern, call swap function twice
 	#This gives the original input but in a formatted tabbed version 
 	elif [[ $1 == -c* ]]; then
-		swap $std_file 
+		swap $stdin
 		stdin_file=swap_output
-		swap $stdin_file
+		swap $stdin
 		stdin_file=swap_output
 		calculate $stdin_file
 	#If argument does not match patter, print usage and quit
