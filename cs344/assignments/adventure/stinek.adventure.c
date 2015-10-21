@@ -7,16 +7,15 @@
 struct stat st = {0};
 
 int main () {
+	FILE *fp;
 
 	int pid = getpid();
-	char myPID;
-	myPID = pid;
-	char path_dir = "stinek.adventure.c";
-	cat myPID | path_dir;
-	printf("Path_dir = %d", path_dir);
-	const char *path = printf("stinek.adventure.%c", myPID);
-	mkdir(path, 0777);	
-	printf("I should have printed....");
- 
+	printf("PID: %d\n", pid);
+
+	//Create initial directory for files to be stored in
+	mkdir("stinek.adventure.$$", 0777);	
+	//Create first file
+	fp = fopen("/stinek.adventure.$$/
+	 
 	return 0;
 }
