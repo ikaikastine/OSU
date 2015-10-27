@@ -28,17 +28,6 @@ char *createDirectory(int pID) {
 	return directory; 
 }
 
-/*
-void populateFiles(int files) {
-	int i;
-	FILE *fp;
-	for (i = 0; i < files; i++) {
-		fp = fopen("stinek.adventure.$$/file%d.c", i);
-		fprintf(fp, "Hello World\n");
-	}
-}
-*/
-
 
 int main () {
 	int numFiles = 7;
@@ -49,13 +38,7 @@ int main () {
 	int pid = getpid();
 	printf("PID: %d\n", pid);
 
-	//Create initial directory for files to be stored in
-	//Create first file
 	createDirectory(pid);	
-	//for (i = 0; i < numFiles; i++) {
-	//	sprintf(filename, "stinek.adventure.$$/file%d.c", i);
-	//	files[i] = fopen (filename, "w");
-	//}
-	//populateFiles(numFiles);
+	
 	return 0;
 }
