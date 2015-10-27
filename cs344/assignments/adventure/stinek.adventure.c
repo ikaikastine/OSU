@@ -3,8 +3,42 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
+#include <errno.h>
+#include <string.h>
 
 struct stat st = {0};
+
+struct Positions {
+	char *start;
+	char *mid;
+	char *end;
+};
+
+char *createDirectory(int pID) {
+	char *directory = malloc(20);
+	char *dirName = "stinek.adventure.";
+
+	sprintf(directory, "%s%d", dirName, pID);
+
+	struct stat st = {0};
+	if (stat(directory, &st) == -1) {
+		mkdir(directory, 0755);
+	}
+	return directory; 
+}
+
+/*
+void populateFiles(int files) {
+	int i;
+	FILE *fp;
+	for (i = 0; i < files; i++) {
+		fp = fopen("stinek.adventure.$$/file%d.c", i);
+		fprintf(fp, "Hello World\n");
+	}
+}
+*/
+
 
 int main () {
 	int numFiles = 7;
@@ -16,14 +50,12 @@ int main () {
 	printf("PID: %d\n", pid);
 
 	//Create initial directory for files to be stored in
-	mkdir("stinek.adventure.$$", 0777);	
 	//Create first file
-	
-	for (i = 0; i < numFiles; i++) {
-		sprintf(filename, "stinek.adventure.$$/file%d.c", i);
-		files[i] = fopen (filename, "w");
-	}
-	//fp = fopen("/stinek.adventure.$$/
-
+	createDirectory(pid);	
+	//for (i = 0; i < numFiles; i++) {
+	//	sprintf(filename, "stinek.adventure.$$/file%d.c", i);
+	//	files[i] = fopen (filename, "w");
+	//}
+	//populateFiles(numFiles);
 	return 0;
 }
