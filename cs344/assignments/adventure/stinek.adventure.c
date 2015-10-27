@@ -7,8 +7,6 @@
 #include <errno.h>
 #include <string.h>
 
-struct stat st = {0};
-
 struct Positions {
 	char *start;
 	char *mid;
