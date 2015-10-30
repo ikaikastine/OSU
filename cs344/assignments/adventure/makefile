@@ -2,5 +2,5 @@ adventure:
 	gcc -o stinek.adventure stinek.adventure.c
 
 clean: 
-	rmdir $(wildcard stinek.adventure.2*)
+	rm -rf $(wildcard stinek.adventure.[0-9]*)
 	rm stinek.adventure
