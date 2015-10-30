@@ -7,13 +7,15 @@
 #include <errno.h>
 #include <string.h>
 
-struct Positions {
+struct Positions 
+{
 	char *start;
 	char *connection;
 	char *end;
 };
 
-struct Positions createRooms(char *directory) {
+struct Positions createRooms(char *directory) 
+{
 	struct Positions location;
 	location.connection = directory;
 
@@ -48,7 +50,8 @@ struct Positions createRooms(char *directory) {
 
 }
 
-char *createDirectory(int pID) {
+char *createDirectory(int pID) 
+{
 	char *directory = malloc(20);
 	char *dirName = "stinek.adventure.";
 
@@ -62,7 +65,8 @@ char *createDirectory(int pID) {
 }
 
 
-int main () {
+int main ()
+{
 	int pid = getpid();
 	printf("PID: %d\n", pid);
 
