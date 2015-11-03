@@ -112,7 +112,5 @@ int main ()
 	
 	createRooms(roomsDirectory);
 
-	printf("Hello world!");
-
 	return 0;
 }
