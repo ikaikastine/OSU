@@ -87,6 +87,7 @@ struct Positions createRooms(char *directory)
 	free(currentFile);
 }
 
+
 char *createDirectory(int pID) 
 {
 	char *directory = malloc(20);
@@ -110,6 +111,8 @@ int main ()
 	char *roomsDirectory = createDirectory(pid);	
 	
 	createRooms(roomsDirectory);
+
+	printf("Hello world!");
 
 	return 0;
 }
