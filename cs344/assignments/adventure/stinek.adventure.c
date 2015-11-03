@@ -30,12 +30,11 @@ struct Positions createRooms(char *directory)
 	room[7] = "Armory";
 	room[8] = "Bestiary";
 	room[9] = "Garden";
-	int bufferSize = 128;
 	char *currentFile = malloc(128);
 	int i, j;
 
 	for (i = 0; i < 7; i++) {
-		snprintf(currentFile, bufferSize, "%s/%s", directory, room[i]);
+		sprintf(currentFile, "%s/%s", directory, room[i]);
 		FILE *fp = fopen(currentFile, "w");
 		if (fp == NULL) {
 			perror ("Error opening file.");
@@ -46,8 +45,46 @@ struct Positions createRooms(char *directory)
 		fclose(fp);
 	}
 
+	int initPos = rand() % 7;
+	int endPos = rand() % 7;
+	char *connection;
+	int connectionNum, idx;
+	char currentRoom[100];
 
+	for(i = 0; i < 7; i++) {
+		sprintf(currentFile, "%s/%s", directory, room[i]);
 
+		FILE *fp = fopen(currentFile, "a");
+		if (fp == NULL) {
+			perror ("Error opening file.");
+		}
+		else {
+			connectionNum = rand() % 4 + 3;
+			idx = 0;
+			for (j = 0; j < connectionNum; j++) {
+				connection = room[idx];
+				if (connection == room[i]) {
+					idx++;
+					connection = room[idx];
+				}
+				fprintf(fp, "CONNECTION %d: %s\n", j+1, connection);
+				idx++;
+			}
+			if (i == initPos) {
+				fprintf(fp, "ROOM TYPE: START_ROOM\n");
+				location.start = room[i];
+			}
+			else if (i == endPos) {
+				fprintf(fp, "ROOM TYPE: END_ROOM\n");
+				location.end = room[i];
+			}
+			else {
+				fprintf(fp, "ROOM TYPE: MID_ROOM\n");
+			}
+		}
+		fclose(fp);
+	}
+	free(currentFile);
 }
 
 char *createDirectory(int pID) 
