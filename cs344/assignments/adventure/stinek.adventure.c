@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <string.h>
 
+#define ANSI_COLOR_RED	"\x1b[31m"
 struct Positions 
 {
 	char *start;
@@ -123,9 +124,10 @@ void beginAdventure(struct Positions location)
 	int i, valid, c, connections;
 	char (*steps)[15] = malloc(sizeof *steps * 8);
 	char (*contents)[15] = malloc(sizeof *contents * 8);
+	
 	char destination[15];
 
-	printf("Final Room is: %s", finalRoom);
+	printf( "Final Room is: %s\n", finalRoom);
 
 	char *currentFile = malloc(128);
 	while (!(strcmp(currentRoom, finalRoom)) == 0) {
