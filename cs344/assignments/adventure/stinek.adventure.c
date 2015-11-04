@@ -108,6 +108,7 @@ struct Positions createRooms(char *directory)
 		fclose(fp);
 	}
 	free(currentFile);
+	return location;
 }
 
 
@@ -122,10 +123,10 @@ void beginAdventure(struct Positions location)
 	char (*contents)[15] = malloc(sizeof *contents * 8);
 	char destination[15];
 
+	printf("Final Room is: %s", finalRoom);
+
 	char *currentFile = malloc(128);
-	printf("seg fault at first strcmp");
 	while (!(strcmp(currentRoom, finalRoom)) == 0) {
-		printf("seg fault after first strcmp");
 		sprintf(currentFile, "%s/%s", directory, currentRoom);
 		FILE *fp = fopen(currentFile, "r");
 
@@ -181,16 +182,18 @@ void beginAdventure(struct Positions location)
 					printf("\nHUH? I DON'T UNDERSTAND THAT ROOM. TRY AGAIN.\n");
 				}
 			}
-			printf("\n");
+		}
+		printf("\n");
 			strcpy(steps[stepCount], currentRoom);
 			stepCount++;
 			fclose(fp);
+
+		
 		}
-		printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!");
+	printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!");
 		printf("YOU TOOK %d STEPS. YOUR PATH TO VICTORY WAS:\n", stepCount);
 		for (i = 0; i < stepCount; i++) {
 			printf("%s\n", steps[i]);
-		}
 	}
 	free(steps);
 	free(contents);
@@ -206,7 +209,7 @@ int main ()
 	char *roomsDirectory = createDirectory(pid);	
 	struct Positions location = createRooms(roomsDirectory);
 
-	//beginAdventure(location);
+	beginAdventure(location);
 	free(roomsDirectory);
 
 	return 0;
