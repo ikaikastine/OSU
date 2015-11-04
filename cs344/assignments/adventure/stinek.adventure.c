@@ -127,7 +127,7 @@ void beginAdventure(struct Positions location)
 	
 	char destination[15];
 
-	printf( "Final Room is: %s\n", finalRoom);
+	//printf( "Final Room is: %s\n", finalRoom);
 
 	char *currentFile = malloc(128);
 	while (!(strcmp(currentRoom, finalRoom)) == 0) {
@@ -163,6 +163,8 @@ void beginAdventure(struct Positions location)
 				strcpy(contents[i], str);
 			}
 			valid = 0;
+
+			//Loop which prints locations/connections until the last room is reached
 			while (valid == 0) {
 				printf("CURRENT LOCATION: %s\n", contents[0]);
 				printf("POSSIBLE CONNECTIONS: ");
@@ -192,7 +194,7 @@ void beginAdventure(struct Positions location)
 		stepCount++;
 		fclose(fp);
 		}
-	printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!");
+	printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!\n");
 	printf("YOU TOOK %d STEPS. YOUR PATH TO VICTORY WAS:\n", stepCount);
 	for (i = 0; i < stepCount; i++) {
 		printf("%s\n", steps[i]);
@@ -207,9 +209,9 @@ int main ()
 	srand(time(NULL));
 
 	char *roomsDirectory = createDirectory();	
+
 	struct Positions location = createRooms(roomsDirectory);
 
 	beginAdventure(location);
 
 	return 0;
-}
