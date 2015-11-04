@@ -215,3 +215,4 @@ int main ()
 	beginAdventure(location);
 
 	return 0;
+}
