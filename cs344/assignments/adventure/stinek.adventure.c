@@ -47,8 +47,17 @@ struct Positions createRooms(char *directory)
 	room[8] = "Bestiary";
 	room[9] = "Garden";
 	char *currentFile = malloc(128);
-	int i, j;
-	shuffle(room, 10);
+	int i, j, k;
+
+	for (k = 0; k < 9; k++) {
+		int swap = rand() % 7;
+		char* temp = room[swap];
+		char* testRoom = room[k];
+		room[swap] = room[k];
+		room[k] = temp;	
+	}
+
+
 	for (i = 0; i < 7; i++) {
 		sprintf(currentFile, "%s/%s", directory, room[i]);
 		FILE *fp = fopen(currentFile, "w");
@@ -190,24 +199,6 @@ void beginAdventure(struct Positions location)
 	free (currentFile);
 }
 
-void shuffle(char **array, size_t n)
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	int usec = tv.tv_usec;
-	srand48(usec);
-
-	if (n > 1) {
-        size_t i;
-        for (i = n - 1; i > 0; i--) {
-            size_t j = (unsigned int) (drand48()*(i+1));
-            char* t = array[j];
-            array[j] = array[i];
-            array[i] = t;
-        }
-    }
-}
-
 int main ()
 {
 	srand(time(NULL));
@@ -215,12 +206,9 @@ int main ()
 	int pid = getpid();
 
 	char *roomsDirectory = createDirectory(pid);	
-	printf("makes it out of create directory");
 	struct Positions location = createRooms(roomsDirectory);
 
-	printf("printf before begin adventure");
-	beginAdventure(location);
-	printf("printf after begin adventure");
+	//beginAdventure(location);
 	free(roomsDirectory);
 
 	return 0;
