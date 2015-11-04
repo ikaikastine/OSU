@@ -14,8 +14,6 @@ struct Positions
 	char *end;
 };
 
-void shuffle(char **array, size_t n);
-
 char *createDirectory(int pID) 
 {
 	char *directory = malloc(20);
