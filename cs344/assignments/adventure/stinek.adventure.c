@@ -7,7 +7,6 @@
 #include <errno.h>
 #include <string.h>
 
-#define ANSI_COLOR_RED	"\x1b[31m"
 struct Positions 
 {
 	char *start;
@@ -18,7 +17,7 @@ struct Positions
 char *createDirectory() 
 {
 	int pid = getpid();
-	char *directory = malloc(20);
+	char *directory = malloc(25);
 	char *dirName = "stinek.adventure.";
 
 	sprintf(directory, "%s%d", dirName, pid);
