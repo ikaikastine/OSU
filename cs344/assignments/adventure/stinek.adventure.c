@@ -114,11 +114,11 @@ struct Positions createRooms(char *directory)
 }
 
 
-void beginAdventure(struct Positions location) 
+void beginAdventure(struct Positions game) 
 {
-	char *currentRoom = location.start;
-	char *finalRoom = location.end;
-	char *directory = location.connection;
+	char *currentRoom = game.start;
+	char *finalRoom = game.end;
+	char *directory = game.connection;
 	int stepCount = 0;
 	int i, valid, c, connections;
 	char (*steps)[15] = malloc(sizeof *steps * 8);
@@ -209,9 +209,9 @@ int main ()
 
 	char *roomsDirectory = createDirectory();	
 
-	struct Positions location = createRooms(roomsDirectory);
+	struct Positions game = createRooms(roomsDirectory);
 
-	beginAdventure(location);
+	beginAdventure(game);
 
 	return 0;
 }
