@@ -17,7 +17,7 @@ struct Positions
 char *createDirectory() 
 {
 	int pid = getpid();
-	char *directory = malloc(25);
+	char *directory = malloc(30);
 	char *dirName = "stinek.adventure.";
 
 	sprintf(directory, "%s%d", dirName, pid);
@@ -45,7 +45,7 @@ struct Positions createRooms(char *directory)
 	room[7] = "Armory";
 	room[8] = "Bestiary";
 	room[9] = "Garden";
-	char *currentFile = malloc(128);
+	char *currentFile = malloc(100);
 	int i, j, k;
 
 	//Swaps files around so they aren't the same each game
@@ -128,7 +128,7 @@ void beginAdventure(struct Positions location)
 
 	//printf( "Final Room is: %s\n", finalRoom);
 
-	char *currentFile = malloc(128);
+	char *currentFile = malloc(100);
 	while (!(strcmp(currentRoom, finalRoom)) == 0) {
 		sprintf(currentFile, "%s/%s", directory, currentRoom);
 		FILE *fp = fopen(currentFile, "r");
