@@ -6,7 +6,6 @@
 ** Input: Which room to go to
 ** Output: Current room, connections, prompt
 *********************************************************************/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
