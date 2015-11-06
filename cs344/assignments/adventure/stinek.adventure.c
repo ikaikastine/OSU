@@ -1,3 +1,12 @@
+/*********************************************************************
+** Program Filename: stinek.adventure.c
+** Author: Kevin Stine
+** Date: 11/5/2015
+** Description: Program that plays an adventure game
+** Input: Which room to go to
+** Output: Current room, connections, prompt
+*********************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -14,6 +23,14 @@ struct Positions
 	char *end;
 };
 
+/*********************************************************************
+** Function: createDirectory
+** Description: gets pID, appends to stinek.adventure., creates directory
+** Parameters: None
+** Pre-Conditions: None
+** Post-Conditions: Directory has been created 
+** Return: Directory has been created 
+*********************************************************************/
 char *createDirectory() 
 {
 	int pid = getpid();
@@ -29,6 +46,14 @@ char *createDirectory()
 	return directory; 
 }
 
+/*********************************************************************
+** Function: createRooms
+** Description: Creates 7 files with random rooms/connections/types
+** Parameters: Directory where the files are placed 
+** Pre-Conditions: Directory has been created
+** Post-Conditions: Rooms have been placed in directory
+** Return: Location
+*********************************************************************/
 struct Positions createRooms(char *directory) 
 {
 	struct Positions location;
@@ -113,19 +138,27 @@ struct Positions createRooms(char *directory)
 	return location;
 }
 
-
+/*********************************************************************
+** Function: beginAdventure
+** Description: Starts the adventure game
+** Parameters: The created rooms
+** Pre-Conditions: Directory and rooms have been created
+** Post-Conditions: Game has run
+** Return: None
+*********************************************************************/
 void beginAdventure(struct Positions game) 
 {
 	char *currentRoom = game.start;
 	char *finalRoom = game.end;
 	char *directory = game.connection;
 	int stepCount = 0;
-	int i, valid, c, connections;
-	char (*steps)[15] = malloc(sizeof *steps * 8);
-	char (*contents)[15] = malloc(sizeof *contents * 8);
-	
+	int i, valid, lines, connections;
+	char (*steps)[15] = malloc(100);
+	char (*contents)[15] = malloc(100);
+
 	char destination[15];
 
+	//Uncomment to always win
 	//printf( "Final Room is: %s\n", finalRoom);
 
 	char *currentFile = malloc(100);
@@ -136,38 +169,45 @@ void beginAdventure(struct Positions game)
 		connections = 0;
 
 		if (fp) {
-			while ((c = getc(fp)) != EOF) {
-				if (c == '\n') {
+			//Loops through room file and at each new line increments the connection count
+			while ((lines = getc(fp)) != EOF) {
+				if (lines == '\n') {
 					connections++;
 				}
 			}
+			//Since it increments on every line, subtract room name & room type
 			connections = connections - 2;
 
-			char str[20];
-			fseek(fp, 11, SEEK_SET);
-			fgets(str, 20, fp);
-			int len = strlen(str);
-			if(str[len-1] == '\n') {
-				str[len-1] = 0;
+			char roomName[20];
+			char connectionName[20];
+
+			fseek(fp, 11, SEEK_SET); //Sets file pointer to beginning of room name
+			fgets(roomName, 15, fp); //Grabs name of room
+			int len = strlen(roomName);
+			//Remove newline character 
+			if(roomName[len-1] == '\n') {
+				roomName[len-1] = 0;
 			}
-			strcpy(contents[0], str);
+			strcpy(contents[0], roomName);
 
 			for (i = 1; i <= connections; i++) {
-				fseek(fp, 14, SEEK_CUR);
-				fgets(str, 20, fp);
-				len = strlen(str);
-				if(str[len-1] == '\n') {
-					str[len-1] = 0;
+				fseek(fp, 14, SEEK_CUR); //Sets file pointer at beginning of connection
+				fgets(connectionName, 20, fp); //Grabs name of connection
+				len = strlen(connectionName);
+				//Remove newline character
+				if(connectionName[len-1] == '\n') {
+					connectionName[len-1] = 0;
 				}
-				strcpy(contents[i], str);
+				strcpy(contents[i], connectionName);
 			}
 			valid = 0;
 
-			//Loop which prints locations/connections until the last room is reached
+			//Loop which prints locations/connections until the end room is reached
 			while (valid == 0) {
 				printf("CURRENT LOCATION: %s\n", contents[0]);
 				printf("POSSIBLE CONNECTIONS: ");
 				for (i = 1; i <= connections; i++) {
+					//Prints a period if last connection
 					if (i == connections) {
 						printf("%s.\n", contents[i]);
 					}
@@ -175,8 +215,8 @@ void beginAdventure(struct Positions game)
 						printf("%s, ", contents[i]);
 					}
 				}
-				printf("WHERE TO? > ");
-				scanf("%s", destination);
+				printf("WHERE TO? >");
+				scanf("%s", destination); //Read input from user
 				for (i = 1; i <= connections; i++) {
 					if (strcmp(destination, contents[i]) == 0) {
 						valid = 1;
@@ -192,7 +232,7 @@ void beginAdventure(struct Positions game)
 		strcpy(steps[stepCount], currentRoom);
 		stepCount++;
 		fclose(fp);
-		}
+	}
 	printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!\n");
 	printf("YOU TOOK %d STEPS. YOUR PATH TO VICTORY WAS:\n", stepCount);
 	for (i = 0; i < stepCount; i++) {
@@ -205,13 +245,13 @@ void beginAdventure(struct Positions game)
 
 int main ()
 {
-	srand(time(NULL));
+	srand(time(NULL)); //Initializes pseudo-random number generator 
 
-	char *roomsDirectory = createDirectory();	
+	char *roomsDirectory = createDirectory(); //Stores directory 	
 
-	struct Positions game = createRooms(roomsDirectory);
+	struct Positions game = createRooms(roomsDirectory); //Stores rooms
 
-	beginAdventure(game);
+	beginAdventure(game); //Let the fun
 
 	return 0;
 }
