@@ -156,9 +156,10 @@ void beginAdventure(struct Positions game)
 	char *directory = game.connection;
 	int stepCount = 0;
 	int i, valid, lines, connections;
-	char (*steps)[15] = malloc(100);
-	char (*contents)[15] = malloc(100);
-
+	char (*steps)[15] = malloc(200); //Set to 200 as a larger buffer for more turns
+	char (*contents)[15] = malloc(200); //Allows for 13 turns. If more might dump core
+	//char (*steps)[15] = malloc(sizeof *steps * 8);
+	//char (*contents)[15] = malloc(sizeof *contents * 8);
 	char destination[15];
 
 	//Uncomment to always win
