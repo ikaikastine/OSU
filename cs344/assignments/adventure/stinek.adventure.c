@@ -36,8 +36,9 @@ char *createDirectory()
 	char *directory = malloc(30);
 	char *dirName = "stinek.adventure.";
 
-	sprintf(directory, "%s%d", dirName, pid);
+	sprintf(directory, "%s%d", dirName, pid); //Stores the pid at the end of directory
 
+	//Creates the directory
 	struct stat st = {0};
 	if (stat(directory, &st) == -1) {
 		mkdir(directory, 0755);
