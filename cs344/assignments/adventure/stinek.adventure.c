@@ -12,8 +12,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <errno.h>
 #include <string.h>
+#include <errno.h>
 
 struct Positions 
 {
@@ -58,6 +58,7 @@ struct Positions createRooms(char *directory)
 	struct Positions location;
 	location.connection = directory;
 
+	//Creates 10 room files
 	char *room[10];
 	room[0] = "Barracks";
 	room[1] = "Prison";
@@ -81,7 +82,7 @@ struct Positions createRooms(char *directory)
 		room[k] = temp;	
 	}
 
-
+	//Opens files with write access, writes room name
 	for (i = 0; i < 7; i++) {
 		sprintf(currentFile, "%s/%s", directory, room[i]);
 		FILE *fp = fopen(currentFile, "w");
@@ -94,8 +95,8 @@ struct Positions createRooms(char *directory)
 		fclose(fp);
 	}
 
-	int initPos = rand() % 7;
-	int endPos = rand() % 7;
+	int initPos = rand() % 7; //Randomizes start position
+	int endPos = rand() % 7; //Randomizes end position
 	char *connection;
 	int connections, idx;
 	char currentRoom[100];
@@ -119,14 +120,17 @@ struct Positions createRooms(char *directory)
 				fprintf(fp, "CONNECTION %d: %s\n", j+1, connection);
 				idx++;
 			}
+			//Sets room type as start
 			if (i == initPos) {
 				fprintf(fp, "ROOM TYPE: START_ROOM\n");
 				location.start = room[i];
 			}
+			//Sets room type as end
 			else if (i == endPos) {
 				fprintf(fp, "ROOM TYPE: END_ROOM\n");
 				location.end = room[i];
 			}
+			//Sets all other room types as mid
 			else {
 				fprintf(fp, "ROOM TYPE: MID_ROOM\n");
 			}
@@ -147,8 +151,8 @@ struct Positions createRooms(char *directory)
 *********************************************************************/
 void beginAdventure(struct Positions game) 
 {
-	char *currentRoom = game.start;
-	char *finalRoom = game.end;
+	char *currentRoom = game.start; //Current room is set to start room
+	char *finalRoom = game.end; //Final lroom is set to end room
 	char *directory = game.connection;
 	int stepCount = 0;
 	int i, valid, lines, connections;
@@ -161,6 +165,8 @@ void beginAdventure(struct Positions game)
 	//printf( "Final Room is: %s\n", finalRoom);
 
 	char *currentFile = malloc(100);
+	//Loop which checks if current room equals final room
+	//This is the core of the game to determine if you reach the final room
 	while (!(strcmp(currentRoom, finalRoom)) == 0) {
 		sprintf(currentFile, "%s/%s", directory, currentRoom);
 		FILE *fp = fopen(currentFile, "r");
@@ -194,6 +200,7 @@ void beginAdventure(struct Positions game)
 				fgets(connectionName, 20, fp); //Grabs name of connection
 				len = strlen(connectionName);
 				//Remove newline character
+				//Without this, the connections would not be printed as required
 				if(connectionName[len-1] == '\n') {
 					connectionName[len-1] = 0;
 				}
@@ -250,7 +257,7 @@ int main ()
 
 	struct Positions game = createRooms(roomsDirectory); //Stores rooms
 
-	beginAdventure(game); //Let the fun
+	beginAdventure(game); //Let the fun begin
 
 	return 0;
 }
