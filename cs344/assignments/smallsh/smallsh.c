@@ -9,6 +9,13 @@
 #include <fcntl.h>
 #include <singla.h>
 
+char *getLine() {
+	char *line = NULL;
+	ssize_t bufsize = 0;
+	getline(&line, &bufsize, stdin);
+	return line;
+}
+
 
 int main () {
 
