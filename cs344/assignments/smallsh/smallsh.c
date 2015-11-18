@@ -9,6 +9,8 @@
 #include <fcntl.h>
 #include <singla.h>
 
+int numArgs, isbg;
+
 char *getLine() {
 	char *line = NULL;
 	ssize_t bufsize = 0;
@@ -16,9 +18,26 @@ char *getLine() {
 	return line;
 }
 
+int runShell() {
+	int exitCalled= 0;
+	int exitStatus = 0;
+	int i;
+
+	do {
+		printf(": ");
+		char *line = NULL;
+		char **args;
+		int fileDescriptor;
+		numArgs = 0;
+		isbg = 0;
+
+		line = getLine();
+	} while (!exitCalled);	
+}
 
 int main () {
 
+	runShell();
 
 
 
