@@ -14,9 +14,9 @@ int numArgs, isbg;
 #define TOK_DELIM " \t\r\n\a"
 
 char *getLine() {
-	char *line = NULL;
-	ssize_t bufsize = 0;
-	getline(&line, &bufsize, stdin);
+	char* line = NULL;
+	size_t size = 0;
+	getline(&line, &size, stdin);
 	return line;
 }
 
@@ -91,12 +91,10 @@ int runShell() {
 
 		line = getLine();
 		args = splitLine(line);
-
 		if(!(strncmp(args[numArgs - 1], "&", 1))) {
 			isbg = 1;
 			args[numArgs - 1] = NULL;
 		}
-
 		if(args[0] == NULL || !(strncmp(args[0], "#", 1))) {
 			exitStatus = 0;
 		}
