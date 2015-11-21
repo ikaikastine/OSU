@@ -44,7 +44,11 @@ char **splitLine(char *line) {
 }
 
 void handle_SIGINT() {
-	printf("Found your CTRL-C\n");
+	//printf("Found your CTRL-C\n");
+}
+
+void handle_SIGTERM() {
+	printf("Found your sigterm\n");
 }
 
 int launch(char **args) {
@@ -52,8 +56,11 @@ int launch(char **args) {
 	int status, exitStatus = 0;
 
 	struct sigaction handler;
+	struct sigaction action;
 	handler.sa_handler = handle_SIGINT;
+	action.sa_handler = handle_SIGTERM;
 	sigaction(SIGINT, &handler, NULL);
+	sigaction(SIGTERM, &action, NULL);
 
 	pid = fork();
 
@@ -72,9 +79,6 @@ int launch(char **args) {
 			if (backProcess == 0) {
 				CHECK(setpgid(0, 0) == 0);
 				wpid = waitpid(pid, &status, WUNTRACED);
-				
-				kill(pid, SIGKILL);
-				pid = 0;
 			}
 			else if (backProcess == 1) {
 				wpid = waitpid(-1, &status, WNOHANG);
@@ -85,6 +89,9 @@ int launch(char **args) {
 		printf("Background PID: %d\nExit Status: %d", pid, exitStatus);
 	}
 	if (status != 0 || WIFSIGNALED(status)) {
+		exitStatus = 1;
+	}
+	else if (status != 0 || WTERMSIG(status)) {
 		exitStatus = 1;
 	}
 	return exitStatus;
