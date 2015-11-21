@@ -9,12 +9,13 @@
 #include <fcntl.h>
 #include <signal.h>
 
-int numArgs, isbg;
+int numArgs, backProcess;
 
 #define TOK_DELIM " \t\r\n\a"
+#define CHECK(x) if(!(x)) { perror(#x " failed"); abort(); }
 
 char *getLine() {
-	char* line = NULL;
+	char *line = NULL;
 	size_t size = 0;
 	getline(&line, &size, stdin);
 	return line;
@@ -42,13 +43,22 @@ char **splitLine(char *line) {
 	return tokens;
 }
 
+void handle_SIGINT() {
+	printf("Found your CTRL-C\n");
+}
+
 int launch(char **args) {
 	pid_t pid, wpid;
 	int status, exitStatus = 0;
 
+	struct sigaction handler;
+	handler.sa_handler = handle_SIGINT;
+	sigaction(SIGINT, &handler, NULL);
+
 	pid = fork();
 
 	if (pid == 0) {
+		CHECK(setpgid(0, 0) == 0);
 		if (execvp(args[0], args) == -1) {
 			printf("Command or file not recognized\n");
 			exit(1);
@@ -59,15 +69,19 @@ int launch(char **args) {
 	}
 	else {
 		do {
-			if (isbg == 0) {
+			if (backProcess == 0) {
+				CHECK(setpgid(0, 0) == 0);
 				wpid = waitpid(pid, &status, WUNTRACED);
+				
+				kill(pid, SIGKILL);
+				pid = 0;
 			}
-			else if (isbg == 1) {
+			else if (backProcess == 1) {
 				wpid = waitpid(-1, &status, WNOHANG);
 			}
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	if (isbg == 1) {
+	if (backProcess == 1) {
 		printf("Background PID: %d\nExit Status: %d", pid, exitStatus);
 	}
 	if (status != 0 || WIFSIGNALED(status)) {
@@ -87,12 +101,12 @@ int runShell() {
 		char **args;
 		int fileDescriptor;
 		numArgs = 0;
-		isbg = 0;
+		backProcess = 0;
 
 		line = getLine();
 		args = splitLine(line);
 		if(!(strncmp(args[numArgs - 1], "&", 1))) {
-			isbg = 1;
+			backProcess = 1;
 			args[numArgs - 1] = NULL;
 		}
 		if(args[0] == NULL || !(strncmp(args[0], "#", 1))) {
