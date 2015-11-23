@@ -12,7 +12,6 @@
 int numArgs, backProcess;
 
 #define TOK_DELIM " \t\r\n\a"
-#define CHECK(x) if(!(x)) { perror(#x " failed"); abort(); }
 
 char *getLine() {
 	char *line = NULL;
@@ -44,7 +43,7 @@ char **splitLine(char *line) {
 }
 
 void handle_SIGINT() {
-	//printf("Found your CTRL-C\n");
+	printf("\n"); //Catches CTRL-C and print newline 
 }
 
 void handle_SIGTERM() {
@@ -65,7 +64,6 @@ int launch(char **args) {
 	pid = fork();
 
 	if (pid == 0) {
-		CHECK(setpgid(0, 0) == 0);
 		if (execvp(args[0], args) == -1) {
 			printf("Command or file not recognized\n");
 			exit(1);
@@ -77,7 +75,6 @@ int launch(char **args) {
 	else {
 		do {
 			if (backProcess == 0) {
-				CHECK(setpgid(0, 0) == 0);
 				wpid = waitpid(pid, &status, WUNTRACED);
 			}
 			else if (backProcess == 1) {
@@ -195,10 +192,6 @@ int runShell() {
 }
 
 int main () {
-
 	runShell();
-
-
-
 	return 0;
 }
