@@ -52,7 +52,7 @@ void handle_SIGTERM() {
 	printf("Found your sigterm\n");
 }
 
-int launch(char **args) {
+int execute(char **args) {
 	pid_t pid, wpid;
 	int status, exitStatus = 0;
 
@@ -160,7 +160,7 @@ int runShell() {
 					dup2(fileDescriptor, 1);
 					args[1] = NULL;
 					close(fileDescriptor);
-					exitStatus = launch(args);
+					exitStatus = execute(args);
 				}
 			}
 			else if (strcmp(args[1], "<") == 0) {
@@ -173,7 +173,7 @@ int runShell() {
 					dup2(fileDescriptor, 0);
 					args[1] = NULL;
 					close(fileDescriptor);
-					exitStatus = launch(args);
+					exitStatus = execute(args);
 				}
 			}
 			dup2(savedStdout, 1);
@@ -183,12 +183,11 @@ int runShell() {
 		}
 
 		else {
-			exitStatus = launch(args);
+			exitStatus = execute(args);
 		}
 
 		free(line);
 		free(args);
-
 
 	} while (!exitCalled);	
 	return 0;
