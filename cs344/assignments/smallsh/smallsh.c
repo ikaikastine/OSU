@@ -42,10 +42,12 @@ char **splitLine(char *line) {
 	return tokens;
 }
 
+//handles the signal SIGINT
 void handle_SIGINT() {
 	printf("\n"); //Catches CTRL-C and print newline 
 }
 
+//handles the signal SIGTERM
 void handle_SIGTERM() {
 	printf("Found your sigterm\n");
 }
@@ -54,11 +56,12 @@ int launch(char **args) {
 	pid_t pid, wpid;
 	int status, exitStatus = 0;
 
+	//Start signal catching
 	struct sigaction handler;
 	struct sigaction action;
 	handler.sa_handler = handle_SIGINT;
 	action.sa_handler = handle_SIGTERM;
-	sigaction(SIGINT, &handler, NULL);
+	sigaction(SIGINT, &handler, NULL); //
 	sigaction(SIGTERM, &action, NULL);
 
 	pid = fork();
