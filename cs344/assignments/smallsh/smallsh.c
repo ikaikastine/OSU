@@ -1,106 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <signal.h>
+#include "smallsh.h"
 
-int numArgs, backProcess;
-
-#define TOK_DELIM " \t\r\n\a"
-
-char *getLine() {
-	char *line = NULL;
-	size_t size = 0;
-	getline(&line, &size, stdin);
-	return line;
-}
-
-char **splitLine(char *line) {
-	int buffer = 64;
-	int pos = 0;
-	char **tokens = malloc(buffer * sizeof(char*));
-	char *token;
-
-	token = strtok(line, TOK_DELIM);
-	while (token != NULL) {
-		tokens[pos] = token;
-		numArgs++;
-		pos++;
-
-		if (pos >= buffer) {
-			buffer += 64;
-			tokens = realloc(tokens, buffer * sizeof(char*));
-		}
-		token = strtok(NULL, TOK_DELIM);
-	}
-	tokens[pos] = NULL;
-	return tokens;
-}
-
-//handles the signal SIGINT
-void handle_SIGINT() {
-	printf("\n"); //Catches CTRL-C and print newline 
-}
-
-//handles the signal SIGTERM
-void handle_SIGTERM() {
-	printf("Found your sigterm\n");
-}
-
-int execute(char **args) {
-	pid_t pid, wpid;
-	int status, exitStatus = 0;
-
-	//Start signal catching
-	struct sigaction handler;
-	struct sigaction action;
-	handler.sa_handler = handle_SIGINT;
-	action.sa_handler = handle_SIGTERM;
-	sigaction(SIGINT, &handler, NULL); //
-	sigaction(SIGTERM, &action, NULL);
-
-	pid = fork();
-
-	if (pid == 0) {
-		if (execvp(args[0], args) == -1) {
-			printf("Command or file not recognized\n");
-			exit(1);
-		}
-	}
-	else if (pid < 0) {
-		perror("smallsh");
-	}
-	else {
-		do {
-			if (backProcess == 0) {
-				wpid = waitpid(pid, &status, WUNTRACED);
-			}
-			else if (backProcess == 1) {
-				wpid = waitpid(-1, &status, WNOHANG);
-			}
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-	if (backProcess == 1) {
-		printf("Background PID: %d\nExit Status: %d", pid, exitStatus);
-	}
-	if (status != 0 || WIFSIGNALED(status)) {
-		exitStatus = 1;
-	}
-	else if (status != 0 || WTERMSIG(status)) {
-		exitStatus = 1;
-	}
-	return exitStatus;
-}
-
-int runShell() {
+int main()
+{
 	int exitCalled= 0;
 	int exitStatus = 0;
-	int i;
+	//int i;
 
 	do {
 		printf(": ");
@@ -111,6 +15,9 @@ int runShell() {
 		backProcess = 0;
 
 		line = getLine();
+		if (line == NULL) {
+			exitStatus = 0;
+		}
 		args = splitLine(line);
 		if(!(strncmp(args[numArgs - 1], "&", 1))) {
 			backProcess = 1;
@@ -132,6 +39,10 @@ int runShell() {
 				chdir(getenv("HOME"));
 				exitStatus = 0;
 			}
+		}
+
+		else if (strcmp(args[0], "pid") == 0) {
+			printf("%d\n", getpid());
 		}
 
 		//Builtin "exit"
@@ -190,10 +101,5 @@ int runShell() {
 		free(args);
 
 	} while (!exitCalled);	
-	return 0;
-}
-
-int main () {
-	runShell();
 	return 0;
 }

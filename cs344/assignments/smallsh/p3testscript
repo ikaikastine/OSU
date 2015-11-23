@@ -1,5 +1,7 @@
 #!/bin/bash
 
+make
+
 echo "Pre-script Info"
 echo "PID: $$"
 
@@ -91,3 +93,5 @@ echo pwd (10 points for being in the newly created dir)
 pwd
 exit
 ___EOF___
+
+make clean
