@@ -41,10 +41,6 @@ int main()
 			}
 		}
 
-		else if (strcmp(args[0], "pid") == 0) {
-			printf("%d\n", getpid());
-		}
-
 		//Builtin "exit"
 		else if(strcmp(args[0], "exit") == 0) {
 			exitCalled = 1;
