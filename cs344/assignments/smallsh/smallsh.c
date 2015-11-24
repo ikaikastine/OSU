@@ -27,6 +27,7 @@ int main()
 			backProcess = 1; //Marks as background process
 			args[numArgs - 1] = NULL; //Clear token 
 		}
+
 		//Check to see if input is blank or a comment
 		//If the input is empty it segfaults for some reason
 		//Really not sure why
@@ -86,6 +87,7 @@ int main()
 			int savedOutput, savedInput; //Declares two variables to store input & output
 			savedInput = dup(0); //Creates a copy of file descriptor 
 			savedOutput = dup(1); //Creates a copy of file descriptor
+
 			//Checks to see if redirecting standard output
 			if (strcmp(args[1], ">") == 0) {
 				//Opens the file to direct standard output 
@@ -103,6 +105,7 @@ int main()
 					status = execute(args); //Execute the command 
 				}
 			}
+
 			//Checks to see if redirecting standard input
 			else if (strcmp(args[1], "<") == 0) {
 				fileDescriptor = open(args[2], O_RDONLY); //Opens for reading only
@@ -123,6 +126,7 @@ int main()
 			dup2(savedInput, 0); //Restore original input 
 			close(savedInput);
 		}
+		
 		//All other commands that are not built in
 		else {
 			status = execute(args); //Execute the command
