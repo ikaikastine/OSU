@@ -2,6 +2,7 @@
 #define SMALLSH_H
 
 #define TOK_DELIM " \t\r\n\a"
+#define bufferSize 1024
 
 int numArgs, backProcess;
 

@@ -1,31 +1,27 @@
 #include "smallsh.h"
 
+#define bufferSize 1024
+
 int main()
 {
-	int exitCalled= 0;
-	int exitStatus = 0;
-	//int i;
+	int exitCalled = 0; //Used to know if the program should exit
+	int exitStatus = 0; //Used to know the status
 
 	do {
-		printf(": ");
-		char line[1024];
+		printf(": "); //Prints the prompt
+
+		//Declaration of variables used
+		char line[bufferSize];
 		size_t size = 0;
-		ssize_t read;
 		char **args;
 		int fileDescriptor;
 		numArgs = 0;
 		backProcess = 0;
 
-		char *string = fgets(line, 1024, stdin);
-		int len = strlen(line);
-		if (string == NULL || strlen(line) == 0) {
-			exitStatus = 0;
-		}
-		//getline(&line, &size, stdin);
-		
-		line[len-1] = '\0';
-
+		//Reads input from user and stores in line
+		fgets(line, bufferSize, stdin);
 		args = splitLine(line);
+
 		if (!(strncmp(args[numArgs - 1], "&", 1))) {
 			backProcess = 1;
 			args[numArgs - 1] = NULL;
