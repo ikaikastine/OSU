@@ -8,27 +8,34 @@ int main()
 
 	do {
 		printf(": ");
-		char *line = NULL;
+		char line[1024];
+		size_t size = 0;
+		ssize_t read;
 		char **args;
 		int fileDescriptor;
 		numArgs = 0;
 		backProcess = 0;
 
-		line = getLine();
-		if (line == NULL) {
+		char *string = fgets(line, 1024, stdin);
+		int len = strlen(line);
+		if (string == NULL || strlen(line) == 0) {
 			exitStatus = 0;
 		}
+		//getline(&line, &size, stdin);
+		
+		line[len-1] = '\0';
+
 		args = splitLine(line);
-		if(!(strncmp(args[numArgs - 1], "&", 1))) {
+		if (!(strncmp(args[numArgs - 1], "&", 1))) {
 			backProcess = 1;
 			args[numArgs - 1] = NULL;
 		}
-		if(args[0] == NULL || !(strncmp(args[0], "#", 1))) {
+		if (args[0] == NULL || !(strncmp(args[0], "#", 1))) {
 			exitStatus = 0;
 		}
 
 		//Builtin "cd"
-		else if(strcmp(args[0], "cd") == 0) {
+		else if (strcmp(args[0], "cd") == 0) {
 			if(args[1]) {
 				if(chdir(args[1]) != 0) {
 					printf("No such file or directory\n");
@@ -49,8 +56,18 @@ int main()
 
 		//Builtin "status"
 		else if(strcmp(args[0], "status") == 0) {
-			printf("Exit status: %d\n", exitStatus);
-			exitStatus = 0;
+			if (exitStatus == 2) {
+				printf("Terminated by signal 2\n");
+				exitStatus = 0;
+			}
+			if (exitStatus == 3) {
+				printf("Terminated by signal 15\n");
+				exitStatus = 0;
+			}
+			else {
+				printf("Exit status: %d\n", exitStatus);
+				exitStatus = 0;
+			}
 		}
 
 		else if (numArgs == 3 && ((strcmp(args[1], ">") == 0) || (strcmp(args[1], "<") == 0) )) {
@@ -92,10 +109,8 @@ int main()
 		else {
 			exitStatus = execute(args);
 		}
-
-		free(line);
+		//free(line);
 		free(args);
-
 	} while (!exitCalled);	
 	return 0;
 }

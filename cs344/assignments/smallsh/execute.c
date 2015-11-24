@@ -2,16 +2,20 @@
 #include <signal.h>
 
 //handles the signal SIGINT
-void handle_SIGINT() {
-    printf("\n"); //Catches CTRL-C and print newline 
+void handle_SIGINT() 
+{
+    printf(" Terminated by signal 2\n"); //Catches CTRL-C and print newline 
+    //exitStatus = 2;
 }
 
 //handles the signal SIGTERM
-void handle_SIGTERM() {
+void handle_SIGTERM() 
+{
     printf("Found your sigterm\n");
 }
 
-int execute(char **args) {
+int execute(char **args) 
+{
     pid_t pid, wpid;
     int status, exitStatus = 0;
 
@@ -45,7 +49,7 @@ int execute(char **args) {
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
     if (backProcess == 1) {
-        printf("Background PID: %d\nExit Status: %d", pid, exitStatus);
+        printf("Background PID: %d\nExit Status: %d\n", pid, exitStatus);
     }
     if (status != 0 || WIFSIGNALED(status)) {
         exitStatus = 1;
@@ -58,3 +62,4 @@ int execute(char **args) {
     }
     return exitStatus;
 }
+

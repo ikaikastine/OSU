@@ -1,6 +1,7 @@
 #include "smallsh.h"
 
-char **splitLine(char *line) {
+char **splitLine(char *line) 
+{
     int buffer = 64;
     int pos = 0;
     char **tokens = malloc(buffer * sizeof(char*));
