@@ -1,11 +1,11 @@
 #ifndef SMALLSH_H
 #define SMALLSH_H
 
+//Define statements 
 #define TOK_DELIM " \t\r\n\a"
 #define bufferSize 1024
 
-int numArgs, backProcess;
-
+//Various header definitions
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,6 +17,10 @@ int numArgs, backProcess;
 #include <fcntl.h>
 #include <signal.h>
 
+//Declaration of global variables
+int numArgs, backProcess;
+
+//Function prototypes
 char *getLine();
 
 char **splitLine(char *line);
