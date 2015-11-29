@@ -36,3 +36,16 @@ file = open('file3.txt', 'r')
 line = file.readline(10)
 print "File 3 contains: %s" % (line)
 file.close()
+
+print (" ")
+
+int1 = random.randint(1, 42)
+int2 = random.randint(1, 42)
+
+intSum = int1 * int2
+
+print "Integer 1: %d" % (int1)
+print "Integer 2: %d" % (int2)
+
+print"Sum = %d" % (intSum)
+
