@@ -37,15 +37,20 @@ line = file.readline(10)
 print "File 3 contains: %s" % (line)
 file.close()
 
+#Print line to seperate sections
 print (" ")
 
+#Set int1 & int2 as random integers between 1-42
 int1 = random.randint(1, 42)
 int2 = random.randint(1, 42)
 
+#Set the intSum as the product of int1 & int2
 intSum = int1 * int2
 
+#Print out integer values
 print "Integer 1: %d" % (int1)
 print "Integer 2: %d" % (int2)
 
+#Print out the sum 
 print"Sum = %d" % (intSum)
 
