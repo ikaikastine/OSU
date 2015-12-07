@@ -165,15 +165,15 @@ int main(int argc, char *argv[]) {
             error("ERROR opening plaintext file.\n");
         }
 
-        char ptxt[BUFSIZE]; // This will store plaintext string to be extracted from file
-        fgets(ptxt, BUFSIZE, fp); // Read file, store into ptxt
+        char plainText[BUFSIZE]; // This will store plaintext string to be extracted from file
+        fgets(plainText, BUFSIZE, fp); // Read file, store into plainText
 
-        for (i = 0; i < strlen(ptxt); i++) { // Convert plaintext to all upper case
-            ptxt[i] = toupper(ptxt[i]);
+        for (i = 0; i < strlen(plainText); i++) { // Convert plaintext to all upper case
+            plainText[i] = toupper(plainText[i]);
         }
 
-        for (i = 0; i < strlen(ptxt)-1; i++) { // Check for bad input
-            if (charCheck(ptxt[i]) == 1) { // If charCheck returns true, exit with error
+        for (i = 0; i < strlen(plainText)-1; i++) { // Check for bad input
+            if (charCheck(plainText[i]) == 1) { // If charCheck returns true, exit with error
                 error("ERROR plaintext file contained bad characters.\n");
             }
         }
@@ -193,14 +193,14 @@ int main(int argc, char *argv[]) {
             error("ERROR opening key file.\n");
         }
 
-        char ktxt[BUFSIZE]; // Stores key string to be extracted from file
-        fgets(ktxt, BUFSIZE, fp); // Read file, store contents into ktxt
+        char keyText[BUFSIZE]; // Stores key string to be extracted from file
+        fgets(keyText, BUFSIZE, fp); // Read file, store contents into keyText
 
         fclose(fp);
 
-        /////* USE KTXT TO ENCRYPT PTXT */////
-        // First, ensure that ktxt is big enough for ptxt
-        if (strlen(ktxt) < strlen(ptxt)) {
+        /////* USE keyText TO ENCRYPT plainText */////
+        // First, ensure that keyText is big enough for plainText
+        if (strlen(keyText) < strlen(plainText)) {
             //error("ERROR key is shorter than plaintext.\n");
             bzero(sendbuf, BUFSIZE); // Clear the send buffer so it can be used safely
             snprintf(sendbuf, BUFSIZE, "%s", "error1: key too short"); // Store the cipher string into the buffer
@@ -211,26 +211,26 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        // Then encrypt each char and push to ctxt
-        char ctxt[strlen(ptxt)]; // This will store the ciphertext once generated
+        // Then encrypt each char and push to cipherText
+        char cipherText[strlen(plainText)]; // This will store the ciphertext once generated
         // These int arrays will store the messages converted into numbers, and their modular sums
-        int pnums[strlen(ptxt)], knums[strlen(ptxt)], cnums[strlen(ptxt)];
+        int plainVal[strlen(plainText)], keyVal[strlen(plainText)], cipherVal[strlen(plainText)];
         char alpha[28] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "; // This will be used to reference alphabetical positions
 
-        for (i = 0; i < strlen(ptxt); i++) {    // Iterate through each character in the plaintext
-            pnums[i] = charToInt(ptxt[i]);      // Each index of pnums gets the numeric equivalent of ptxt
-            knums[i] = charToInt(ktxt[i]);      // Each index of knums gets the numeric equivalent of ktxt
-            cnums[i] = pnums[i] + knums[i];     // Each index of cnums gets the sum of pnums+knums
-            if (cnums[i] > 26) {                // Modular addition if the cnum is over 26 (zero is 'A')
-                cnums[i] -= 27;
+        for (i = 0; i < strlen(plainText); i++) {    // Iterate through each character in the plaintext
+            plainVal[i] = charToInt(plainText[i]);      // Each index of plainVal gets the numeric equivalent of plainText
+            keyVal[i] = charToInt(keyText[i]);      // Each index of keyVal gets the numeric equivalent of keyText
+            cipherVal[i] = plainVal[i] + keyVal[i];     // Each index of cipherVal gets the sum of plainVal+keyVal
+            if (cipherVal[i] > 26) {                // Modular addition if the cnum is over 26 (zero is 'A')
+                cipherVal[i] -= 27;
             }
-            ctxt[i] = alpha[cnums[i]];          // Set ctxt[i] equal to the corresponding resulting letter
+            cipherText[i] = alpha[cipherVal[i]];          // Set cipherText[i] equal to the corresponding resulting letter
         }
-        ctxt[strlen(ptxt)-1] = '\0'; // Null terminate the resulting message
+        cipherText[strlen(plainText)-1] = '\0'; // Null terminate the resulting message
 
         ////* WRITE BACK TO THE CLIENT *////
         bzero(sendbuf, BUFSIZE); // Clear the send buffer so it can be used safely
-        snprintf(sendbuf, BUFSIZE, "%s", ctxt); // Store the cipher string into the buffer
+        snprintf(sendbuf, BUFSIZE, "%s", cipherText); // Store the cipher string into the buffer
         n = write(acceptfd, sendbuf, strlen(sendbuf)); // Write this message back to the client
         if (n < 0) {
             error("ERROR writing to socket.\n");

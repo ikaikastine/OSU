@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -15,63 +15,65 @@ void error(const char *msg) {
 }
 
 int main(int argc, char *argv[]) {
-    int socketfd, portNum, n;
+    int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     char buffer[BUFSIZE];
 
     if (argc < 4) {
-        fprintf(stderr, "Usage: %s plaintext key port\n", argv[0]);
-        exit(1);
+       fprintf(stderr,"Usage: %s plaintext key port\n", argv[0]);
+       exit(1);
     }
 
-    portNum = atoi(argv[3]);
-    socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    portno = atoi(argv[3]);
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (socketfd < 0) {
-        error("Error opening socket.\n");
+    if (sockfd < 0) {
+        error("ERROR opening socket.\n");
     }
-
+    
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(portNum);
+    serv_addr.sin_port = htons(portno);
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    if (connect(socketfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-        printf("Error connecting to port %d.\n", portNum);
+    if (connect(sockfd,(struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        printf("ERROR connecting to port %d.\n", portno);
         exit(2);
     }
 
+    /* SEND PLAINTEXT FILE NAME */
+    //bzero(buffer,BUFSIZE);
     snprintf(buffer, BUFSIZE, "%s", argv[1]);
-    n = write(socketfd, buffer, strlen(buffer));
-    if ( n < 0) {
-        error("Error writing argv[1] to cket.\n");
+    n = write(sockfd, buffer, strlen(buffer));
+    if (n < 0) {
+        error("ERROR writing argv[1] to socket.\n");
     }
 
     sleep(1);
 
+    /* SEND KEY FILE NAME */
     snprintf(buffer, BUFSIZE, "%s", argv[2]);
-    n = write(socketfd, buffer, strlen(buffer));
+    n = write(sockfd, buffer, strlen(buffer));
     if (n < 0) {
-        error("Error writing to socket.\n");
+        error("ERROR writing to socket.\n");
     }
 
+    /* RECEIVE SERVER RESPONSE */
     bzero(buffer, BUFSIZE);
-    n = read(socketfd, buffer, BUFSIZE);
+    n = read(sockfd, buffer, BUFSIZE); // Waiting for server response
     if (n < 0) {
-        error("Error reading from socket.\n");
+        error("ERROR reading from socket.\n");
     }
 
     if (buffer == "error1: key too short") {
-        error("Error key not long enough.\n");
-    }
-    else if (buffer == "error2") {
-        error("Error bad characteres in file.\n");
-    }
-    else {
+        error("ERROR Key not long enough.\n");
+    } else if (buffer == "error2") {
+        error("ERROR Bad characters in file.\n");
+    } else {
         printf("%s\n", buffer);
     }
 
-    close(socketfd);
-
-	return 0;
+    close(sockfd);
+     
+    return 0;
 }
