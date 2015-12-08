@@ -80,6 +80,7 @@ int validateChar(char character)
         case 'Y': return 0;
         case 'Z': return 0;
         case ' ': return 0;
+        case '$': return 1;
         default : return 1;
     }
 }

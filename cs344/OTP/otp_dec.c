@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     //Initiates a connection on a socket
     //If return value is less than 0, print that otp_dec_d could not be found
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-        printf("Error. otp_dec could not find otp_dec_d.\n");
+        printf("Error: otp_dec could not find otp_dec_d.\n");
         exit(2);
     }
 
