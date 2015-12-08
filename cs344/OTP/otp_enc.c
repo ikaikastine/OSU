@@ -18,7 +18,7 @@ void error(const char *msg)
 
 int main(int argc, char *argv[]) 
 {
-    //Setup socket file descriptor andport number
+    //Setup socket file descriptor and port number
     int sockfd, portno, n; 
     struct sockaddr_in serv_addr;
     char buffer[BUFSIZE];
