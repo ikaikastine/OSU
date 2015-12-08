@@ -9,7 +9,7 @@
 
 #define BUFSIZE 1024 // Controls the length of all string buffers
 
-// Prints error message and exits with failure status
+//Prints out error message
 void error(const char *msg) {
     perror(msg);
     exit(1);

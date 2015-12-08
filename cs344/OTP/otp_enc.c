@@ -9,6 +9,7 @@
 
 #define BUFSIZE 1024
 
+//Prints out error message
 void error(const char *msg) {
     perror(msg);
     exit(1);
