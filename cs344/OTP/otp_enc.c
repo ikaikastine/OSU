@@ -7,42 +7,52 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#define BUFSIZE 1024
+#define BUFSIZE 1024 //Sets buffer size
 
-void error(const char *msg) {
+//Prints out error message
+void error(const char *msg) 
+{
     perror(msg);
     exit(1);
 }
 
-int main(int argc, char *argv[]) {
-    int sockfd, portno, n;
+int main(int argc, char *argv[]) 
+{
+    //Setup socket file descriptor andport number
+    int sockfd, portno, n; 
     struct sockaddr_in serv_addr;
     char buffer[BUFSIZE];
 
+    //Checks if user supplies less than four arguments
+    //If so, prints usage message
     if (argc < 4) {
        fprintf(stderr,"Usage: %s plaintext key port\n", argv[0]);
        exit(1);
     }
 
+    //Type cast port argument to an integer and set to portno
     portno = atoi(argv[3]);
+    //Creates socket in address family INET
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
+    //If -1 is returned from socket() print out error message
     if (sockfd < 0) {
         error("ERROR opening socket.\n");
     }
     
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(portno);
-    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    bzero((char *) &serv_addr, sizeof(serv_addr)); //Clear buffer for server address
+    serv_addr.sin_family = AF_INET; //Sets address family as internet
+    serv_addr.sin_port = htons(portno); //Only listen to specified port 
+    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY); //Accept connection from any machine
 
+    //Initiates a connection on a socket
+    //If return value is -1, print error connecting 
     if (connect(sockfd,(struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         printf("ERROR connecting to port %d.\n", portno);
         exit(2);
     }
 
-    /* SEND PLAINTEXT FILE NAME */
-    //bzero(buffer,BUFSIZE);
+    //Send plaintext file name
     snprintf(buffer, BUFSIZE, "%s", argv[1]);
     n = write(sockfd, buffer, strlen(buffer));
     if (n < 0) {
@@ -51,16 +61,16 @@ int main(int argc, char *argv[]) {
 
     sleep(1);
 
-    /* SEND KEY FILE NAME */
+    //Send key file name
     snprintf(buffer, BUFSIZE, "%s", argv[2]);
     n = write(sockfd, buffer, strlen(buffer));
     if (n < 0) {
         error("ERROR writing to socket.\n");
     }
 
-    /* RECEIVE SERVER RESPONSE */
+    //Receive response from server
     bzero(buffer, BUFSIZE);
-    n = read(sockfd, buffer, BUFSIZE); // Waiting for server response
+    n = read(sockfd, buffer, BUFSIZE); //Waiting for server response
     if (n < 0) {
         error("ERROR reading from socket.\n");
     }
