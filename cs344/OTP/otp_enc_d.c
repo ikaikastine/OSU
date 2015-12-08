@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <ctype.h> // letter to number conversion
 
-#define BUFSIZE 1024 // Controls the length of all string buffers
+#define BUFSIZE 1024 //Sets buffer size
 
 //Prints out error message
 void error(const char *msg) {
