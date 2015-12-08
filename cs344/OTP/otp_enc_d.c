@@ -131,8 +131,9 @@ int main(int argc, char *argv[]) {
     bzero((char *) &serv_addr, sizeof(serv_addr)); // Clear buffer for server address
     portno = atoi(argv[1]); // Save port number that was passed in, converting from string to int
     serv_addr.sin_family = AF_INET; // Establish address family as internet
-    serv_addr.sin_addr.s_addr = INADDR_ANY; // Accept connections from any machine
     serv_addr.sin_port = htons(portno); // Only listen on the user-specified port
+    serv_addr.sin_addr.s_addr = INADDR_ANY; // Accept connections from any machine
+    
 
     // Bind server to socket using aforementioned configuration
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
