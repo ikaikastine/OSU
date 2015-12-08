@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#define BUFSIZE 1024
+#define BUFSIZE 1024 //Sets buffer size
 
 //Prints out error message
 void error(const char * msg) {
