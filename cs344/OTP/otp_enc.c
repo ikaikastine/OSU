@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         error("ERROR reading from socket.\n");
     }
 
-    if (buffer == "error1: key too short") {
+    if (buffer == "Error: key too short") {
         error("ERROR Key not long enough.\n");
     } else if (buffer == "error2") {
         error("ERROR Bad characters in file.\n");

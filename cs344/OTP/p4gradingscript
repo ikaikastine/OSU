@@ -1,7 +1,7 @@
 #!/bin/bash
 # FYI, this command removes file abc if it is empty: [ -s abc ] || rm -f abc
-./otp_enc_d 57100 &
-./otp_dec_d 57170 &
+./otp_enc_d 57110 &
+./otp_dec_d 57190 &
 
 echo '#-----------------------------------------'
 echo '#START OF GRADING SCRIPT'
@@ -23,18 +23,18 @@ echo "#5 POINTS: Number of characters in key70000, should be 70000:"
 wc -m key70000
 echo
 echo "#-----------------------------------------"
-echo '#otp_enc plaintext1 key20 57100'
+echo '#otp_enc plaintext1 key20 57110'
 echo "#10 POINTS: Should return error about too-short key"
-./otp_enc plaintext1 key20 57100
+./otp_enc plaintext1 key20 57110
 echo
 echo "#-----------------------------------------"
-echo '#otp_enc plaintext1 key70000 57100'
+echo '#otp_enc plaintext1 key70000 57110'
 echo "#20 POINTS: Should return encrypted version of plaintext1"
-./otp_enc plaintext1 key70000 57100
+./otp_enc plaintext1 key70000 57110
 echo
 echo '#-----------------------------------------'
-echo '#otp_enc plaintext1 key70000 57100 > ciphertext1'
-./otp_enc plaintext1 key70000 57100 > ciphertext1
+echo '#otp_enc plaintext1 key70000 57110 > ciphertext1'
+./otp_enc plaintext1 key70000 57110 > ciphertext1
 echo "#10 POINTS: ciphertext1 must exist"
 [ -s ciphertext1 ] || rm -f ciphertext1 
 if [ -f ciphertext1 ]; then echo 'ciphertext1 exists!'; else echo 'ciphertext1 DOES NOT EXIST'; fi 
@@ -51,7 +51,7 @@ echo '#5 POINTS: ciphertext1 should look encrypted'
 cat ciphertext1
 echo
 echo '#-----------------------------------------'
-echo '#otp_dec ciphertext1 key70000 57100'
+echo '#otp_dec ciphertext1 key70000 57110'
 echo '#5 POINTS: Should fail giving error that otp_dec cannot find otp_dec_d'
 ./otp_dec ciphertext1 key70000 51717
 echo
@@ -59,12 +59,12 @@ echo '#-----------------------------------------'
 echo '#20 POINTS: should return decrypted ciphertext1 that matches source'
 echo '#cat plaintext1'
 cat plaintext1
-echo '#otp_dec ciphertext1 key70000 57170'
-./otp_dec ciphertext1 key70000 57170
+echo '#otp_dec ciphertext1 key70000 57190'
+./otp_dec ciphertext1 key70000 57190
 echo
 echo '#-----------------------------------------'
-echo '#otp_dec ciphertext1 key70000 57170 > plaintext1_a'
-./otp_dec ciphertext1 key70000 57170 > plaintext1_a
+echo '#otp_dec ciphertext1 key70000 57190 > plaintext1_a'
+./otp_dec ciphertext1 key70000 57190 > plaintext1_a
 echo "#10 POINTS: plaintext1_a must exist"
 [ -s plaintext1_a ] || rm -f plaintext1_a
 if [ -f plaintext1_a ]; then echo 'plaintext1_a exists!'; else echo 'plaintext1_a DOES NOT EXIST'; fi
@@ -81,11 +81,11 @@ echo '#20 POINTS: concurrent test of encryption - look for 4 ciphertext# files'
 echo '#5 POINTS: Should be only one error about plaintext5 being bad'
 rm -f ciphertext*
 rm -f plaintext*_*
-./otp_enc plaintext1 key70000 57100 > ciphertext1
-./otp_enc plaintext2 key70000 57100 > ciphertext2
-./otp_enc plaintext3 key70000 57100 > ciphertext3
-./otp_enc plaintext4 key70000 57100 > ciphertext4
-./otp_enc plaintext5 key70000 57100 > ciphertext5
+./otp_enc plaintext1 key70000 57110 > ciphertext1
+./otp_enc plaintext2 key70000 57110 > ciphertext2
+./otp_enc plaintext3 key70000 57110 > ciphertext3
+./otp_enc plaintext4 key70000 57110 > ciphertext4
+./otp_enc plaintext5 key70000 57110 > ciphertext5
 [ -s ciphertext1 ] || rm -f ciphertext1
 [ -s ciphertext2 ] || rm -f ciphertext2
 [ -s ciphertext3 ] || rm -f ciphertext3
@@ -95,10 +95,10 @@ ls
 echo
 echo '#-----------------------------------------'
 echo '#15 POINTS: concurrent test of decryption - look for 4 plaintext#_a files'
-./otp_dec ciphertext1 key70000 57170 > plaintext1_a 
-./otp_dec ciphertext2 key70000 57170 > plaintext2_a
-./otp_dec ciphertext3 key70000 57170 > plaintext3_a
-./otp_dec ciphertext4 key70000 57170 > plaintext4_a
+./otp_dec ciphertext1 key70000 57190 > plaintext1_a 
+./otp_dec ciphertext2 key70000 57190 > plaintext2_a
+./otp_dec ciphertext3 key70000 57190 > plaintext3_a
+./otp_dec ciphertext4 key70000 57190 > plaintext4_a
 [ -s plaintext1_a ] || rm -f plaintext1_a
 [ -s plaintext2_a ] || rm -f plaintext2_a
 [ -s plaintext3_a ] || rm -f plaintext3_a
