@@ -10,12 +10,14 @@
 #define BUFSIZE 1024 //Sets buffer size
 
 //Prints out error message
-void error(const char * msg) {
+void error(const char * msg) 
+{
     perror(msg);
     exit(0);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
     //Setup socket file descriptor and port number 
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;

@@ -5,7 +5,7 @@
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <ctype.h> // letter to number conversion
+#include <ctype.h> //letter to number conversion
 
 #define BUFSIZE 1024 //Sets buffer size
 
@@ -15,9 +15,10 @@ void error(const char *msg) {
     exit(1);
 }
 
-// Converts char values to corresponding integers
-int charToInt(char c) {
-    switch (c) {
+//Converts char values to integers
+int convertChar(char character) 
+{
+    switch (character) {
         case 'A': return 0;
         case 'B': return 1;
         case 'C': return 2;
@@ -48,10 +49,10 @@ int charToInt(char c) {
     }
 }
 
-// Checks to make sure input characters are valid
-// (only A-Z and the space character)
-int charCheck(char c) {
-    switch (c) {
+//Checks to make sure characters are valid
+int validateChar(char character) 
+{
+    switch (character) {
         case 'A': return 0;
         case 'B': return 0;
         case 'C': return 0;
@@ -83,156 +84,158 @@ int charCheck(char c) {
     }
 }
 
-int main(int argc, char *argv[]) {
-    int sockfd, acceptfd, portno; // Initialize socket file descriptors, port
-    socklen_t clilen; // Initialize client address length
-    char recvbuf[BUFSIZE], sendbuf[BUFSIZE]; // Initialize send/receive string buffers
-    struct sockaddr_in serv_addr, cli_addr; // Initialize server and client structs
-    int n, i; // For-loop iterators
+int main(int argc, char *argv[]) 
+{
+    int n, i; //Loop iterators
+    int sockfd, acceptfd, portno; //Initialize socket file descriptors and port
+    socklen_t clilen; //Initialize client address length
+    char recvbuf[BUFSIZE], sendbuf[BUFSIZE]; //Initialize send/receive string buffers
+    struct sockaddr_in serv_addr, cli_addr; //Initialize server and client structs
+    
 
-    if (argc < 2) { // Check for proper args usage
+    //Checks for two arguments
+    //If less, print out usage message
+    if (argc < 2) { 
         fprintf(stderr,"Usage: %s port\n", argv[0]);
         exit(1);
     }
 
-    pid_t pid, sid; // Initialize process ID and Session ID
+    pid_t pid, sid; //Initialize process ID and Session ID
     
-    // Fork off the parent process
+    //Fork parent process
     pid = fork();
     if (pid < 0) {
         exit(EXIT_FAILURE);
     }
 
-    // If PID is good, exit parent process
+    //If PID is good, exit parent process
     if (pid > 0) {
         exit(EXIT_SUCCESS);
     }
 
-    // Change file mode mask to ensure daemon can read/write files
+    //Change file mode so daemon can read/write files
     umask(0);   
 
-    // Create new SID for child process
+    //Create new SID for child process
     sid = setsid();
     if (sid < 0) {
         exit(EXIT_FAILURE);
     }
 
-    // Close out the standard file descriptors (daemon shouldn't have access to terminal)
+    //Close out the standard file descriptors 
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
 
-    // Initialize daemon
-    sockfd = socket(AF_INET, SOCK_STREAM, 0); // Set socket file descriptor for IP, TCP
+    //Creates socket in address family INET
+    sockfd = socket(AF_INET, SOCK_STREAM, 0); 
     if (sockfd < 0) {
         error("ERROR opening socket.\n");
     }
 
-    bzero((char *) &serv_addr, sizeof(serv_addr)); // Clear buffer for server address
-    portno = atoi(argv[1]); // Save port number that was passed in, converting from string to int
-    serv_addr.sin_family = AF_INET; // Establish address family as internet
-    serv_addr.sin_port = htons(portno); // Only listen on the user-specified port
-    serv_addr.sin_addr.s_addr = INADDR_ANY; // Accept connections from any machine
+    bzero((char *) &serv_addr, sizeof(serv_addr)); //Clear buffer for server address
+    portno = atoi(argv[1]); //Convert port argument to int and set port number
+    serv_addr.sin_family = AF_INET; //Sets address family as internet
+    serv_addr.sin_port = htons(portno); //Only listen to specified port 
+    serv_addr.sin_addr.s_addr = INADDR_ANY; //Accept connections from any machine
     
-
-    // Bind server to socket using aforementioned configuration
+    //Assign specified address space
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         error("ERROR on binding.\n");
     }
 
-    // Listen for incoming connections (up to 5) on this socket
+    //Listen for up to 5 incoming connections on socket
     listen(sockfd, 5);
-    clilen = sizeof(cli_addr); // Grab length of client address to pass into accept call
+    clilen = sizeof(cli_addr); 
 
-    // Start the daemon/server listening loop
+    //Beginning of the listening loop
     while (1) {
-        // Wait for connection attempts from client processes
+        //Wait for connection attempts from client processes
         acceptfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (acceptfd < 0) {
             error("ERROR on accept.\n");
         }
 
-        /////* READ FROM CLIENT MESSAGE #1 */////
-        bzero(recvbuf, BUFSIZE); // Clear the string buffer for received messages
-        n = read(acceptfd, recvbuf, BUFSIZE); // Read any incoming messages
+        //Read from client message one
+        bzero(recvbuf, BUFSIZE); //Clear the string buffer for received messages
+        n = read(acceptfd, recvbuf, BUFSIZE); //Read incoming messages
         if (n < 0) {
             error("ERROR reading from socket.\n");
         }
 
-        // Attempt to open a file whose name was in the message
+        //Attempt to open a file whose name was in the message
         FILE *fp;
         fp = fopen(recvbuf, "r");
         if (fp == NULL) {
             error("ERROR opening plaintext file.\n");
         }
 
-        char plainText[BUFSIZE]; // This will store plaintext string to be extracted from file
-        fgets(plainText, BUFSIZE, fp); // Read file, store into plainText
+        char plainText[BUFSIZE]; //This will store plaintext string to be extracted from file
+        fgets(plainText, BUFSIZE, fp); //Read file, store into plainText
 
-        for (i = 0; i < strlen(plainText); i++) { // Convert plaintext to all upper case
+        for (i = 0; i < strlen(plainText); i++) { //Convert plaintext to all upper case
             plainText[i] = toupper(plainText[i]);
         }
 
-        for (i = 0; i < strlen(plainText)-1; i++) { // Check for bad input
-            if (charCheck(plainText[i]) == 1) { // If charCheck returns true, exit with error
+        for (i = 0; i < strlen(plainText)-1; i++) { //Check for bad input
+            if (validateChar(plainText[i]) == 1) { //If validateChar returns true, exit with error
                 error("ERROR plaintext file contained bad characters.\n");
             }
         }
 
         fclose(fp);
 
-        /////* READ FROM CLIENT MESSAGE #2 */////
-        bzero(recvbuf, BUFSIZE); // Clear the buffer so it can be safely reused
-        n = read(acceptfd, recvbuf, BUFSIZE); // Read any incoming messages into the buffer
+        //Read from client message two
+        bzero(recvbuf, BUFSIZE); //Clear the buffer so it can be safely reused
+        n = read(acceptfd, recvbuf, BUFSIZE); //Read any incoming messages into the buffer
         if (n < 0) {
             error("ERROR reading from socket.\n");
         }
 
-        // Attempt to open the file named in the message
+        //Attempt to open the file named in the message
         fp = fopen(recvbuf, "r");
         if (fp == NULL) {
             error("ERROR opening key file.\n");
         }
 
-        char keyText[BUFSIZE]; // Stores key string to be extracted from file
-        fgets(keyText, BUFSIZE, fp); // Read file, store contents into keyText
+        char keyText[BUFSIZE]; //Stores key string to be extracted from file
+        fgets(keyText, BUFSIZE, fp); //Read file, store contents into keyText
 
         fclose(fp);
 
-        /////* USE keyText TO ENCRYPT plainText */////
-        // First, ensure that keyText is big enough for plainText
+        //Use keyText to encrypt plainText
         if (strlen(keyText) < strlen(plainText)) {
-            //error("ERROR key is shorter than plaintext.\n");
-            bzero(sendbuf, BUFSIZE); // Clear the send buffer so it can be used safely
-            snprintf(sendbuf, BUFSIZE, "%s", "error1: key too short"); // Store the cipher string into the buffer
-            n = write(acceptfd, sendbuf, strlen(sendbuf)); // Write this message back to the client
+            bzero(sendbuf, BUFSIZE); //Clear the send buffer 
+            snprintf(sendbuf, BUFSIZE, "%s", "Error: key too short"); //Store the cipher string into the buffer
+            n = write(acceptfd, sendbuf, strlen(sendbuf)); //Write this message back to the client
             if (n < 0) {
                 error("ERROR writing to socket.\n");
             }
             continue;
         }
 
-        // Then encrypt each char and push to cipherText
-        char cipherText[strlen(plainText)]; // This will store the ciphertext once generated
-        // These int arrays will store the messages converted into numbers, and their modular sums
+        //Then encrypt each character
+        char cipherText[strlen(plainText)]; //Stores cipherText
+        //Store the strings as numbers 
         int plainVal[strlen(plainText)], keyVal[strlen(plainText)], cipherVal[strlen(plainText)];
-        char alpha[28] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "; // This will be used to reference alphabetical positions
+        char letters[28] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "; 
 
-        for (i = 0; i < strlen(plainText); i++) {    // Iterate through each character in the plaintext
-            plainVal[i] = charToInt(plainText[i]);      // Each index of plainVal gets the numeric equivalent of plainText
-            keyVal[i] = charToInt(keyText[i]);      // Each index of keyVal gets the numeric equivalent of keyText
-            cipherVal[i] = plainVal[i] + keyVal[i];     // Each index of cipherVal gets the sum of plainVal+keyVal
-            if (cipherVal[i] > 26) {                // Modular addition if the cnum is over 26 (zero is 'A')
+        for (i = 0; i < strlen(plainText); i++) { 
+            plainVal[i] = convertChar(plainText[i]); //Convert each character of plaintext to numbers 
+            keyVal[i] = convertChar(keyText[i]); //Convert each character of keytext to numbers
+            cipherVal[i] = plainVal[i] + keyVal[i]; //Cipherval is set as the sum of plainVal and keyVal
+            //Modular addition if the cipherVal is over 26
+            if (cipherVal[i] > 26) { 
                 cipherVal[i] -= 27;
             }
-            cipherText[i] = alpha[cipherVal[i]];          // Set cipherText[i] equal to the corresponding resulting letter
+            cipherText[i] = letters[cipherVal[i]]; //Convert cipher number to a letter
         }
-        cipherText[strlen(plainText)-1] = '\0'; // Null terminate the resulting message
+        cipherText[strlen(plainText)-1] = '\0'; //Null terminate the resulting message
 
-        ////* WRITE BACK TO THE CLIENT *////
-        bzero(sendbuf, BUFSIZE); // Clear the send buffer so it can be used safely
-        snprintf(sendbuf, BUFSIZE, "%s", cipherText); // Store the cipher string into the buffer
-        n = write(acceptfd, sendbuf, strlen(sendbuf)); // Write this message back to the client
+        //Write back to client
+        bzero(sendbuf, BUFSIZE); 
+        snprintf(sendbuf, BUFSIZE, "%s", cipherText); //Store the cipher 
+        n = write(acceptfd, sendbuf, strlen(sendbuf)); //Write this message back to the client
         if (n < 0) {
             error("ERROR writing to socket.\n");
         }
