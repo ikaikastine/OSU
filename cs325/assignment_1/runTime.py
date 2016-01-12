@@ -1,21 +1,22 @@
-import csv, random, sys, timeit
+import csv, random, sys, timeit, time
 
 #Basic max sub array implemetation 
 def enumeration(array):
-	start = timeit.default_timer()
+	start = time.time()
 	maxSum = 0
 	for i in range(len(array)):
 		for j in range(i, len(array)):
 			newSum = sum(array[i:j+1])
 			if newSum > maxSum:
 				maxSum = newSum
-	stop = timeit.default_timer()
-	print "Enumeration =", maxSum
-	print "Enumeration time =", stop - start
+	stop = time.time()
+	#print "Enumeration =", maxSum
+	print "Enumeration time =", (stop - start) 
 	return maxSum
 
 #Better max sub array implementation
 def betterEnumeration(array):
+	start = time.time()
 	maxSum = 0
 	for i in range(len(array)):
 		oldSum = 0
@@ -27,30 +28,42 @@ def betterEnumeration(array):
 			if newSum > maxSum:
 				maxSum = newSum
 			oldSum = newSum
-	print "Better enumeration =", maxSum
+	stop = time.time()
+	print "Better enumeration time =", (stop - start) 
+	#print "Better enumeration =", maxSum
 	return maxSum
 
 def dynamicProgramming(array):
+	start = time.time()
 	best = cur = 0
 	for i in array:
 		cur = max(cur + i, 0)
 		best = max(best, cur)
-	print "Dynamic programming =", best
+	stop = time.time()
+	print "Dynamic programming =", (stop - start) 
+	#print "Dynamic programming =", best
 	return best
 
-def testRunTime():
-	for i in range(0, 10):
-		testArray = [random.randint(-100,100) for r in range(100)]
-	print testArray
-	enumeration(testArray)
-	
+def testRunTime(testCase):
+	for i in range(1, 10):
+		testArray = [random.randint(-100, 100) for r in range(i*100)]
+		#print testArray
+		if testCase == 'enumeration':
+			enumeration(testArray)
+		elif testCase == 'betterEnumeration':
+			betterEnumeration(testArray)
+		elif testCase == 'dynamicProgramming':
+			dynamicProgramming(testArray)
+
 #Call basic enumeration implementation
-enumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
+#enumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
 
 #Call better enumeration implementation
-betterEnumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
+#betterEnumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
 
 #Call dynamic programming implementation 
-dynamicProgramming([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
+#dynamicProgramming([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
 
-testRunTime()
+testRunTime('enumeration')
+testRunTime('betterEnumeration')
+testRunTime('dynamicProgramming')
