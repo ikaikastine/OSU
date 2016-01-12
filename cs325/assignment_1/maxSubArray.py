@@ -1,4 +1,4 @@
-import csv, random, sys
+import csv, random, sys, timeit
 
 #Basic max sub array implemetation 
 def enumeration(array):
