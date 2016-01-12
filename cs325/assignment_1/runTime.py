@@ -1,6 +1,6 @@
 import csv, random, sys, timeit, time
 
-#Basic max sub array implemetation 
+#Algorithm 1: Enumeration 
 def enumeration(array):
 	start = time.time()
 	maxSum = 0
@@ -10,11 +10,10 @@ def enumeration(array):
 			if newSum > maxSum:
 				maxSum = newSum
 	stop = time.time()
-	#print "Enumeration =", maxSum
-	print "Enumeration time =", (stop - start) 
+	print (stop - start)
 	return maxSum
 
-#Better max sub array implementation
+#Algorithm 2: Better enumeration
 def betterEnumeration(array):
 	start = time.time()
 	maxSum = 0
@@ -29,10 +28,10 @@ def betterEnumeration(array):
 				maxSum = newSum
 			oldSum = newSum
 	stop = time.time()
-	print "Better enumeration time =", (stop - start) 
-	#print "Better enumeration =", maxSum
+	print (stop - start)
 	return maxSum
 
+#Algorithm 3: Dynamic programming
 def dynamicProgramming(array):
 	start = time.time()
 	best = cur = 0
@@ -40,12 +39,11 @@ def dynamicProgramming(array):
 		cur = max(cur + i, 0)
 		best = max(best, cur)
 	stop = time.time()
-	print "Dynamic programming =", (stop - start) 
-	#print "Dynamic programming =", best
+	print (stop - start)
 	return best
 
 def testRunTime(testCase):
-	for i in range(1, 18):
+	for i in range(1, 19):
 		testArray = [random.randint(-100, 100) for r in range(i*100)]
 		#print testArray
 		if testCase == 'enumeration':
@@ -55,7 +53,13 @@ def testRunTime(testCase):
 		elif testCase == 'dynamicProgramming':
 			dynamicProgramming(testArray)
 
-
+#BEGIN TEST CASES#
+print "***ENUMERATION***"
 testRunTime('enumeration')
+
+print "***BETTER ENUMERATION***"
 testRunTime('betterEnumeration')
+
+print "***DYMANIC PROGRAMMING***"
 testRunTime('dynamicProgramming')
+#END TEST CASES#
