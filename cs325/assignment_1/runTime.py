@@ -45,7 +45,7 @@ def dynamicProgramming(array):
 	return best
 
 def testRunTime(testCase):
-	for i in range(1, 10):
+	for i in range(1, 18):
 		testArray = [random.randint(-100, 100) for r in range(i*100)]
 		#print testArray
 		if testCase == 'enumeration':
@@ -55,14 +55,6 @@ def testRunTime(testCase):
 		elif testCase == 'dynamicProgramming':
 			dynamicProgramming(testArray)
 
-#Call basic enumeration implementation
-#enumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
-
-#Call better enumeration implementation
-#betterEnumeration([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
-
-#Call dynamic programming implementation 
-#dynamicProgramming([31, -41, 59, 26, -53, 58, 97, -93, -23, 84])
 
 testRunTime('enumeration')
 testRunTime('betterEnumeration')
