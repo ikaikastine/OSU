@@ -5,3 +5,4 @@ cs261 - Data Structures
 cs271 - Computer Architecture and Assembly Language   
 cs275 - Intro to Databases  
 cs344 - Operating Systems I  
+cs325 - Analysis of Algorithms  
