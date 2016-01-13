@@ -41,7 +41,6 @@ def dynamicProgramming(array):
 	file.write(' ')
 	return best
 
-
 #***BEGIN ENUMERATION TEST CASES***#
 file = open('output.txt', 'w')
 file.write("ENUMERATION: ")
