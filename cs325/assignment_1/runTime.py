@@ -42,10 +42,10 @@ def dynamicProgramming(array):
 	print (stop - start)
 	return best
 
+#Creates random array with integers between -100 & 100
 def testRunTime(testCase):
 	for i in range(1, 19):
 		testArray = [random.randint(-100, 100) for r in range(i*100)]
-		#print testArray
 		if testCase == 'enumeration':
 			enumeration(testArray)
 		elif testCase == 'betterEnumeration':
@@ -54,12 +54,13 @@ def testRunTime(testCase):
 			dynamicProgramming(testArray)
 
 #BEGIN TEST CASES#
-print "***ENUMERATION***"
+print "\n***ENUMERATION***\n"
 testRunTime('enumeration')
 
-print "***BETTER ENUMERATION***"
+print "\n***BETTER ENUMERATION***\n"
 testRunTime('betterEnumeration')
+print " "
 
-print "***DYMANIC PROGRAMMING***"
+print "\n***DYMANIC PROGRAMMING***\n"
 testRunTime('dynamicProgramming')
 #END TEST CASES#
