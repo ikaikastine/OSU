@@ -8,9 +8,7 @@ def enumeration(array):
 			newSum = sum(array[i:j+1])
 			if newSum > maxSum:
 				maxSum = newSum
-	#print "Enumeration =", maxSum
 	file = open('output.txt', 'a')
-	#print maxSum
 	file.write(str(maxSum))
 	file.write(' ')
 	return maxSum
@@ -28,7 +26,6 @@ def betterEnumeration(array):
 			if newSum > maxSum:
 				maxSum = newSum
 			oldSum = newSum
-	#print "Better enumeration =", maxSum
 	file = open('output.txt', 'a')
 	file.write(str(maxSum))
 	file.write(' ')
@@ -39,7 +36,6 @@ def dynamicProgramming(array):
 	for i in array:
 		cur = max(cur + i, 0)
 		best = max(best, cur)
-	#print "Dynamic programming =", best
 	file = open('output.txt', 'a')
 	file.write(str(best))
 	file.write(' ')
