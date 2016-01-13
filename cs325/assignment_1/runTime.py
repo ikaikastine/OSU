@@ -10,8 +10,9 @@ def enumeration(array):
 			if newSum > maxSum:
 				maxSum = newSum
 	stop = time.time()
-	print (stop - start)
-	return maxSum
+	#print (stop - start)
+	runTime = (stop - start)
+	return runTime
 
 #Algorithm 2: Better enumeration
 def betterEnumeration(array):
@@ -28,8 +29,8 @@ def betterEnumeration(array):
 				maxSum = newSum
 			oldSum = newSum
 	stop = time.time()
-	print (stop - start)
-	return maxSum
+	runTime = (stop - start)
+	return runTime
 
 #Algorithm 3: Dynamic programming
 def dynamicProgramming(array):
@@ -39,26 +40,45 @@ def dynamicProgramming(array):
 		cur = max(cur + i, 0)
 		best = max(best, cur)
 	stop = time.time()
-	print (stop - start)
-	return best
+	runTime = (stop - start)
+	return runTime
 
 #Creates random array with integers between -100 & 100
 def testRunTime(testCase):
 	for i in range(1, 19):
 		testArray = [random.randint(-100, 100) for r in range(i*100)]
 		if testCase == 'enumeration':
-			enumeration(testArray)
+			runTime = 0
+			sumTime = 0
+			for i in range(1, 11):
+				runTime = enumeration(testArray)
+				sumTime = sumTime + runTime
+			finalTime = (sumTime / 10)
+			print finalTime
 		elif testCase == 'betterEnumeration':
-			betterEnumeration(testArray)
+			runTime = 0
+			sumTime = 0
+			for i in range(1, 11):
+				runTime = betterEnumeration(testArray)
+				sumTime = sumTime + runTime
+			finalTime = (sumTime / 10)
+			print finalTime
 		elif testCase == 'dynamicProgramming':
-			dynamicProgramming(testArray)
+			runTime = 0
+			sumTime = 0
+			for i in range(1, 11):
+				runTime = dynamicProgramming(testArray)
+				sumTime = sumTime + runTime
+			finalTime = (sumTime / 10)
+			print finalTime
+			
 
 #BEGIN TEST CASES#
 print "\n***ENUMERATION***\n"
-testRunTime('enumeration')
+#testRunTime('enumeration')
 
 print "\n***BETTER ENUMERATION***\n"
-testRunTime('betterEnumeration')
+#testRunTime('betterEnumeration')
 print " "
 
 print "\n***DYMANIC PROGRAMMING***\n"
