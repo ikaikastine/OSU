@@ -7,6 +7,8 @@ enumeration(array of integers)
 			new sum = sum of array from i to j+1
 			if new sum > max sum 
 				max sum = new sum 
+				
+This algorithm will add two numbers together for however long the array is twice
 		
 Algorithm 2: Better Enumeration
 
