@@ -75,10 +75,10 @@ def testRunTime(testCase):
 
 #BEGIN TEST CASES#
 print "\n***ENUMERATION***\n"
-#testRunTime('enumeration')
+testRunTime('enumeration')
 
 print "\n***BETTER ENUMERATION***\n"
-#testRunTime('betterEnumeration')
+testRunTime('betterEnumeration')
 print " "
 
 print "\n***DYMANIC PROGRAMMING***\n"
