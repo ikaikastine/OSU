@@ -1,3 +1,4 @@
+import sys
 from itertools import chain, combinations
 
 class Locker:
@@ -8,9 +9,6 @@ class Locker:
         self._keys = []
         self._tennisBalls = []
         self._sampleOutput = 0
-
-    def printFormat(self):
-        print 'n={} m={} t={}\nM{}\nT{}\n'.format(self._numLockers, self._numKeys, self._numTennisBalls, self._keys, self._tennisBalls)
 
     #Usage: provide a filename to load a locker
     def loadFromFile(self, filename, index):
@@ -41,6 +39,7 @@ class Locker:
     def algorithmOne(self):
         leastOpenedLockers = self._numLockers
 
+        #print 'DEBUG: _tennisBalls =', self._tennisBalls
         keySet = set(self._keys)
 
         for keys in chain.from_iterable(combinations(keySet, r) for r in range(len(keySet) + 1)):
@@ -56,7 +55,7 @@ class Locker:
                 unopened += keys[0] - 1
 
             if self._tennisBalls[self._numTennisBalls - 1] > keys[len(keys) -1]:
-                unopened += self._numLockers - self._tennisBalls[self._numTennisBalls -1]
+                unopened += self._numLockers - self._tennisBalls[self._numTennisBalls - 1]
             else:
                 unopened += self._numLockers - keys[len(keys) - 1]
 
@@ -87,53 +86,55 @@ class Locker:
                         ballCounter += 1
                         continue
                     else:
-                        while(j+1 < self._tennisBalls[ballCounter]):
+                        while(j + 1 < self._tennisBalls[ballCounter]):
                             j += 1
+
                         if (j-i) + 1 > bestEmptySet and (j - i) + 1 > 0:
                             ballCounter += 1
-                            bestEmptySet = (j-i) + 1
+                            bestEmptySet = (j-i) + 1 
+                            
                 unopened += bestEmptySet
+               
             if((self._numLockers - unopened) < leastOpenedLockers):
                 leastOpenedLockers = self._numLockers - unopened
                 unopened = 0
-        print 'Least opened lockers: ', leastOpenedLockers
         return leastOpenedLockers
     
     def algorithmTwo(self):
-        n = self._numLockers
-        m = self._numKeys
-        t = self._numTennisBalls
-        M = self._keys
-        T = self._tennisBalls
+        lockerCount = self._numLockers
+        keyCount = self._numKeys
+        tennisBallCount = self._numTennisBalls
+        keyLocker = self._keys
+        tennisBallLocker = self._tennisBalls
 
-        M.sort()
-        T.sort()
+        keyLocker.sort()
+        tennisBallLocker.sort()
 
-        D = []
+        D = []  #Minimum number of lockers that must be opened
 
-        for i in range(0, m):
+        for i in range(0, keyCount):
             D.append(float('inf'))
 
         #First key
-        if M[0] <= T[0]:
+        if keyLocker[0] <= tennisBallLocker[0]:
             D[0] = 0
         else:
-            D[0] = M[0] - T[0] + 1
+            D[0] = keyLocker[0] - tennisBallLocker[0] + 1
 
         #Middle key
-        for i in range(1, m):
+        for i in range(1, keyCount):
             for j in range(0, i):
-                leastOpened = self.LEAST_OPENED(M[i], M[j])
+                leastOpened = self.openLeastLockers(keyLocker[i], keyLocker[j])
                 if D[j] + leastOpened < D[i]:
                     D[i] = D[j] + leastOpened
 
         #Second key
-        if T[t-1] >= M[m-1]:
-            D[m-1] += (T[t-1] - M[m-1]) + 1
+        if tennisBallLocker[tennisBallCount-1] >= keyLocker[keyCount-1]:
+            D[keyCount-1] += (tennisBallLocker[tennisBallCount-1] - keyLocker[keyCount-1]) + 1
 
-        return D[m-1]
+        return D[keyCount-1]
 
-    def LEAST_OPENED(self, mi, mj):
+    def openLeastLockers(self, mi, mj):
         bestUnopenedCount = 0
         if mi - mj == 1:
             if mi in self._tennisBalls:
@@ -158,17 +159,36 @@ class Locker:
                         bestUnopenedCount = (j-i) + 1
             return (mi - (mj+1) + 1) - bestUnopenedCount
 
+def usage():
+    print 'Usage: python lockers.py --test [option #]'
+    print 'Options:'
+    options = ['1 - Enumeration Algorithm', '2 - Dynamic Programming Algorithm']
+    print '\n'.join(map(lambda x:'\t'+ x, options))
+    sys.exit()
+
 if __name__ == '__main__':
-    for i in range(8):
         l = Locker()
-
-        #---ENUMERATION TEST CASES---#
-        l.loadFromFile('dp_set1.txt', i)
-        l.printFormat()
-        l.algorithmOne()
-
-        #---DYNAMIC PROGRAMMING TEST CASES---#
-        l.loadFromFile('dp_set2.txt', i)
-        l.printFormat()
-        bestValue = l.algorithmTwo()
-        print 'Least opened lockers:', bestValue
+        if not len(sys.argv) > 2:
+            usage()
+        if len(sys.argv) == 3:
+            arg = sys.argv[2]
+            if arg == '1':
+                print '#---ENUMERATION TEST CASES---#'
+                print 'Reading from file: dp_set1.txt\n'
+                for i in range(8):
+                    l.loadFromFile('dp_set1.txt', i)
+                    print 'Test case:', i+1
+                    bestEnumValue = l.algorithmOne()
+                    print 'Minimum number of lockers opened:', bestEnumValue
+                    print
+            elif arg == '2':
+                print '#---DYNAMIC PROGRAMMING TEST CASES---#'
+                print 'Reading from file: dp_set2.txt\n'
+                for i in range(8):
+                    l.loadFromFile('dp_set2.txt', i)
+                    print 'Test case:', i+1
+                    bestDPValue = l.algorithmTwo()
+                    print 'Minimum number of locker opened:', bestDPValue
+                    print
+            else:
+                usage()
