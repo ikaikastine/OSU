@@ -7,6 +7,24 @@ def usage():
 	print '\n'.join(map(lambda x:'\t' + x, options))
 	sys.exit()
 
+def powerset(set):
+	if not set:
+		return [[]]
+	return (powerset(set[1:]) + [[set[0]] + x for x in powerset(set[1:])])
+
+def enumeration(numLockers, numKeys, numBalls, givenKeys, desiredLockers):
+	keySets = powerset(givenKeys)
+	desiredLockers.sort()
+	allLockers = [x in desiredLockers for x in xrange(numLockers + 1)]
+	totalOpened = []
+	for keys in keySets:
+		keys.sort()
+		if not keys:
+			continue
+		p = countPaths(keys, allLockers, desiredLockers)
+		totalOpened.append(p)
+	return min(totalOpened)
+
 if __name__ == '__main__':
 	if not len (sys.argv) > 1:
 		usage()
@@ -34,7 +52,7 @@ if __name__ == '__main__':
 			desiredLockers = map(int, lines[2].split(' '))
 			if not arg:
 				ans = int(lines[3])
-			ourAns = alg1(numLockers, numKeys, numBalls, givenKeys, desiredLockers)
+			ourAns = enumeration(numLockers, numKeys, numBalls, givenKeys, desiredLockers)
 			print 'out ans: ' + str(ourAns)
 			if not arg:
 				print 'real ans: ' + str(ans)
