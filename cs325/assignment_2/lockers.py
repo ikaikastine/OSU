@@ -179,6 +179,7 @@ def usage():
 if __name__ == '__main__':
     l = Locker()
     if not len(sys.argv) > 2:
+        print 'No option specified.'
         usage()
     if len(sys.argv) == 3:
         arg = sys.argv[2]
