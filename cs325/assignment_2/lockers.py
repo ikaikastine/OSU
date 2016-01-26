@@ -177,28 +177,28 @@ def usage():
     sys.exit()
 
 if __name__ == '__main__':
-        l = Locker()
-        if not len(sys.argv) > 2:
+    l = Locker()
+    if not len(sys.argv) > 2:
+        usage()
+    if len(sys.argv) == 3:
+        arg = sys.argv[2]
+        if arg == '1':
+            print '#---ENUMERATION TEST CASES---#'
+            print 'Reading from file: dp_set1.txt\n'
+            for i in range(8):
+                l.loadFromFile('dp_set1.txt', i)
+                print 'Test case:', i+1
+                bestEnumValue = l.algorithmOne()
+                print 'Minimum number of lockers opened:', bestEnumValue
+                print
+        elif arg == '2':
+            print '#---DYNAMIC PROGRAMMING TEST CASES---#'
+            print 'Reading from file: dp_set2.txt\n'
+            for i in range(8):
+                l.loadFromFile('dp_set2.txt', i)
+                print 'Test case:', i+1
+                bestDPValue = l.algorithmTwo()
+                print 'Minimum number of locker opened:', bestDPValue
+                print
+        else:
             usage()
-        if len(sys.argv) == 3:
-            arg = sys.argv[2]
-            if arg == '1':
-                print '#---ENUMERATION TEST CASES---#'
-                print 'Reading from file: dp_set1.txt\n'
-                for i in range(8):
-                    l.loadFromFile('dp_set1.txt', i)
-                    print 'Test case:', i+1
-                    bestEnumValue = l.algorithmOne()
-                    print 'Minimum number of lockers opened:', bestEnumValue
-                    print
-            elif arg == '2':
-                print '#---DYNAMIC PROGRAMMING TEST CASES---#'
-                print 'Reading from file: dp_set2.txt\n'
-                for i in range(8):
-                    l.loadFromFile('dp_set2.txt', i)
-                    print 'Test case:', i+1
-                    bestDPValue = l.algorithmTwo()
-                    print 'Minimum number of locker opened:', bestDPValue
-                    print
-            else:
-                usage()
