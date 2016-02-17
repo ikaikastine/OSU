@@ -1,0 +1,7 @@
+Pseudocode for three methods:
+
+
+
+
+
+Pseudocode for divide & conquer algorithm
