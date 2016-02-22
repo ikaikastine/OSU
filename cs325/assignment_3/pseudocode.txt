@@ -31,9 +31,24 @@ Pseudocode for three methods:
 			}
 		}
 
-
-
-
-
+	methodThree(suffix[0,...,n], prefix[0,...m])
+		bestSuffix = n
+		bestPrefix = 0
+		for (int i = 0; i < m; i++) {
+			prefix[i] = -abs(prefix[i])
+		}
+		list = suffix + prefix
+		sortedList = sort(list)
+		//Set initial best value
+		bestVal = sortedList[0]
+		for (int j = 0; j < sizeof(sortedList); j++) {
+			(abs(sortedList[j]) - abs(sortedList[j+1])) = curBest
+			if curBest < bestVal {
+				bestVal = curBest
+				bestSuffix = sortedList[j]
+				bestPrefix = sortedList[j+1]
+			}
+		}
+		return bestVal, bestSuffix, bestPrefix
 
 Pseudocode for divide & conquer algorithm
