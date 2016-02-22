@@ -223,30 +223,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "lockers.py",
-			"settings":
-			{
-				"buffer_size": 7173,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "usage.txt",
-			"settings":
-			{
-				"buffer_size": 319,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "dp_set1.txt",
-			"settings":
-			{
-				"buffer_size": 523,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -305,9 +281,13 @@
 	],
 	"file_history":
 	[
+		"/home/kevin/development/cs362w16_stinek/dominion/dominion.sublime-project",
+		"/home/kevin/development/OSU/cs325/practiceAssignments/3.txt",
+		"/home/kevin/development/OSU/cs325/assignment_2/dp_set1.txt",
+		"/home/kevin/development/OSU/cs325/assignment_2/usage.txt",
+		"/home/kevin/development/OSU/cs325/assignment_2/lockers.py",
 		"/home/kevin/development/OSU/cs325/assignment_2/testSet.txt",
 		"/home/kevin/development/OSU/cs325/assignment_2/enumerationRevised.py",
-		"/home/kevin/development/OSU/cs325/assignment_2/lockers.py",
 		"/home/kevin/development/cs362w16_stinek/dominion/refactor.txt",
 		"/home/kevin/development/cs362w16_stinek/dominion/dominionOriginal.c",
 		"/home/kevin/development/cs362w16_stinek/dominion/Makefile",
@@ -434,104 +414,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "lockers.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7173,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6282,
-								6282
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2916.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "usage.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 319,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								319,
-								319
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "dp_set1.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 523,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				}
 			]
 		}
 	],
