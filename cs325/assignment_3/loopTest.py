@@ -1,28 +1,30 @@
 import sys
 
-def maxSubArray(ls):
-    if len(ls) == 0:
+def maxSubArray(testArray):
+    if len(testArray) == 0:
        raise Exception("Array empty") # should be non-empty
       
-    runSum = maxSum = ls[0]
-    minSum = sys.maxint
+    currentSum = bestSum = testArray[0]
+    minSum = 0
     i = 0
     start = finish = 0
 
-    for j in range(1, len(ls)):
-        curVal = ls[j]
-        if abs(curVal) > (minSum - ls[j]):
-            runSum = ls[j]
+    for j in range(1, len(testArray)):
+        curVal = testArray[j]
+        if (curVal) > (minSum - testArray[j]):
+            currentSum = testArray[j]
             i = j
         else:
-            runSum += ls[j]
+            currentSum += testArray[j]
 
-        if runSum < maxSum:
-            maxSum = runSum
+        #if bestSum < currentSum:
+        if currentSum < bestSum:
+            bestSum = (currentSum)
+            
             start = i
             finish = j
 
-    print "maxSum =>", maxSum
+    print "bestSum =>", bestSum
     print "start =>", start, "; finish =>", finish
 
 maxSubArray([-2, 70, -4, 13, -5, 2])

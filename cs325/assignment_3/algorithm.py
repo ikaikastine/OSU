@@ -1,5 +1,63 @@
 import sys
 
+def computeNegative(suffix, prefix):
+    bestVal = sys.maxint
+    testVal = sys.maxint
+    minVal = 0
+    sumVal = 0
+    bestVal = 0
+    testLooper = 0
+    positiveArray = [None] * (len(suffix) + len(prefix))
+    prefixLen = len(prefix)
+    for i in range(0, prefixLen):
+        prefix[i] = -(prefix[i])
+    print 'prefix after negation', prefix
+    combinedArray = suffix + prefix
+    combinedArray.sort()
+    print 'combinedArray: ', combinedArray
+    for i in range(0, len(combinedArray)):
+        testLoopVar = combinedArray[i]
+        positiveArray[i] = abs(testLoopVar)
+    #print 'positiveArray = ', positiveArray
+    for i in range(0, len(combinedArray)):
+        for j in range(i, len(combinedArray)):
+            
+            for k in range(j+1, len(combinedArray)):
+                testLoopVar = combinedArray[i]
+                loopVar = combinedArray[k]
+                initVal = combinedArray[j]
+                
+                testLooper += combinedArray[k]
+                if testLooper < minVal:
+                    testLooper = minVal
+                    break
+                    
+                minVal = min(i for i in positiveArray if i > 0)
+                sumVal = (initVal) + (loopVar)
+                
+                #print '\ninitVal =', (initVal)
+                #print 'loopVar = ', (loopVar)
+                #print 'sumVal = ', (sumVal)
+                #print 'testVal: ', testVal
+                
+                if abs(sumVal) < testVal:
+                    if minVal < sumVal:
+                        bestVal = abs(minVal)
+                    else:
+                        testVal = abs(sumVal)    
+    print 'minVal = ', minVal           
+    if minVal < testVal:
+        return minVal
+    else:
+        return testVal
+
+def usage():
+    print 'Usage: python algorithm.py --test [option #]'
+    print 'Options:'
+    options = ['1 - test_cases_with_solutions', '2 - test_cases_without_solutions']
+    print '\n'.join(map(lambda x:'\t'+ x, options))
+    sys.exit()
+
 def loadFromFile(filename, index):
     f = open(filename, 'r')
     if index > 9:
@@ -18,99 +76,6 @@ def splitArray(list):
     half = len(list)/2
     return list[:half], list[half:]
 
-def compute(suffix, prefix):
-    minSum = sys.maxint
-    suffixLen = len(suffix)
-    prefixLen = len(prefix)
-    print 'suffixLen = ', suffixLen
-    print 'prefixLen = ', prefixLen
-    fullList = suffix + prefix
-    fullList.sort()
-    #print 'full list: ', fullList
-
-    for i in range(0, len(fullList)):
-        for j in range(i+1, len(fullList)):
-            initLoop = fullList[i]
-            secondLoop = fullList[j]
-            arraySum = (initLoop) + (secondLoop)
-            
-            print '\ninitLoop: ', initLoop
-            print 'secondLoop: ', secondLoop
-            print 'arraySum: ', arraySum
-            print 'minSum: ', minSum
-            if (abs(arraySum) < abs(minSum)):
-                minSum = abs(arraySum)
-
-    return minSum
-
-def computeNegative(suffix, prefix):
-    bestVal = sys.maxint
-    testVal = sys.maxint
-    minVal = 0
-    sumVal = 0
-    bestVal = 0
-    testLooper = 0
-    positiveArray = [None] * (len(suffix) + len(prefix))
-    prefixLen = len(prefix)
-    for i in range(0, prefixLen):
-        prefix[i] = -abs(prefix[i])
-    combinedArray = suffix + prefix
-    combinedArray.sort()
-    print 'combinedArray: ', combinedArray
-    for i in range(0, len(combinedArray)):
-        testLoopVar = combinedArray[i]
-        positiveArray[i] = abs(testLoopVar)
-    #print 'positiveArray = ', positiveArray
-    for i in range(0, len(combinedArray)):
-        for j in range(i, len(combinedArray)):
-            
-            for k in range(j+1, len(combinedArray)):
-                testLoopVar = combinedArray[i]
-                loopVar = combinedArray[k]
-                initVal = combinedArray[j]
-                
-                testLooper += loopVar
-                print 'testLooper: ', testLooper
-                if testLooper < minVal:
-                    testLooper = minVal
-                    break
-                    
-                minVal = min(i for i in positiveArray if i > 0)
-                #print 'minVal: ', minVal
-                sumVal = (initVal) + (loopVar)
-                
-                #print '\ninitVal =', (initVal)
-                #print 'loopVar = ', (loopVar)
-                #print 'sumVal = ', (sumVal)
-                #print 'testVal: ', testVal
-                if abs(sumVal) < testVal:
-                    if minVal < sumVal:
-                        bestVal = abs(minVal)
-                    else:
-                        #print 'testVal before: ', testVal
-                        #print 'sumVal before = ', (sumVal)
-                        testVal = abs(sumVal)
-                        #print 'testVal after: ', testVal
-    #print 'I make it here lol'
-    #print 'minVal: ', minVal
-    #print 'testVal: ', testVal
-    if minVal < testVal:
-        #print 'I make it here'
-        return minVal
-    else:
-        #print 'I should go here...'
-        return testVal
-    #print 'testVal = ', testVal
-    #print 'bestVal = ', bestVal
-    #print 'minVal = ', minVal
-
-def usage():
-    print 'Usage: python algorithm.py --test [option #]'
-    print 'Options:'
-    options = ['1 - test_cases_with_solutions', '2 - test_cases_without_solutions']
-    print '\n'.join(map(lambda x:'\t'+ x, options))
-    sys.exit()
-
 if __name__ == '__main__':
     if not len(sys.argv) > 2:
         print 'No option specified.'
@@ -128,7 +93,7 @@ if __name__ == '__main__':
                 sortedSuffix = suffix.sort()
                 sortedPrefix = prefix.sort()
 
-                bestVal = compute(suffix, prefix)
+                bestVal = computeNegative(suffix, prefix)
                 print 'bestVal: ', bestVal
             #print '\nminSum: ', minSum
             #print '\nminSuffix: ', minSuffix
