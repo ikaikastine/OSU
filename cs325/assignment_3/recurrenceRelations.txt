@@ -1,20 +1,32 @@
 Algorithm 1 Recurrence Relation:
     for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                best = abs(suffix[bestSuffix] + prefix[bestPrefix])
-                curr = abs(suffix[i] + prefix[j])
-                if curr < best
-                    bestPrefix = i
-                    bestSuffix = j
-            }
+        for (int j = 0; j < m; j++) {
+            best = abs(suffix[bestSuffix] + prefix[bestPrefix])
+            curr = abs(suffix[i] + prefix[j])
+            if curr < best
+                bestPrefix = i
+                bestSuffix = j
         }
+    }
 
     for loop is executed twice to n and m 
     = [n(n-1)]/2 = (n^2 + n)/2 therefore we have big theta(n^2)
 
 
 Algorithm 2 Recurrence Relation:
-
+    sortedSuffix = sort(suffix) -> sorts all elements in the array, n
+    sortedPrefix = sort(prefix) -> sorts all elements in the array, n
+    minSum = INT_MAX
+    for (int i = 0; i < n; i++) { -> iterates through all elements in the array, n
+        for (int j = 0; j < m; j++) { -> iterates through all elements in the array, n
+            sum = sortedSuffix[i] + sortedPrefix[j]
+            if (abs(sum) < abs(minSum)) {
+                minSum = sum
+                minSuffix = i
+                minPrefix = j
+            }
+        }
+    }
 
 
 
