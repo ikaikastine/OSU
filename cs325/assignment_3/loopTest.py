@@ -1,19 +1,30 @@
 import sys
 
-if __name__ == '__main__':
-    sumVal = 0
-    foundVal = 0
-    bestVal = sys.maxint
-    testArray = [-3, 4, -5, 6]
-    testArray.sort()
-    for i in range(0, len(testArray)):
-        for j in range(i, len(testArray)):
-            for k in range(j+1, len(testArray)):
+def maxSubArray(ls):
+    if len(ls) == 0:
+       raise Exception("Array empty") # should be non-empty
+      
+    runSum = maxSum = ls[0]
+    minSum = sys.maxint
+    i = 0
+    start = finish = 0
 
-                sumVal = testArray[j] + testArray[k]
-                print 'sumVal = ', sumVal
-                if (abs(sumVal) < bestVal):
-                   bestVal = abs(sumVal)
+    for j in range(1, len(ls)):
+        curVal = ls[j]
+        if abs(curVal) > (minSum - ls[j]):
+            runSum = ls[j]
+            i = j
+        else:
+            runSum += ls[j]
 
-    print 'bestVal = ', bestVal                
+        if runSum < maxSum:
+            maxSum = runSum
+            start = i
+            finish = j
+
+    print "maxSum =>", maxSum
+    print "start =>", start, "; finish =>", finish
+
+maxSubArray([-2, 70, -4, 13, -5, 2])
+maxSubArray([-15, 29, -36, 3, -22, 11, -112, -5])
 

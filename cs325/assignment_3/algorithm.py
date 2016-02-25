@@ -12,8 +12,6 @@ def loadFromFile(filename, index):
 
     inputArray = f.readline() #Trash newline
     myArray = [int(numStr) for numStr in inputArray.split(' ')]
-    print myArray
-    print myArray[10]
     return myArray
 
 def splitArray(list):
@@ -26,69 +24,85 @@ def compute(suffix, prefix):
     prefixLen = len(prefix)
     print 'suffixLen = ', suffixLen
     print 'prefixLen = ', prefixLen
+    fullList = suffix + prefix
+    fullList.sort()
+    #print 'full list: ', fullList
 
-    for i in range(0, suffixLen):
-        for j in range(0, prefixLen):
-            #print 'suffix[i]: ', suffix[i]
-            #print 'prefix[j]: ', prefix[j]
-            arraySum = suffix[i] + prefix[j]
+    for i in range(0, len(fullList)):
+        for j in range(i+1, len(fullList)):
+            initLoop = fullList[i]
+            secondLoop = fullList[j]
+            arraySum = (initLoop) + (secondLoop)
+            
+            print '\ninitLoop: ', initLoop
+            print 'secondLoop: ', secondLoop
+            print 'arraySum: ', arraySum
+            print 'minSum: ', minSum
             if (abs(arraySum) < abs(minSum)):
-                print '\narraySum: ', abs(arraySum)
-                print 'minSum: ', abs(minSum)
-                print 'i = ', i
-                print 'j = ', j
-                print 'suffix[i]: ', suffix[i]
-                print 'prefix[j]: ', prefix[j]
-                minSum = (arraySum)
-                print 'after arraySum: ', abs(arraySum)
-                print 'after minSum: ', abs(minSum)
-                
-                minSuffix = i
-                minPrefix = j
+                minSum = abs(arraySum)
 
-    return minSum, minSuffix, minPrefix
+    return minSum
 
 def computeNegative(suffix, prefix):
     bestVal = sys.maxint
     testVal = sys.maxint
+    minVal = 0
     sumVal = 0
     bestVal = 0
-    positiveArray = [100]
+    testLooper = 0
+    positiveArray = [None] * (len(suffix) + len(prefix))
     prefixLen = len(prefix)
     for i in range(0, prefixLen):
         prefix[i] = -abs(prefix[i])
     combinedArray = suffix + prefix
     combinedArray.sort()
+    print 'combinedArray: ', combinedArray
     for i in range(0, len(combinedArray)):
         testLoopVar = combinedArray[i]
         positiveArray[i] = abs(testLoopVar)
-    #print 'combinedArray = ', combinedArray
+    #print 'positiveArray = ', positiveArray
     for i in range(0, len(combinedArray)):
         for j in range(i, len(combinedArray)):
             
             for k in range(j+1, len(combinedArray)):
                 testLoopVar = combinedArray[i]
-                #initVal = combinedArray[j]
-                #print 'initVal = ', initVal
                 loopVar = combinedArray[k]
                 initVal = combinedArray[j]
                 
-                    #return bestVal 
-                #minVal = min(i for i in positiveArray if i > 0)
-
-                sumVal = abs(initVal) - abs(loopVar)
+                testLooper += loopVar
+                print 'testLooper: ', testLooper
+                if testLooper < minVal:
+                    testLooper = minVal
+                    break
+                    
+                minVal = min(i for i in positiveArray if i > 0)
+                #print 'minVal: ', minVal
+                sumVal = (initVal) + (loopVar)
                 
-                #sumVal = combinedArray[j] + combinedArray[k]
-                #sumVal += combinedArray[k]
+                #print '\ninitVal =', (initVal)
+                #print 'loopVar = ', (loopVar)
                 #print 'sumVal = ', (sumVal)
+                #print 'testVal: ', testVal
                 if abs(sumVal) < testVal:
-                    if abs(initVal) < sumVal:
-                        bestVal = abs(initVal)
-
-                    testVal = abs(sumVal)
-    print 'testVal = ', testVal
-    print 'bestVal = ', bestVal
-    print 'minVal = ', minVal
+                    if minVal < sumVal:
+                        bestVal = abs(minVal)
+                    else:
+                        #print 'testVal before: ', testVal
+                        #print 'sumVal before = ', (sumVal)
+                        testVal = abs(sumVal)
+                        #print 'testVal after: ', testVal
+    #print 'I make it here lol'
+    #print 'minVal: ', minVal
+    #print 'testVal: ', testVal
+    if minVal < testVal:
+        #print 'I make it here'
+        return minVal
+    else:
+        #print 'I should go here...'
+        return testVal
+    #print 'testVal = ', testVal
+    #print 'bestVal = ', bestVal
+    #print 'minVal = ', minVal
 
 def usage():
     print 'Usage: python algorithm.py --test [option #]'
@@ -108,14 +122,14 @@ if __name__ == '__main__':
             print 'Reading from file: test_cases_with_solutions.txt\n'
             for i in range(1):
                 inputArray = loadFromFile('test_cases_with_solutions.txt', i)
-            #print 'inputArray = ', inputArray
-            #Splits the array into to halves
-            suffix, prefix = splitArray(inputArray)
-            sortedSuffix = suffix.sort()
-            sortedPrefix = prefix.sort()
+                #print 'inputArray = ', inputArray
+                #Splits the array into to halves
+                suffix, prefix = splitArray(inputArray)
+                sortedSuffix = suffix.sort()
+                sortedPrefix = prefix.sort()
 
-            bestVal = computeNegative(suffix, prefix)
-            print 'bestVal: ', bestVal
+                bestVal = compute(suffix, prefix)
+                print 'bestVal: ', bestVal
             #print '\nminSum: ', minSum
             #print '\nminSuffix: ', minSuffix
             #print '\nminPrefix: ', minPrefix
@@ -125,6 +139,7 @@ if __name__ == '__main__':
             print '#---TEST CASES WITHOUT SOLUTIONS---#'
             print 'Reading from file: test_cases_without_solutions.txt\n'
             testArray = [31, -41, 59, 26, -53, 58, -6, 97, -93, -23]
+            secondTestArray = [22, -9, 32, -27, -53, -58, -52, -149, -56, -33]
             suffix, prefix = splitArray(testArray)
 
             sortedSuffix = suffix.sort()
@@ -132,7 +147,8 @@ if __name__ == '__main__':
             print 'sorted suffix: ', suffix
             print 'sorted prefix: ', prefix
 
-            computeNegative(suffix, prefix)
+            bestVal = computeNegative(suffix, prefix)
+            print 'bestVal: ', bestVal
             #minSum, minSuffix, minPrefix = computeNegative(suffix, prefix)
 
             #print '\nminSum: ', minSum
