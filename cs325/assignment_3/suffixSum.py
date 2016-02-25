@@ -64,7 +64,6 @@ for i in range(10):
     minSum = sys.maxint
     start = finish = 0
     arrSum = tempSum = 0
-    z = 0
     smallestVal = min(i for i in combinedArray if i > 0)
 
     for i in range(0, len(combinedArray) - 1):
