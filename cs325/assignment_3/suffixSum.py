@@ -90,3 +90,4 @@ for i in range(10):
             if smallestVal < minSum:
                 minSum = smallestVal
     print minSum, start, finish
+    print
