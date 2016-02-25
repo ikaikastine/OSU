@@ -36,14 +36,10 @@ def loadFromFile(filename, index):
     myArray = [int(numStr) for numStr in inputArray.split(' ')]
     return myArray
 
-for i in range(10):
-    testArray = loadFromFile('test_cases_with_solutions.txt', i)
-    #print 'initial array: ', testArray
+def compute(suffix, prefix):
     originalCombinedArray = [0] * len(testArray)
 
-    suffix, prefix = splitArray(testArray)
-    suffix = suffixSum(suffix)
-    prefix = prefixSum(prefix)
+    
     #print 'before negative'
     #print 'suffix: ', suffix
     #print 'prefix: ', prefix
@@ -98,11 +94,17 @@ for i in range(10):
     for i in range (0, len(originalCombinedArray)):
         if startVal == originalCombinedArray[i]:
             start = i  
-            print 'START SHOULD BE: ', start
     for j in range (0, len(originalCombinedArray)):
         if finishVal == originalCombinedArray[j]:
             finish = j
-            print 'finish SHOULD BE: ', finish
+    return minSum, start, finish
 
+for i in range(10):
+    testArray = loadFromFile('test_cases_with_solutions.txt', i)
+    suffix, prefix = splitArray(testArray)
+    suffix = suffixSum(suffix)
+    prefix = prefixSum(prefix)
+
+    minSum, start, finish = compute(suffix, prefix)
     print minSum, start, finish
     print
