@@ -36,6 +36,13 @@ def loadFromFile(filename, index):
     myArray = [int(numStr) for numStr in inputArray.split(' ')]
     return myArray
 
+def usage():
+    print 'Usage: python algorithm.py --test [option #]'
+    print 'Options:'
+    options = ['1 - test_cases_with_solutions', '2 - test_cases_without_solutions']
+    print '\n'.join(map(lambda x:'\t'+ x, options))
+    sys.exit()
+
 def compute(suffix, prefix):
     originalCombinedArray = [0] * len(testArray)
     #print 'before negative'
@@ -87,7 +94,7 @@ def compute(suffix, prefix):
                 finishVal = initVal
             else:
                 arrSum = tempSum
-                
+
             if smallestVal < minSum:
                 minSum = smallestVal
     #print 'startval: ', startVal
@@ -100,12 +107,31 @@ def compute(suffix, prefix):
             finish = j
     return minSum, start, finish
 
-for i in range(10):
-    testArray = loadFromFile('test_cases_with_solutions.txt', i)
-    suffix, prefix = splitArray(testArray)
-    suffix = suffixSum(suffix)
-    prefix = prefixSum(prefix)
+if __name__ == '__main__':
+    if not len(sys.argv) > 2:
+        print 'No option specified.'
+        usage()
+    if len(sys.argv) == 3:
+        arg = sys.argv[2]
+        if arg == '1':
+            for i in range(10):
+                testArray = loadFromFile('test_cases_with_solutions.txt', i)
+                suffix, prefix = splitArray(testArray)
+                suffix = suffixSum(suffix)
+                prefix = prefixSum(prefix)
 
-    minSum, start, finish = compute(suffix, prefix)
-    print minSum, start, finish
-    print
+                minSum, start, finish = compute(suffix, prefix)
+                print minSum, start, finish
+                print
+        elif arg == '2':
+            for i in range(10):
+                testArray = loadFromFile('test_cases_without_solutions.txt', i)
+                suffix, prefix = splitArray(testArray)
+                suffix = suffixSum(suffix)
+                prefix = prefixSum(prefix)
+
+                minSum, start, finish = compute(suffix, prefix)
+                print minSum, start, finish
+                print
+        else:
+            usage()
