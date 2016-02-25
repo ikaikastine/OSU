@@ -37,6 +37,7 @@ def loadFromFile(filename, index):
     return myArray
 
 for i in range(10):
+    print '\nTest Case: ', i+1
     testArray = loadFromFile('test_cases_with_solutions.txt', i)
     #print 'initial array: ', testArray
     suffix, prefix = splitArray(testArray)
@@ -90,6 +91,6 @@ for i in range(10):
 
             if smallestVal < minSum:
                 minSum = smallestVal
-    print '\nminSum: ', minSum
+    print 'minSum: ', minSum
     print 'start: ', start
     print 'finish: ', finish
