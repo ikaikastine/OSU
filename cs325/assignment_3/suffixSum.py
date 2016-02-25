@@ -38,8 +38,6 @@ def loadFromFile(filename, index):
 
 def compute(suffix, prefix):
     originalCombinedArray = [0] * len(testArray)
-
-    
     #print 'before negative'
     #print 'suffix: ', suffix
     #print 'prefix: ', prefix
@@ -68,8 +66,12 @@ def compute(suffix, prefix):
             tempSum = arrSum
             initVal = combinedArray[j]
             secondVal = combinedArray[i]
+
             if secondVal < 0:
-                arrSum = abs(initVal) - abs(secondVal)
+                if initVal > 0:
+                   arrSum = abs(initVal) - (secondVal) 
+                else:
+                    arrSum = abs(initVal) - abs(secondVal)
             else:
                 arrSum = abs(initVal) - abs(secondVal)
             #print '\ninitVal: ', initVal
@@ -79,14 +81,13 @@ def compute(suffix, prefix):
 
             if  abs(arrSum) < minSum:
                 minSum = abs(arrSum)
-                #initVal = combinedArray[i+2]
                 start = i
                 startVal = secondVal
                 finish = j
                 finishVal = initVal
             else:
                 arrSum = tempSum
-
+                
             if smallestVal < minSum:
                 minSum = smallestVal
     #print 'startval: ', startVal
