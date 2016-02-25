@@ -39,6 +39,8 @@ def loadFromFile(filename, index):
 for i in range(10):
     testArray = loadFromFile('test_cases_with_solutions.txt', i)
     #print 'initial array: ', testArray
+    originalCombinedArray = [0] * len(testArray)
+
     suffix, prefix = splitArray(testArray)
     suffix = suffixSum(suffix)
     prefix = prefixSum(prefix)
@@ -55,8 +57,8 @@ for i in range(10):
 
     #Combine first list with negative of second
     combinedArray = suffix + prefix
-
-    #print 'combinedArray: ', combinedArray
+    for i in range(0, len(combinedArray)):
+        originalCombinedArray[i] = combinedArray[i]
     combinedArray.sort()
     #print '\nsorted combinedArray: ', combinedArray
 
@@ -65,8 +67,8 @@ for i in range(10):
     arrSum = tempSum = 0
     smallestVal = min(i for i in combinedArray if i > 0)
 
-    for i in range(0, len(combinedArray) - 1):
-        for j in range (i+1, len(combinedArray) - 1):
+    for i in range(0, len(combinedArray)):
+        for j in range (i+1, len(combinedArray)):
             tempSum = arrSum
             initVal = combinedArray[j]
             secondVal = combinedArray[i]
@@ -83,11 +85,24 @@ for i in range(10):
                 minSum = abs(arrSum)
                 #initVal = combinedArray[i+2]
                 start = i
+                startVal = secondVal
                 finish = j
+                finishVal = initVal
             else:
                 arrSum = tempSum
 
             if smallestVal < minSum:
                 minSum = smallestVal
+    #print 'startval: ', startVal
+    #print 'finishVal: ', finishVal
+    for i in range (0, len(originalCombinedArray)):
+        if startVal == originalCombinedArray[i]:
+            start = i  
+            print 'START SHOULD BE: ', start
+    for j in range (0, len(originalCombinedArray)):
+        if finishVal == originalCombinedArray[j]:
+            finish = j
+            print 'finish SHOULD BE: ', finish
+
     print minSum, start, finish
     print
