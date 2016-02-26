@@ -31,7 +31,6 @@ def loadFromFile(filename, index):
     for i in range(index):
             for i in range(1):
                 trash = f.readline()
-
     inputArray = f.readline() #Trash newline
     myArray = [int(numStr) for numStr in inputArray.split(' ')]
     return myArray
@@ -45,29 +44,17 @@ def usage():
 
 def compute(suffix, prefix):
     originalCombinedArray = [0] * len(testArray)
-    #print 'before negative'
-    #print 'suffix: ', suffix
-    #print 'prefix: ', prefix
-
-    #Take negative of prefix
     for i in range(0, len(prefix)):
         prefix[i] = -(prefix[i])
-    #print 'after negative'
-    #print 'suffix: ', suffix
-    #print 'prefix: ', prefix
-
     #Combine first list with negative of second
     combinedArray = suffix + prefix
     for i in range(0, len(combinedArray)):
         originalCombinedArray[i] = combinedArray[i]
     combinedArray.sort()
-    #print '\nsorted combinedArray: ', combinedArray
-
     minSum = sys.maxint
     start = finish = 0
     arrSum = tempSum = 0
     smallestVal = min(i for i in combinedArray if i > 0)
-
     for i in range(0, len(combinedArray)):
         for j in range (i+1, len(combinedArray)):
             tempSum = arrSum
@@ -81,11 +68,6 @@ def compute(suffix, prefix):
                     arrSum = abs(initVal) - abs(secondVal)
             else:
                 arrSum = abs(initVal) - abs(secondVal)
-            #print '\ninitVal: ', initVal
-            #print 'secondVal: ', secondVal
-            #print 'tempSum: ', tempSum
-            #print 'arrSum: ', arrSum
-
             if  abs(arrSum) < minSum:
                 minSum = abs(arrSum)
                 start = i
@@ -94,11 +76,9 @@ def compute(suffix, prefix):
                 finishVal = initVal
             else:
                 arrSum = tempSum
-
             if smallestVal < minSum:
                 minSum = smallestVal
-    #print 'startval: ', startVal
-    #print 'finishVal: ', finishVal
+    #Check for start and finish values
     for i in range (0, len(originalCombinedArray)):
         if startVal == originalCombinedArray[i]:
             start = i  
