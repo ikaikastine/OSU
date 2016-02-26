@@ -1,6 +1,8 @@
 Pseudocode for three methods:
 	
 	methodOne(suffix[0,..., n], prefix[0,..., m])
+		sumOfSuffix(suffix)
+		sumOfPrefix(prefix)
 		bestSuffix = n
 		bestPrefix = 0
 		for (int i = 0; i < n; i++) {
@@ -15,6 +17,8 @@ Pseudocode for three methods:
 		return bestSuffix, bestPrefix 
 
 	methodTwo(suffix[0,...,n], prefix[0,...,m])
+		sumOfSuffix(suffix)
+		sumOfPrefix(prefix)
 		bestSuffix = n
 		bestPrefix = 0
 		sortedSuffix = sort(suffix)
@@ -32,6 +36,8 @@ Pseudocode for three methods:
 		}
 
 	methodThree(suffix[0,...,n], prefix[0,...m])
+		sumOfSuffix(suffix)
+		sumOfPrefix(prefix)
 		bestSuffix = n
 		bestPrefix = 0
 		for (int i = 0; i < m; i++) {
@@ -53,35 +59,33 @@ Pseudocode for three methods:
 
 Pseudocode for divide & conquer algorithm
 
-	int recurse(array, size) {
-		if size == 1
-			return array[0]
-		else if size == 2 
-			return lesserOf(array[0], array[1])
-		else if (size == 3 || size == 4)
-			return enumerate(array,size)
-		else 
-			split array
-			return lesserOf(array1, array2)
-	}
+	sumOfSuffix(suffix)
+	sumOfPrefix(prefix)
 
-	int lesserOf(int a, int b) {
-		if (a < b) {
-			return a
-		} else {
-			return b
-		}
-	}
+	def computer(suffix, prefix):
+		for i in range(0, len(prefix)):
+			#take negative of all values in prefix
+			prefix[i] = -(prefix[i]))
+		for i in range(0, len(combinedArray)):
+        for j in range (i+1, len(combinedArray)):
+            tempSum = arrSum
+            initVal = combinedArray[j]
+            secondVal = combinedArray[i]
 
-	int enumerate(array, size) {
-		smallestSum = sumarray1[0] + sumarray2[0]
-		for (int i = 1; i < array1size; i++) {
-			for (int j = 0; j < array2size; j++) {
-				tempsum = sumarray1[i] + sumarray2[j]
-				if (abs(tempsum) < abs(smallestsum)) {
-					smallestsum = tempsum
-				}
-			}
-		}
-		return smallestsum
-	}
+            if secondVal < 0:
+                if initVal > 0:
+                   arrSum = abs(initVal) - (secondVal) 
+                else:
+                    arrSum = abs(initVal) - abs(secondVal)
+            else:
+                arrSum = abs(initVal) - abs(secondVal)
+            if  abs(arrSum) < minSum:
+                minSum = abs(arrSum)
+                start = i
+                startVal = secondVal
+                finish = j
+                finishVal = initVal
+            else:
+                arrSum = tempSum
+            if smallestVal < minSum:
+                minSum = smallestVal
