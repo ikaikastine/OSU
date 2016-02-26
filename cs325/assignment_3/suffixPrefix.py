@@ -1,4 +1,4 @@
-import sys
+import sys, timeit, time
 
 def suffixSum(suffix):
     arrSum = 0
@@ -24,7 +24,7 @@ def splitArray(list):
 
 def loadFromFile(filename, index):
     f = open(filename, 'r')
-    if index > 9:
+    if index > 19:
         print 'Index: out of bounds'
         return
 
@@ -85,7 +85,9 @@ def compute(suffix, prefix):
     for j in range (0, len(originalCombinedArray)):
         if finishVal == originalCombinedArray[j]:
             finish = j
+    
     return minSum, start, finish
+
 
 if __name__ == '__main__':
     if not len(sys.argv) > 2:
@@ -95,23 +97,38 @@ if __name__ == '__main__':
         arg = sys.argv[2]
         if arg == '1':
             for i in range(10):
+                #for j in range(0, 10):
+                runTimeSum = 0
                 testArray = loadFromFile('test_cases_with_solutions.txt', i)
                 suffix, prefix = splitArray(testArray)
                 suffix = suffixSum(suffix)
                 prefix = prefixSum(prefix)
-
-                minSum, start, finish = compute(suffix, prefix)
+ 
+                startTime = time.time()
+                minSum, start, finish= compute(suffix, prefix)
+                endTime = time.time()
+                runTime = endTime - startTime
+                #runTimeSum += runTime
+                #avgRuNTime = runTimeSum
                 print minSum, start, finish
+                #print runTime
                 print
+            #print avgRuNTime
         elif arg == '2':
-            for i in range(10):
+            for i in range(20):
                 testArray = loadFromFile('test_cases_without_solutions.txt', i)
+                #print 'testArray: ', testArray
                 suffix, prefix = splitArray(testArray)
                 suffix = suffixSum(suffix)
                 prefix = prefixSum(prefix)
 
-                minSum, start, finish = compute(suffix, prefix)
+                startTime = time.time()
+                minSum, start, finish= compute(suffix, prefix)
+                endTime = time.time()
+                runTime = endTime - startTime
+                
                 print minSum, start, finish
+                #print runTime
                 print
         else:
             usage()
