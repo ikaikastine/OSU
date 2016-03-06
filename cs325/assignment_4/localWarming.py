@@ -1,6 +1,6 @@
 from pulp import *
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import math
 import csv
 
@@ -10,8 +10,8 @@ d = []
 #Use for average temps
 T = []
 
-with open('Corvallis_data.csv', 'rb') as f:
-	reader = csv.reader(f, delimeter=';')
+with open('Corvallis_data.csv', 'r') as f:
+	reader = csv.reader(f, delimiter=';')
 	for row in reader:
 		average = row[7].strip()
 		if(not average.isalpha()):
