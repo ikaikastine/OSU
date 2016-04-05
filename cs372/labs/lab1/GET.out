@@ -1,0 +1,35 @@
+No.     Time               Source                Destination           Protocol Length Info
+    772 16:29:44.527624000 10.0.0.2              128.119.245.12        HTTP     478    GET /wireshark-labs/INTRO-wireshark-file1.html HTTP/1.1 
+
+Frame 772: 478 bytes on wire (3824 bits), 478 bytes captured (3824 bits) on interface 0
+Ethernet II, Src: Micro-St_bc:6b:1c (d4:3d:7e:bc:6b:1c), Dst: SmcNetwo_f5:6f:e2 (00:26:f3:f5:6f:e2)
+Internet Protocol Version 4, Src: 10.0.0.2 (10.0.0.2), Dst: 128.119.245.12 (128.119.245.12)
+    Version: 4
+    Header Length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00: Not-ECT (Not ECN-Capable Transport))
+    Total Length: 464
+    Identification: 0x7197 (29079)
+    Flags: 0x02 (Don't Fragment)
+    Fragment offset: 0
+    Time to live: 64
+    Protocol: TCP (6)
+    Header checksum: 0x480b [validation disabled]
+    Source: 10.0.0.2 (10.0.0.2)
+    Destination: 128.119.245.12 (128.119.245.12)
+    [Source GeoIP: Unknown]
+    [Destination GeoIP: Unknown]
+Transmission Control Protocol, Src Port: 37391 (37391), Dst Port: 80 (80), Seq: 1, Ack: 1, Len: 412
+Hypertext Transfer Protocol
+    GET /wireshark-labs/INTRO-wireshark-file1.html HTTP/1.1\r\n
+    Host: gaia.cs.umass.edu\r\n
+    Connection: keep-alive\r\n
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n
+    Upgrade-Insecure-Requests: 1\r\n
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36\r\n
+    Accept-Encoding: gzip, deflate, sdch\r\n
+    Accept-Language: en-US,en;q=0.8\r\n
+    \r\n
+    [Full request URI: http://gaia.cs.umass.edu/wireshark-labs/INTRO-wireshark-file1.html]
+    [HTTP request 1/2]
+    [Response in frame: 776]
+    [Next request in frame: 778]
