@@ -1,0 +1,40 @@
+MDF Database:  version 1.0
+MDF_INFO | section3_schematic | XC9572XL-10-VQ44
+MACROCELL | 0 | 4 | XLXN_31
+ATTRIBUTES | 264960 | 0
+INPUTS | 3 | B  | A  | C
+INPUTP | 3 | 3 | 7 | 10
+EQ | 2 | 
+   Le = B & A
+	# !C & !B & !A;
+
+MACROCELL | 0 | 1 | XLXN_32
+ATTRIBUTES | 264960 | 0
+INPUTS | 1 | A
+INPUTP | 1 | 7
+EQ | 1 | 
+   Ld = !A;
+
+MACROCELL | 0 | 7 | XLXN_33
+ATTRIBUTES | 264960 | 0
+INPUTS | 3 | C  | B  | A
+INPUTP | 3 | 10 | 3 | 7
+EQ | 2 | 
+   Re = C & B
+	# !C & !B & !A;
+
+MACROCELL | 0 | 5 | XLXN_34
+ATTRIBUTES | 264960 | 0
+INPUTS | 3 | C  | B  | A
+INPUTP | 3 | 10 | 3 | 7
+EQ | 2 | 
+   Rd = !C & B
+	# !C & A;
+
+PIN | C | 64 | 0 | N/A | 10 | 3 | 0 | 4 | 0 | 7 | 0 | 5
+PIN | B | 64 | 0 | N/A | 3 | 3 | 0 | 4 | 0 | 7 | 0 | 5
+PIN | A | 64 | 0 | N/A | 7 | 4 | 0 | 4 | 0 | 1 | 0 | 7 | 0 | 5
+PIN | Le | 128 | 0 | N/A | 12
+PIN | Ld | 128 | 0 | N/A | 11
+PIN | Re | 128 | 0 | N/A | 15
+PIN | Rd | 128 | 0 | N/A | 13

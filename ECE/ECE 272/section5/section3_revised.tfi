@@ -1,0 +1,15 @@
+// Verilog instantiation template created from schematic Z:\ECE 272\section3\section3_revised.sch - Thu May 16 10:07:47 2013
+//
+// Notes: 
+// To use this template to instantiate this component,cut-and-paste and then edit
+//
+// Instantiate the UUT
+   section3_revised UUT (
+		.A(    ), 
+		.B(    ), 
+		.C(    ), 
+		.Le(    ), 
+		.Ld(    ), 
+		.Re(    ), 
+		.Rd(    )
+   );

@@ -1,0 +1,16 @@
+xst -intstyle ise -ifn "Z:/ECE 272/section3/section3_schematic.xst" -ofn "Z:/ECE 272/section3/section3_schematic.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc section3_schematic.ucf -p xc9572xl-VQ44-10 "section3_schematic.ngc" section3_schematic.ngd  
+cpldfit -intstyle ise -p xc9572xl-10-VQ44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 54 -pterms 25 -unused float -power std -terminate keeper section3_schematic.ngd 
+XSLTProcess section3_schematic_build.xml 
+tsim -intstyle ise section3_schematic section3_schematic.nga 
+taengine -intstyle ise -f section3_schematic -w --format html1 -l section3_schematic_html/tim/timing_report.htm 
+hprep6 -s IEEE1149 -n section3_schematic -i section3_schematic 
+cpldfit -intstyle ise -p xc9572xl-10-VQ44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 54 -pterms 25 -nogtsopt -nogsropt -unused float -power std -terminate keeper section3_schematic.ngd 
+XSLTProcess section3_schematic_build.xml 
+tsim -intstyle ise section3_schematic section3_schematic.nga 
+hprep6 -s IEEE1149 -n section3_schematic -i section3_schematic 
+xst -intstyle ise -ifn "Z:/ECE 272/section3/section3_schematic.xst" -ofn "Z:/ECE 272/section3/section3_schematic.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc section3_schematic.ucf -p xc9572xl-VQ44-10 "section3_schematic.ngc" section3_schematic.ngd  
+cpldfit -intstyle ise -p xc9572xl-10-VQ44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 54 -pterms 25 -nogtsopt -nogsropt -unused float -power std -terminate keeper section3_schematic.ngd 
+XSLTProcess section3_schematic_build.xml 
+tsim -intstyle ise section3_schematic section3_schematic.nga 

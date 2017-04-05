@@ -1,0 +1,16 @@
+
+
+
+// Instantiate the module
+BumpModule instance_name (
+    .RB(RB), 
+    .LB(LB), 
+    .Reset(Reset), 
+    .clk(clk), 
+    .LE(LE), 
+    .LD(LD), 
+    .RE(RE), 
+    .RD(RD)
+    );
+
+

@@ -1,0 +1,14 @@
+xst -intstyle ise -ifn "Z:/ECE 272/section4/section4.xst" -ofn "Z:/ECE 272/section4/section4.syr" 
+ngdbuild -intstyle ise -dd _ngo -i -p xc9572xl-VQ44-10 "section4.ngc" section4.ngd  
+cpldfit -intstyle ise -p xc9572xl-10-VQ44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 54 -pterms 25 -unused float -power std -terminate keeper section4.ngd 
+XSLTProcess section4_build.xml 
+tsim -intstyle ise section4 section4.nga 
+taengine -intstyle ise -f section4 -w --format html1 -l section4_html/tim/timing_report.htm 
+hprep6 -s IEEE1149 -n section4 -i section4 
+xst -intstyle ise -ifn "Z:/ECE 272/section4/section4.xst" -ofn "Z:/ECE 272/section4/section4.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc section4.ucf -p xc9572xl-VQ44-10 "section4.ngc" section4.ngd  
+cpldfit -intstyle ise -p xc9572xl-10-VQ44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 54 -pterms 25 -unused float -power std -terminate keeper section4.ngd 
+XSLTProcess section4_build.xml 
+tsim -intstyle ise section4 section4.nga 
+taengine -intstyle ise -f section4 -w --format html1 -l section4_html/tim/timing_report.htm 
+hprep6 -s IEEE1149 -n section4 -i section4 

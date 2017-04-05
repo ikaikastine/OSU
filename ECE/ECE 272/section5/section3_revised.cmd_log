@@ -1,0 +1,1 @@
+sch2verilog -intstyle ise -family xc9500xl -tionly {} -tiext tfi -w {Z:/ECE 272/section3/section3_revised.sch} section3_revised.tfi 

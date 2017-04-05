@@ -1,0 +1,78 @@
+MDF Database:  version 1.0
+MDF_INFO | section4 | XC9572XL-10-VQ44
+MACROCELL | 2 | 4 | XLXN_73
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | C  | B  | A
+INPUTP | 4 | 9 | 10 | 3 | 7
+EQ | 4 | 
+   !Seg_B = D & !C & !B
+	# D & !B & !A
+	# !D & !C & !A
+	# !D & C & !B & A;
+
+MACROCELL | 0 | 16 | XLXN_74
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | B  | A  | C
+INPUTP | 4 | 9 | 3 | 7 | 10
+EQ | 3 | 
+   !Seg_C = D & !B & !A
+	# !C & !B & !A
+	# D & !C & B & A;
+
+MACROCELL | 0 | 13 | XLXN_76
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | A  | C  | B
+INPUTP | 4 | 9 | 7 | 10 | 3
+EQ | 3 | 
+   !Seg_E = !D & A
+	# !D & C & B
+	# C & !B & A;
+
+MACROCELL | 2 | 1 | XLXN_77
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | B  | A  | C
+INPUTP | 4 | 9 | 3 | 7 | 10
+EQ | 3 | 
+   !Seg_F = !D & C & !B
+	# !D & B & A
+	# !C & B & A;
+
+MACROCELL | 2 | 7 | XLXN_72
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | C  | B  | A
+INPUTP | 4 | 9 | 10 | 3 | 7
+EQ | 3 | 
+   !Seg_A = !D & C & B & A
+	# !D & C & !B & !A
+	# !D & !C & B & !A;
+
+MACROCELL | 0 | 14 | XLXN_75
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | D  | C  | B  | A
+INPUTP | 4 | 9 | 10 | 3 | 7
+EQ | 4 | 
+   !Seg_D = !D & C & B
+	# !D & !C & !B
+	# D & C & !B & A
+	# D & !C & B & !A;
+
+MACROCELL | 2 | 8 | XLXN_78
+ATTRIBUTES | 264960 | 0
+INPUTS | 4 | C  | B  | A  | D
+INPUTP | 4 | 10 | 3 | 7 | 9
+EQ | 3 | 
+   !Seg_G = C & B & A
+	# D & C & !B & !A
+	# !D & !C & !B & A;
+
+PIN | C | 64 | 0 | N/A | 10 | 7 | 2 | 4 | 0 | 16 | 0 | 13 | 2 | 1 | 2 | 7 | 0 | 14 | 2 | 8
+PIN | B | 64 | 0 | N/A | 3 | 7 | 2 | 4 | 0 | 16 | 0 | 13 | 2 | 1 | 2 | 7 | 0 | 14 | 2 | 8
+PIN | D | 64 | 0 | N/A | 9 | 7 | 2 | 4 | 0 | 16 | 0 | 13 | 2 | 1 | 2 | 7 | 0 | 14 | 2 | 8
+PIN | A | 64 | 0 | N/A | 7 | 7 | 2 | 4 | 0 | 16 | 0 | 13 | 2 | 1 | 2 | 7 | 0 | 14 | 2 | 8
+PIN | Seg_B | 128 | 0 | N/A | 31
+PIN | Seg_C | 128 | 0 | N/A | 27
+PIN | Seg_E | 128 | 0 | N/A | 24
+PIN | Seg_F | 128 | 0 | N/A | 29
+PIN | Seg_A | 128 | 0 | N/A | 33
+PIN | Seg_D | 128 | 0 | N/A | 26
+PIN | Seg_G | 128 | 0 | N/A | 38

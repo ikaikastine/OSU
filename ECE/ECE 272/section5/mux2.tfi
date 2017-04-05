@@ -1,0 +1,13 @@
+
+
+
+// Instantiate the module
+mux2 instance_name (
+    .d0(d0), 
+    .d1(d1), 
+    .s(s), 
+    .y(y)
+    );
+
+
+

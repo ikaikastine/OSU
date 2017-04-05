@@ -1,0 +1,1 @@
+vhdtdtfi -lang verilog -prj section5 -o "Z:/ECE 272/section5/mux2.tfi" -lib work "Z:/ECE 272/section5//section5.v" -module mux2 -template C:/Xilinx/14.1/ISE_DS/ISE//data/tfi.tft -deleteonerror 

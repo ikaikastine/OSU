@@ -1,0 +1,234 @@
+NDS Database:  version P.15xf
+
+NDS_INFO | xc9500xl | 9572XL44VQ | XC9572XL-10-VQ44
+
+DEVICE | 9572XL | 9572XL44VQ | 
+
+NETWORK | section5 | 0 | 0 | 16391
+
+INPUT_INSTANCE | 0 | 0 | NULL | C_IBUF | section5_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | C | 320 | PI | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+
+INPUT_INSTANCE | 0 | 0 | NULL | B_IBUF | section5_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | B | 321 | PI | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+
+INPUT_INSTANCE | 0 | 0 | NULL | A_IBUF | section5_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | A | 322 | PI | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+
+INPUT_INSTANCE | 0 | 0 | NULL | AnalogRdir_IBUF | section5_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | AnalogRdir | 323 | PI | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+
+INPUT_INSTANCE | 0 | 0 | NULL | AnalogLdir_IBUF | section5_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | AnalogLdir | 324 | PI | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+
+MACROCELL_INSTANCE | OptxMapped | Rdir_OBUF | section5_COPY_0_COPY_0 | 2155872256 | 5 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | Rdir_OBUF | 312 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Rdir_OBUF.Q | Rdir_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | Rdir_OBUF.SI | Rdir_OBUF | 0 | 5 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | Rdir_OBUF.D1 | 326 | ? | 0 | 4096 | Rdir_OBUF | NULL | NULL | Rdir_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | Rdir_OBUF.D2 | 327 | ? | 0 | 4096 | Rdir_OBUF | NULL | NULL | Rdir_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | AnalogRdir_IBUF | IV_FALSE | AnalogLdir_IBUF
+SPPTERM | 3 | IV_FALSE | C_IBUF | IV_TRUE | B_IBUF | IV_TRUE | AnalogRdir_IBUF
+SPPTERM | 3 | IV_FALSE | C_IBUF | IV_TRUE | A_IBUF | IV_TRUE | AnalogRdir_IBUF
+
+SRFF_INSTANCE | Rdir_OBUF.REG | Rdir_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | Rdir_OBUF.D | 325 | ? | 0 | 0 | Rdir_OBUF | NULL | NULL | Rdir_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | Rdir_OBUF.Q | 328 | ? | 0 | 0 | Rdir_OBUF | NULL | NULL | Rdir_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | OptxMapped | Ldir_OBUF | section5_COPY_0_COPY_0 | 2155872256 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | Ldir_OBUF | 313 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Ldir_OBUF.Q | Ldir_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | Ldir_OBUF.SI | Ldir_OBUF | 0 | 3 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | Ldir_OBUF.D1 | 330 | ? | 0 | 4096 | Ldir_OBUF | NULL | NULL | Ldir_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | Ldir_OBUF.D2 | 331 | ? | 0 | 4096 | Ldir_OBUF | NULL | NULL | Ldir_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 3 | IV_FALSE | A_IBUF | IV_TRUE | AnalogRdir_IBUF | IV_TRUE | AnalogLdir_IBUF
+
+SRFF_INSTANCE | Ldir_OBUF.REG | Ldir_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | Ldir_OBUF.D | 329 | ? | 0 | 0 | Ldir_OBUF | NULL | NULL | Ldir_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | Ldir_OBUF.Q | 332 | ? | 0 | 0 | Ldir_OBUF | NULL | NULL | Ldir_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | OptxMapped | Len_OBUF | section5_COPY_0_COPY_0 | 2155872256 | 5 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | Len_OBUF | 314 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Len_OBUF.Q | Len_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | Len_OBUF.SI | Len_OBUF | 0 | 5 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | Len_OBUF.D1 | 334 | ? | 0 | 4096 | Len_OBUF | NULL | NULL | Len_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | Len_OBUF.D2 | 335 | ? | 0 | 4096 | Len_OBUF | NULL | NULL | Len_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 4 | IV_TRUE | B_IBUF | IV_TRUE | A_IBUF | IV_TRUE | AnalogRdir_IBUF | IV_TRUE | AnalogLdir_IBUF
+SPPTERM | 5 | IV_FALSE | C_IBUF | IV_FALSE | B_IBUF | IV_FALSE | A_IBUF | IV_TRUE | AnalogRdir_IBUF | IV_TRUE | AnalogLdir_IBUF
+
+SRFF_INSTANCE | Len_OBUF.REG | Len_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | Len_OBUF.D | 333 | ? | 0 | 0 | Len_OBUF | NULL | NULL | Len_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | Len_OBUF.Q | 336 | ? | 0 | 0 | Len_OBUF | NULL | NULL | Len_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | OptxMapped | Ren_OBUF | section5_COPY_0_COPY_0 | 2155872256 | 5 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | Ren_OBUF | 315 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Ren_OBUF.Q | Ren_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | Ren_OBUF.SI | Ren_OBUF | 0 | 5 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | C_IBUF | 307 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | C_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | B_IBUF | 308 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | B_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogRdir_IBUF | 310 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogRdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | AnalogLdir_IBUF | 311 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | AnalogLdir_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | A_IBUF | 309 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | A_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | Ren_OBUF.D1 | 338 | ? | 0 | 4096 | Ren_OBUF | NULL | NULL | Ren_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | Ren_OBUF.D2 | 339 | ? | 0 | 4096 | Ren_OBUF | NULL | NULL | Ren_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 4 | IV_TRUE | C_IBUF | IV_TRUE | B_IBUF | IV_TRUE | AnalogRdir_IBUF | IV_TRUE | AnalogLdir_IBUF
+SPPTERM | 5 | IV_FALSE | C_IBUF | IV_FALSE | B_IBUF | IV_FALSE | A_IBUF | IV_TRUE | AnalogRdir_IBUF | IV_TRUE | AnalogLdir_IBUF
+
+SRFF_INSTANCE | Ren_OBUF.REG | Ren_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | Ren_OBUF.D | 337 | ? | 0 | 0 | Ren_OBUF | NULL | NULL | Ren_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | Ren_OBUF.Q | 340 | ? | 0 | 0 | Ren_OBUF | NULL | NULL | Ren_OBUF.REG | 0 | 8 | SRFF_Q
+
+OUTPUT_INSTANCE | 0 | Rdir | section5_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | Rdir_OBUF | 312 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Rdir_OBUF.Q | Rdir_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | Rdir | 316 | PO | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | Rdir | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | Ldir | section5_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | Ldir_OBUF | 313 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Ldir_OBUF.Q | Ldir_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | Ldir | 317 | PO | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | Ldir | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | Len | section5_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | Len_OBUF | 314 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Len_OBUF.Q | Len_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | Len | 318 | PO | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | Len | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | Ren | section5_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | Ren_OBUF | 315 | ? | 0 | 0 | section5_COPY_0_COPY_0 | NULL | Ren_OBUF.Q | Ren_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | Ren | 319 | PO | 0 | 0 | section5_COPY_0_COPY_0 | NULL | NULL | Ren | 0 | 6 | OI_OUT
+
+FB_INSTANCE | FOOBAR1_ | section5_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 2 | Len_OBUF | 1 | NULL | 0 | Len | 1 | 39 | 49152
+FBPIN | 5 | Ldir_OBUF | 1 | NULL | 0 | Ldir | 1 | 40 | 49152
+FBPIN | 6 | Ren_OBUF | 1 | NULL | 0 | Ren | 1 | 41 | 49152
+FBPIN | 8 | Rdir_OBUF | 1 | NULL | 0 | Rdir | 1 | 42 | 49152
+FBPIN | 17 | NULL | 0 | AnalogLdir_IBUF | 1 | NULL | 0 | 3 | 49152
+
+FB_INSTANCE | FOOBAR2_ | section5_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 11 | NULL | 0 | B_IBUF | 1 | NULL | 0 | 34 | 53248
+FBPIN | 14 | NULL | 0 | A_IBUF | 1 | NULL | 0 | 36 | 53248
+FBPIN | 17 | NULL | 0 | C_IBUF | 1 | NULL | 0 | 38 | 49152
+
+FB_INSTANCE | FOOBAR3_ | section5_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 2 | NULL | 0 | AnalogRdir_IBUF | 1 | NULL | 0 | 5 | 49152
+
+FB_INSTANCE | FOOBAR4_ | section5_COPY_0_COPY_0 | 0 | 0 | 0
+
+FB_INSTANCE | INPUTPINS_FOOBAR5_ | section5_COPY_0_COPY_0 | 0 | 0 | 0
+
+
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 2 | B | 34 | 8 | A | 36 | 19 | C | 38 | 22 | AnalogRdir | 5 | 44 | AnalogLdir | 3
+
+FB_IMUX_INDEX | FOOBAR1_ | -1 | -1 | 92 | -1 | -1 | -1 | -1 | -1 | 98 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 104 | -1 | -1 | 134 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 132 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1
+

@@ -1,0 +1,24 @@
+Running: C:\Xilinx\14.1\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -lib uni9000_ver -lib aim_ver -lib cpld_ver -lib xilinxcorelib_ver -o Z:/Windows.Documents/Desktop/section5/section3_revised_section3_revised_sch_tb_isim_beh.exe -prj Z:/Windows.Documents/Desktop/section5/section3_revised_section3_revised_sch_tb_beh.prj work.section3_revised_section3_revised_sch_tb work.glbl 
+ISim P.15xf (signature 0xc3576ebc)
+Number of CPUs detected in this system: 8
+Turning on mult-threading, number of parallel sub-compilation jobs: 16 
+Determining compilation order of HDL files
+Analyzing Verilog file "Z:/Windows.Documents/Desktop/section5/section3_revised.vf" into library work
+Analyzing Verilog file "Z:/Windows.Documents/Desktop/section5/Section5test.v" into library work
+Analyzing Verilog file "C:/Xilinx/14.1/ISE_DS/ISE//verilog/src/glbl.v" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling module AND3
+Compiling module AND2B2
+Compiling module AND2B1
+Compiling module AND2
+Compiling module OR2
+Compiling module INV
+Compiling module section3_revised
+Compiling module section3_revised_section3_revise...
+Compiling module glbl
+Time Resolution for simulation is 1ps.
+Compiled 9 Verilog Units
+Built simulation executable Z:/Windows.Documents/Desktop/section5/section3_revised_section3_revised_sch_tb_isim_beh.exe
+Fuse Memory Usage: 28176 KB
+Fuse CPU Usage: 311 ms

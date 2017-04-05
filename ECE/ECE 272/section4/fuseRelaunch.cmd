@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "uni9000_ver" -lib "aim_ver" -lib "cpld_ver" -lib "xilinxcorelib_ver" -o "Z:/ECE 272/section4/section4_isim_beh.exe" -prj "Z:/ECE 272/section4/section4_beh.prj" "work.section4" "work.glbl" 
